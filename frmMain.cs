@@ -20,32 +20,23 @@ namespace DigitalDarkroom
             InitializeComponent();
         }
 
+        frmDisplay display = new frmDisplay();
+
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            frmDisplay display = new frmDisplay();
-            display.setSize(Panels.Wisecoco1038k.Width, Panels.Wisecoco1038k.Height);
+            int Width = Panels.PanelSimulator.Width;
+            int Height = Panels.PanelSimulator.Height;
+
+            display.setSize(Width, Height);
             display.Show();
 
             Image img = Image.FromFile(@"C:\Users\sectronic\Desktop\Digital-Picture-to-Analog-Darkroom-print-master\test.png");
 
-            // http://www.switchonthecode.com/tutorials/csharp-tutorial-convert-a-color-image-to-grayscale
-
             Bitmap a = new Bitmap(img);
-            /*
-            Bitmap b = MakeGrayscale3(a);
-
-            Thread.Sleep(2000);
-
-            display.setImage(a);
-
-            Thread.Sleep(2000);
-
-            display.setImage(b);
-            */
 
             display.PushImage(a, 2000);
 
-            Bitmap b = new Bitmap(Panels.Wisecoco1038k.Width, Panels.Wisecoco1038k.Height);
+            Bitmap b = new Bitmap(Width, Height);
 
             for (int Xcount = 0; Xcount < b.Width; Xcount++)
             {
@@ -57,31 +48,15 @@ namespace DigitalDarkroom
 
             display.PushImage(new Bitmap(b), 2000);
 
-            //display.setImage(b);
+            //display.PushImage(GenerateGreylevelBands8bit(Width, Height), 5000);
+            //display.PushImage(GenerateGreylevelBands(Width, Height), 5000);
 
-            //Thread.Sleep(2000);
+            GenerateMasquesTemps(Width, Height);
 
-            using (Graphics gfx = Graphics.FromImage(b))
-            {
-                using (SolidBrush brush = new SolidBrush(Color.Yellow))
-                {
-                    gfx.FillRectangle(brush, 0, 0, 50, 50);
-                }
-            }
-
-            display.PushImage(b, 2000);
-
-            //display.setImage(b);
-
-            //Thread.Sleep(2000);
-
-            //display.setImage(GenerateGreylevelBands(Panels.Wisecoco1038k.Width, Panels.Wisecoco1038k.Height));
-
-            display.PushImage(GenerateGreylevelBands(Panels.Wisecoco1038k.Width, Panels.Wisecoco1038k.Height), 5000);
             display.Run();
         }
 
-        private Bitmap GenerateGreylevelBands(int width, int height)
+        private Bitmap GenerateGreylevelBands8bit(int width, int height)
         {
             Bitmap b = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
 
@@ -91,6 +66,66 @@ namespace DigitalDarkroom
             }
 
             return b;
+        }
+
+
+        private Bitmap GenerateGreylevelBands(int width, int height)
+        {
+            Bitmap b = new Bitmap(width, height);
+
+            using (Graphics gfx = Graphics.FromImage(b))
+            {
+                for (int i = 0; i < 256; i++)
+                {
+                    using (SolidBrush brush = new SolidBrush(Color.FromArgb(i, i, i)))
+                    {
+                        gfx.FillRectangle(brush, i * (width / 256), 0, width / 256, height);
+                    }
+                }
+            }
+
+            return b;
+        }
+
+        private void GenerateMasquesTemps(int width, int height)
+        {
+            Bitmap b = new Bitmap(width, height);
+
+            using (Graphics gfx = Graphics.FromImage(b))
+            {
+                for (int i = 0; i < 256; i++)
+                {
+                    using (SolidBrush brush = new SolidBrush(Color.FromArgb(i, i, i)))
+                    {
+                        gfx.FillRectangle(brush, i * (width / 256), 0, width / 256, height/2);
+                    }
+                }
+
+                SolidBrush brushBlack = new SolidBrush(Color.Black);
+                SolidBrush brushWhite = new SolidBrush(Color.White);
+
+                int size = 40;
+
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        SolidBrush brush = (j > i) ? brushBlack : brushWhite;
+                        SolidBrush brushTxt = (j > i) ? brushWhite : brushBlack;
+
+                        gfx.FillRectangle(brush, j * (width / size), height / 2, width / size, height / 2);
+
+                        string str = (j + 1).ToString();
+
+                        SizeF stringSize = new SizeF();
+                        stringSize = gfx.MeasureString(str, DefaultFont);
+                        int offset = size / 2 - (int)stringSize.Width / 2;
+
+                        gfx.DrawString(str, DefaultFont, brushTxt, j * (width / size) + offset, height / 2 + 10);
+                    }
+                    display.PushImage(new Bitmap(b), 500);
+                }
+            }
         }
 
         void FillIndexedRectangle(Bitmap bmp8bpp, Rectangle rect, Color col)

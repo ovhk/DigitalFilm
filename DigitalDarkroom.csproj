@@ -74,9 +74,10 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageLayer.cs" />
+    <Compile Include="Panels\PanelSimulator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Panels\Wisecoco1038k.cs" />
+    <Compile Include="Panels\WisecocoTOP103MONO8K01A.cs" />
     <EmbeddedResource Include="frmDisplay.resx">
       <DependentUpon>frmDisplay.cs</DependentUpon>
     </EmbeddedResource>

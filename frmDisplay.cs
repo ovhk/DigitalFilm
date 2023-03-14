@@ -15,12 +15,14 @@ namespace DigitalDarkroom
 {
     public partial class frmDisplay : Form
     {
-        Queue<ImageLayer> layers = new Queue<ImageLayer>();
-
         public frmDisplay()
         {
             InitializeComponent();
         }
+
+        #region Display queue management
+
+        Queue<ImageLayer> layers = new Queue<ImageLayer>();
 
         public void PushImage(Bitmap bitmap, int expositionDuration)
         {
@@ -48,6 +50,8 @@ namespace DigitalDarkroom
 
         }
 
+        #endregion
+
         public void setImage(Bitmap bmp)
         {
             if (bmp == null)
@@ -74,9 +78,12 @@ namespace DigitalDarkroom
 
             SafeUpdate(() => this.BackgroundImage = bmpToDisplay);
             SafeUpdate(() => this.Refresh());
-            //this.Refresh();
         }
 
+        /// <summary>
+        /// Based on http://www.switchonthecode.com/tutorials/csharp-tutorial-convert-a-color-image-to-grayscale
+        /// </summary>
+        /// <returns></returns>
         private ColorPalette GetGrayScalePalette()
         {
             Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed);
@@ -135,6 +142,8 @@ namespace DigitalDarkroom
             SafeUpdate(() => this.Height = height);
         }
 
+        #region Invoke Management
+
         private void SafeUpdate(Action action)
         {
             if (this.InvokeRequired)
@@ -146,6 +155,10 @@ namespace DigitalDarkroom
                 action();
             }
         }
+
+        #endregion
+
+        #region Dragging Management
 
         private bool dragging = false;
         private Point dragCursorPoint;
@@ -171,5 +184,7 @@ namespace DigitalDarkroom
         {
             dragging = false;
         }
+
+        #endregion
     }
 }

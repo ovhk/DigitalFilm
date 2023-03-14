@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace DigitalDarkroom.Panels
 {
     // TODO : faire une interface
-    internal class Wisecoco1038k 
+    internal class WisecocoTOP103MONO8K01A 
     {
-        internal static string Name => "Wisecoco1038k";
+        internal static string Name => "TOP103MONO8K01A";
 
-        internal static int Width => 768;//7680;
+        internal static int Width => 7680;
 
-        internal static int Height => 432;//4320;
+        internal static int Height => 4320;
     }
 }
