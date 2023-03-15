@@ -20,9 +20,13 @@ namespace DigitalDarkroom
             InitializeComponent();
         }
 
-        #region Display queue management
+        // TODO : déplacer la fenête sur un autre écran : https://stackoverflow.com/questions/8420203/move-form-onto-specified-screen
+
+        #region TODO REMOVE Display queue management
 
         Queue<ImageLayer> layers = new Queue<ImageLayer>();
+
+        ManualResetEvent oPausevent = new ManualResetEvent(false);
 
         public void PushImage(Bitmap bitmap, int expositionDuration)
         {
@@ -45,9 +49,14 @@ namespace DigitalDarkroom
             }).Start();
         }
 
+        public void Pause()
+        {
+            this.oPausevent.Set();
+        }
         public void Stop()
         {
-
+            SafeUpdate(() => this.BackgroundImage = null);
+            SafeUpdate(() => this.Refresh());
         }
 
         #endregion
@@ -79,6 +88,8 @@ namespace DigitalDarkroom
             SafeUpdate(() => this.BackgroundImage = bmpToDisplay);
             SafeUpdate(() => this.Refresh());
         }
+
+        #region TODO REMOVE
 
         /// <summary>
         /// Based on http://www.switchonthecode.com/tutorials/csharp-tutorial-convert-a-color-image-to-grayscale
@@ -135,6 +146,8 @@ namespace DigitalDarkroom
             g.Dispose();
             return newBitmap;
         }
+
+        #endregion
 
         public void setSize(int width, int height) 
         {

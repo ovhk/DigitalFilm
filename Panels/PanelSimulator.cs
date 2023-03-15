@@ -3,15 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DigitalDarkroom.Panels
 {
-    internal class PanelSimulator
+    public class PanelSimulator : IPanel
     {
-        internal static string Name => "PanelSimulator";
+        private string _name;
+        string IPanel.Name => this._name;
 
-        internal static int Width => 1024;
+        int IPanel.Width => 1024;
 
-        internal static int Height => 768;
+        int IPanel.Height => 768;
+
+        public override string ToString()
+        {
+            return this._name;
+        }
+
+        public PanelSimulator()
+        {
+            this._name = "Simulator";
+        }
     }
 }

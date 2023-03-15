@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DigitalDarkroom.Panels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,17 +16,59 @@ namespace DigitalDarkroom
 {
     public partial class frmMain : Form
     {
+        /// <summary>
+        /// Main form
+        /// </summary>
         public frmMain()
         {
             InitializeComponent();
         }
 
-        frmDisplay display = new frmDisplay();
+        /// <summary>
+        /// Display Form
+        /// </summary>
+        private frmDisplay display = new frmDisplay();
+        
+        /// <summary>
+        /// Display Engine
+        /// </summary>
+        private DisplayEngine engine;
+
+        /// <summary>
+        /// Main form load
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            cbPanels.Items.Add(new Panels.PanelSimulator());
+            cbPanels.Items.Add(new Panels.WisecocoTOP103MONO8K01A());
+            cbPanels.SelectedIndex = 0; // Select first panel in list
+
+
+            engine = new DisplayEngine();
+            engine.EngineStatusNotify += Engine_EngineStatusNotify;
+            engine.OnNewImage += Engine_OnNewImage;
+        }
+
+        private void Engine_OnNewImage(Bitmap bmp)
+        {
+            SafeUpdate(() => this.pbDisplay.Image = bmp);
+            SafeUpdate(() => this.Refresh());
+            this.display.setImage(bmp); // TODO : FromDisplay doit s'abonner aussi à l'évènement
+        }
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            int Width = Panels.PanelSimulator.Width;
-            int Height = Panels.PanelSimulator.Height;
+            IPanel selectedPanel = (IPanel)this.cbPanels.SelectedItem;
+
+            if (selectedPanel == null || !(selectedPanel is IPanel))
+            {
+                return;
+            }
+
+            int Width = selectedPanel.Width;
+            int Height = selectedPanel.Height;
 
             display.setSize(Width, Height);
             display.Show();
@@ -62,7 +105,7 @@ namespace DigitalDarkroom
 
             for (int i = 0; i < 256; i++)
             {
-                FillIndexedRectangle(b, new Rectangle(i*(width / 256), 0, width / 256, height), Color.FromArgb(i, i, i));
+                FillIndexedRectangle(b, new Rectangle(i * (width / 256), 0, width / 256, height), Color.FromArgb(i, i, i));
             }
 
             return b;
@@ -97,7 +140,7 @@ namespace DigitalDarkroom
                 {
                     using (SolidBrush brush = new SolidBrush(Color.FromArgb(i, i, i)))
                     {
-                        gfx.FillRectangle(brush, i * (width / 256), 0, width / 256, height/2);
+                        gfx.FillRectangle(brush, i * (width / 256), 0, width / 256, height / 2);
                     }
                 }
 
@@ -148,6 +191,151 @@ namespace DigitalDarkroom
             bmp8bpp.UnlockBits(bitmapData);
         }
 
+        private void Engine_EngineStatusNotify(object sender, EngineStatus e)
+        {
+            switch (e)
+            {
+                case EngineStatus.Started:
+                    this.SafeUpdate(() => this.btPlay.Enabled = false);
+                    break;
+                case EngineStatus.Running:
+                    // TODO récupérer le temps écoulé pour l'afficher
+                    Console.WriteLine("Running");
+                    break;
+                case EngineStatus.Stopped:
+                    this.SafeUpdate(() => this.btPlay.Enabled = true);
+                    break;
+                case EngineStatus.Ended:
+                    this.SafeUpdate(() => this.btPlay.Enabled = true);
+                    break;
+            }
+        }
 
+        #region Invoke Management
+
+        private void SafeUpdate(Action action)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(action);
+            }
+            else
+            {
+                action();
+            }
+        }
+
+        #endregion
+
+        private void btTest1_Click(object sender, EventArgs e)
+        {
+            IPanel selectedPanel = (IPanel)this.cbPanels.SelectedItem;
+
+            if (selectedPanel == null || !(selectedPanel is IPanel))
+            {
+                return;
+            }
+
+            Bitmap b = new Bitmap(selectedPanel.Width, selectedPanel.Height);
+
+            using (Graphics gfx = Graphics.FromImage(b))
+            {
+
+                using (SolidBrush brush = new SolidBrush(Color.White))
+                {
+                    gfx.FillRectangle(brush, 0, 0, selectedPanel.Width / 2, selectedPanel.Height);
+                }
+
+                using (SolidBrush brush = new SolidBrush(Color.Black))
+                {
+                    gfx.FillRectangle(brush, selectedPanel.Width / 2, 0, selectedPanel.Width / 2, selectedPanel.Height);
+                }
+            }
+
+            engine.PushImage(b, 60000);
+        }
+
+        private void cbPanels_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IPanel selectedPanel = (IPanel)this.cbPanels.SelectedItem;
+
+            if (selectedPanel == null || !(selectedPanel is IPanel))
+            {
+                return;
+            }
+
+            // Let update frmDisplat size following the selected panel in the list
+            display.setSize(selectedPanel.Width, selectedPanel.Height);
+        }
+
+        private void btPlay_Click(object sender, EventArgs e)
+        {
+            display.Show();
+            Thread.Sleep(100); // Just to be sure that the display frame is loaded
+            engine.Start();
+        }
+
+        private void btPause_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btStop_Click(object sender, EventArgs e)
+        {
+            engine.Stop();
+            display.Hide();
+        }
+
+        private void btNext_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btReset_Click(object sender, EventArgs e)
+        {
+            // TODO : this is for test
+
+            File.FileFormat file = new File.FileFormat();
+            // Write the contents of the variable someClass to a file.
+            File.FileManagement.WriteToJsonFile<File.FileFormat>(@"C:\someClass.txt", file);
+
+            // Read the file contents back into a variable.
+            File.FileFormat object1 = File.FileManagement.ReadFromJsonFile<File.FileFormat>(@"C:\someClass.txt");
+        }
+
+        #region Menu
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //this.openFileDialog1
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmAbout about = new frmAbout();
+            about.ShowDialog();
+        }
+
+        #endregion
     }
 }
