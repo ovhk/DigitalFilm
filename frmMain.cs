@@ -14,6 +14,9 @@ using System.Windows.Forms;
 
 namespace DigitalDarkroom
 {
+    /// <summary>
+    /// Main Form
+    /// </summary>
     public partial class frmMain : Form
     {
         /// <summary>
@@ -41,22 +44,26 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void frmMain_Load(object sender, EventArgs e)
         {
+            engine = DisplayEngine.GetInstance();
+            engine.EngineStatusNotify += Engine_EngineStatusNotify;
+            engine.OnNewImage += Engine_OnNewImage;
+
             cbPanels.Items.Add(new Panels.PanelSimulator());
             cbPanels.Items.Add(new Panels.WisecocoTOP103MONO8K01A());
             cbPanels.SelectedIndex = 0; // Select first panel in list
-
-
-            engine = new DisplayEngine();
-            engine.EngineStatusNotify += Engine_EngineStatusNotify;
-            engine.OnNewImage += Engine_OnNewImage;
         }
 
+        /// <summary>
+        /// DisplayEngine send us a new image to display
+        /// </summary>
+        /// <param name="bmp"></param>
         private void Engine_OnNewImage(Bitmap bmp)
         {
             SafeUpdate(() => this.pbDisplay.Image = bmp);
             SafeUpdate(() => this.Refresh());
-            this.display.setImage(bmp); // TODO : FromDisplay doit s'abonner aussi à l'évènement
         }
+
+        #region TODO REMOVE THIS
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
@@ -70,14 +77,14 @@ namespace DigitalDarkroom
             int Width = selectedPanel.Width;
             int Height = selectedPanel.Height;
 
-            display.setSize(Width, Height);
+            engine.setSize(Width, Height);
             display.Show();
 
             Image img = Image.FromFile(@"C:\Users\sectronic\Desktop\Digital-Picture-to-Analog-Darkroom-print-master\test.png");
 
             Bitmap a = new Bitmap(img);
 
-            display.PushImage(a, 2000);
+            engine.PushImage(a, 2000);
 
             Bitmap b = new Bitmap(Width, Height);
 
@@ -89,14 +96,13 @@ namespace DigitalDarkroom
                 }
             }
 
-            display.PushImage(new Bitmap(b), 2000);
+            engine.PushImage(new Bitmap(b), 2000);
 
-            //display.PushImage(GenerateGreylevelBands8bit(Width, Height), 5000);
-            //display.PushImage(GenerateGreylevelBands(Width, Height), 5000);
+            //engine.PushImage(GenerateGreylevelBands8bit(Width, Height), 5000);
+            //engine.PushImage(GenerateGreylevelBands(Width, Height), 5000);
 
-            GenerateMasquesTemps(Width, Height);
-
-            display.Run();
+           
+            //display.Run();
         }
 
         private Bitmap GenerateGreylevelBands8bit(int width, int height)
@@ -105,12 +111,11 @@ namespace DigitalDarkroom
 
             for (int i = 0; i < 256; i++)
             {
-                FillIndexedRectangle(b, new Rectangle(i * (width / 256), 0, width / 256, height), Color.FromArgb(i, i, i));
+                Tools.FillIndexedRectangle(b, new Rectangle(i * (width / 256), 0, width / 256, height), Color.FromArgb(i, i, i));
             }
 
             return b;
         }
-
 
         private Bitmap GenerateGreylevelBands(int width, int height)
         {
@@ -130,67 +135,13 @@ namespace DigitalDarkroom
             return b;
         }
 
-        private void GenerateMasquesTemps(int width, int height)
-        {
-            Bitmap b = new Bitmap(width, height);
+        #endregion
 
-            using (Graphics gfx = Graphics.FromImage(b))
-            {
-                for (int i = 0; i < 256; i++)
-                {
-                    using (SolidBrush brush = new SolidBrush(Color.FromArgb(i, i, i)))
-                    {
-                        gfx.FillRectangle(brush, i * (width / 256), 0, width / 256, height / 2);
-                    }
-                }
-
-                SolidBrush brushBlack = new SolidBrush(Color.Black);
-                SolidBrush brushWhite = new SolidBrush(Color.White);
-
-                int size = 40;
-
-                for (int i = 0; i < size; i++)
-                {
-                    for (int j = 0; j < size; j++)
-                    {
-                        SolidBrush brush = (j > i) ? brushBlack : brushWhite;
-                        SolidBrush brushTxt = (j > i) ? brushWhite : brushBlack;
-
-                        gfx.FillRectangle(brush, j * (width / size), height / 2, width / size, height / 2);
-
-                        string str = (j + 1).ToString();
-
-                        SizeF stringSize = new SizeF();
-                        stringSize = gfx.MeasureString(str, DefaultFont);
-                        int offset = size / 2 - (int)stringSize.Width / 2;
-
-                        gfx.DrawString(str, DefaultFont, brushTxt, j * (width / size) + offset, height / 2 + 10);
-                    }
-                    display.PushImage(new Bitmap(b), 500);
-                }
-            }
-        }
-
-        void FillIndexedRectangle(Bitmap bmp8bpp, Rectangle rect, Color col)
-        {
-            var bitmapData =
-                bmp8bpp.LockBits(new Rectangle(Point.Empty, bmp8bpp.Size),
-                                 ImageLockMode.ReadWrite, bmp8bpp.PixelFormat);
-            byte[] buffer = new byte[bmp8bpp.Width * bmp8bpp.Height];
-
-            Marshal.Copy(bitmapData.Scan0, buffer, 0, buffer.Length);
-
-            for (int y = rect.Y; y < rect.Bottom; y++)
-            {
-                for (int x = rect.X; x < rect.Right; x++)
-                {
-                    buffer[x + y * bmp8bpp.Width] = (byte)col.ToArgb();
-                }
-            }
-            Marshal.Copy(buffer, 0, bitmapData.Scan0, buffer.Length);
-            bmp8bpp.UnlockBits(bitmapData);
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Engine_EngineStatusNotify(object sender, EngineStatus e)
         {
             switch (e)
@@ -229,32 +180,14 @@ namespace DigitalDarkroom
 
         private void btTest1_Click(object sender, EventArgs e)
         {
-            IPanel selectedPanel = (IPanel)this.cbPanels.SelectedItem;
-
-            if (selectedPanel == null || !(selectedPanel is IPanel))
-            {
-                return;
-            }
-
-            Bitmap b = new Bitmap(selectedPanel.Width, selectedPanel.Height);
-
-            using (Graphics gfx = Graphics.FromImage(b))
-            {
-
-                using (SolidBrush brush = new SolidBrush(Color.White))
-                {
-                    gfx.FillRectangle(brush, 0, 0, selectedPanel.Width / 2, selectedPanel.Height);
-                }
-
-                using (SolidBrush brush = new SolidBrush(Color.Black))
-                {
-                    gfx.FillRectangle(brush, selectedPanel.Width / 2, 0, selectedPanel.Width / 2, selectedPanel.Height);
-                }
-            }
-
-            engine.PushImage(b, 60000);
+            Tests.Test1.Load();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbPanels_SelectedIndexChanged(object sender, EventArgs e)
         {
             IPanel selectedPanel = (IPanel)this.cbPanels.SelectedItem;
@@ -265,9 +198,14 @@ namespace DigitalDarkroom
             }
 
             // Let update frmDisplat size following the selected panel in the list
-            display.setSize(selectedPanel.Width, selectedPanel.Height);
+            engine.setSize(selectedPanel.Width, selectedPanel.Height);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btPlay_Click(object sender, EventArgs e)
         {
             display.Show();
@@ -275,22 +213,42 @@ namespace DigitalDarkroom
             engine.Start();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btPause_Click(object sender, EventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btStop_Click(object sender, EventArgs e)
         {
             engine.Stop();
             display.Hide();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btNext_Click(object sender, EventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btReset_Click(object sender, EventArgs e)
         {
             // TODO : this is for test
