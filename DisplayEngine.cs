@@ -1,6 +1,7 @@
 ﻿using DigitalDarkroom.Panels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace DigitalDarkroom
 
     public delegate void NewImageEvent(Bitmap bmp);
     public delegate void NewPanelSizeEvent(int width, int height);
+    public delegate void NewProgessEvent(int imageLayerIndex, TimeSpan timeSpan);
 
     public class DisplayEngine // TODO : FSM
     {
@@ -46,15 +48,17 @@ namespace DigitalDarkroom
 
         private Thread thread;
 
-        private System.Timers.Timer timer = new System.Timers.Timer();
+        //private System.Timers.Timer timer = new System.Timers.Timer();
 
         /// <summary>
         /// Display Engine private constructor, use only the GetInstance
         /// </summary>
         private DisplayEngine() 
         {
-            this.timer.Interval = 1000;
-            this.timer.Elapsed += Timer_Elapsed;
+            //this.timer.Interval = 1000;
+            //this.timer.Elapsed += Timer_Elapsed;
+
+            this.EngineStatusNotify += DisplayEngine_EngineStatusNotify;
         }
 
         /// <summary>
@@ -66,6 +70,9 @@ namespace DigitalDarkroom
         /// Change panel size event
         /// </summary>
         public event NewPanelSizeEvent OnNewPanelSize;
+
+
+        public event NewProgessEvent OnNewProgress;
 
         public event EventHandler<EngineStatus> EngineStatusNotify;
 
@@ -94,9 +101,20 @@ namespace DigitalDarkroom
             this.OnNewPanelSize?.Invoke(width, height);
         }
 
-        private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        //private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        //{
+        //    EngineStatusNotify?.Invoke(this, EngineStatus.Running);
+        //}
+
+        private void DisplayEngine_EngineStatusNotify(object sender, EngineStatus e)
         {
-            EngineStatusNotify?.Invoke(this, EngineStatus.Running);
+            switch (e) 
+            { 
+                case EngineStatus.Stopped:
+                case EngineStatus.Ended:
+                    this.OnNewImage?.Invoke(null); // Force black screen (because Background controls color are set to black)
+                    break; 
+            }
         }
 
         /// <summary>
@@ -116,7 +134,7 @@ namespace DigitalDarkroom
             layers.Enqueue(new ImageLayer(bitmap, expositionDuration));
         }
 
-        private static ManualResetEvent oStopEvent = new ManualResetEvent(false);
+        //private static ManualResetEvent oStopEvent = new ManualResetEvent(false);
 
 
         private static void ThreadProc(object obj)
@@ -127,16 +145,19 @@ namespace DigitalDarkroom
 
             // TODO : cummuler toutes les expositionDuration et faire un décompte ?
 
-            de.timer.Start();
+            int sum = 0;
+
+            foreach (ImageLayer i in de.layers)
+            {
+                sum += i.GetExpositionDuration();
+            }
+
             de.EngineStatusNotify?.Invoke(de, EngineStatus.Started);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            de.OnNewProgress?.Invoke(0, new TimeSpan(0, 0, 0));
 
             while (de.layers.Count > 0)
             {
-                //if (oStopEvent.WaitOne() == true)
-                {
-                //    return;
-                }
-
                 ImageLayer il = de.layers.Dequeue();
 
                 Bitmap b = il.GetBitmap();
@@ -164,44 +185,53 @@ namespace DigitalDarkroom
 
                 for (int i = 0; i < iter; i++)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(5000);
 
                     if (de._stop)
                     {
                         break;
                     }
+
+                    de.OnNewProgress?.Invoke(0, stopwatch.Elapsed); // TODO : put ImageLayerIndex
                 }
             }
 
-            de.timer.Stop();
+            stopwatch.Stop();
+
             de.EngineStatusNotify?.Invoke(de, EngineStatus.Ended);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Start() 
         {
             _stop = false;
 
             this.thread = new Thread(ThreadProc);
 
-            oStopEvent.Reset();
+            //oStopEvent.Reset();
             this.thread.Start((object)this);
         }
 
         private bool _stop = false; // TODO do an FSM ?
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Stop() 
         {
             if (this.thread == null) return;
-            if (this.thread.ThreadState == ThreadState.Stopped)
+            if (this.thread.ThreadState == System.Threading.ThreadState.Stopped)
             {
                 return;
             }
 
-            this.OnNewImage?.Invoke(null); // Force black screen (because Background controls color are set to black)
+            //this.OnNewImage?.Invoke(null); // Force black screen (because Background controls color are set to black)
 
             _stop = true;
 
-            oStopEvent.Set();
+            //oStopEvent.Set();
             this.thread.Join();
             this.EngineStatusNotify?.Invoke(this, EngineStatus.Stopped);
         }

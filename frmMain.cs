@@ -47,10 +47,18 @@ namespace DigitalDarkroom
             engine = DisplayEngine.GetInstance();
             engine.EngineStatusNotify += Engine_EngineStatusNotify;
             engine.OnNewImage += Engine_OnNewImage;
+            engine.OnNewProgress += Engine_OnNewProgress;
 
             cbPanels.Items.Add(new Panels.PanelSimulator());
             cbPanels.Items.Add(new Panels.WisecocoTOP103MONO8K01A());
             cbPanels.SelectedIndex = 0; // Select first panel in list
+        }
+
+        private void Engine_OnNewProgress(int imageLayerIndex, TimeSpan timeSpan)
+        {
+            SafeUpdate(() => this.lbTime.Text = String.Format("{0:00}:{1:00}.{2:00}",
+                timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds / 10));
+            SafeUpdate(() => this.lbTime.Refresh());
         }
 
         /// <summary>
@@ -154,9 +162,11 @@ namespace DigitalDarkroom
                     Console.WriteLine("Running");
                     break;
                 case EngineStatus.Stopped:
+                    this.SafeUpdate(() => display.Hide());
                     this.SafeUpdate(() => this.btPlay.Enabled = true);
                     break;
                 case EngineStatus.Ended:
+                    this.SafeUpdate(() => display.Hide());
                     this.SafeUpdate(() => this.btPlay.Enabled = true);
                     break;
             }
@@ -231,7 +241,6 @@ namespace DigitalDarkroom
         private void btStop_Click(object sender, EventArgs e)
         {
             engine.Stop();
-            display.Hide();
         }
 
         /// <summary>
