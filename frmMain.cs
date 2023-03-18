@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -85,8 +86,10 @@ namespace DigitalDarkroom
         /// <param name="bmp"></param>
         private void Engine_OnNewImage(Bitmap bmp)
         {
+            Image old = this.pbDisplay.Image;
             SafeUpdate(() => this.pbDisplay.Image = bmp);
-            SafeUpdate(() => this.Refresh());
+            //SafeUpdate(() => this.pbDisplay.Refresh());
+            if (old != null) old.Dispose();
         }
 
         #region TODO REMOVE THIS
@@ -321,7 +324,12 @@ namespace DigitalDarkroom
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ListView lv = sender as ListView;
-            
+
+            if (lv.SelectedItems.Count == 0)
+            { 
+                return;
+            }
+
             this.propertyGrid1.SelectedObject = lv.SelectedItems[0].Tag as string;
         }
 

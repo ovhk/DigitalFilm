@@ -176,22 +176,22 @@ namespace DigitalDarkroom
 
                 Bitmap b = il.GetBitmap();
 
-                Bitmap bmpToDisplay;
+                Bitmap bmpToDisplay = b;
 
-                switch (b.PixelFormat) // TODO : work here !
-                {
-                    case PixelFormat.Format32bppArgb:
-                    case PixelFormat.Format32bppRgb:
-                        bmpToDisplay = MakeGrayscale3(b);
-                        break;
-                    case PixelFormat.Format8bppIndexed:
-                        bmpToDisplay = b;
-                        bmpToDisplay.Palette = GetGrayScalePalette();
-                        break;
-                    default:
-                        bmpToDisplay = new Bitmap(b); ;
-                        break;
-                }
+                //switch (b.PixelFormat) // TODO : work here !
+                //{
+                //    case PixelFormat.Format32bppArgb:
+                //    case PixelFormat.Format32bppRgb:
+                //        bmpToDisplay = MakeGrayscale3(b);
+                //        break;
+                //    case PixelFormat.Format8bppIndexed:
+                //        bmpToDisplay = b;
+                //        bmpToDisplay.Palette = GetGrayScalePalette();
+                //        break;
+                //    default:
+                //        bmpToDisplay = new Bitmap(b); ;
+                //        break;
+                //}
 
                 de.OnNewImage?.Invoke(bmpToDisplay);
 

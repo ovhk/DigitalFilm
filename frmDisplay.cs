@@ -39,8 +39,10 @@ namespace DigitalDarkroom
         /// <param name="bmp"></param>
         private void Engine_OnNewImage(Bitmap bmp)
         {
-            SafeUpdate(() => this.BackgroundImage = bmp);
-            SafeUpdate(() => this.Refresh());
+            Image old = this.BackgroundImage;
+            SafeUpdate(() => this.BackgroundImage = bmp); // TODO c'est long à afficher !!!!
+            //SafeUpdate(() => this.Refresh());
+            if (old != null) old.Dispose();
         }
 
         /// <summary>
@@ -72,10 +74,19 @@ namespace DigitalDarkroom
 
         #region Dragging Management
 
+        /// <summary>
+        /// Dragging flag
+        /// </summary>
         private bool dragging = false;
+
         private Point dragCursorPoint;
         private Point dragFormPoint;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmDisplay_MouseMove(object sender, MouseEventArgs e)
         {
             if (dragging)
@@ -86,6 +97,11 @@ namespace DigitalDarkroom
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmDisplay_MouseDown(object sender, MouseEventArgs e)
         {
             dragging = true;
@@ -93,6 +109,11 @@ namespace DigitalDarkroom
             dragFormPoint = this.Location;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmDisplay_MouseUp(object sender, MouseEventArgs e)
         {
             Cursor.Current = Cursors.Default;
