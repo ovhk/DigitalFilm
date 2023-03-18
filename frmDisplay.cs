@@ -80,6 +80,7 @@ namespace DigitalDarkroom
         {
             if (dragging)
             {
+                Cursor.Current = Cursors.SizeAll;
                 Point dif = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
                 this.Location = Point.Add(dragFormPoint, new Size(dif));
             }
@@ -94,6 +95,7 @@ namespace DigitalDarkroom
 
         private void frmDisplay_MouseUp(object sender, MouseEventArgs e)
         {
+            Cursor.Current = Cursors.Default;
             dragging = false;
         }
 

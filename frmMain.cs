@@ -1,4 +1,5 @@
 ﻿using DigitalDarkroom.Panels;
+using DigitalDarkroom.Tests;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,6 +45,10 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void frmMain_Load(object sender, EventArgs e)
         {
+            LoadTests();
+
+            this.btStop.Enabled = false;
+
             engine = DisplayEngine.GetInstance();
             engine.EngineStatusNotify += Engine_EngineStatusNotify;
             engine.OnNewImage += Engine_OnNewImage;
@@ -54,11 +59,24 @@ namespace DigitalDarkroom
             cbPanels.SelectedIndex = 0; // Select first panel in list
         }
 
-        private void Engine_OnNewProgress(int imageLayerIndex, TimeSpan timeSpan)
+        private void Engine_OnNewProgress(int imageLayerIndex, TimeSpan elapseTime, TimeSpan totalDuration)
         {
             SafeUpdate(() => this.lbTime.Text = String.Format("{0:00}:{1:00}.{2:00}",
-                timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds / 10));
+                elapseTime.Minutes, elapseTime.Seconds, elapseTime.Milliseconds / 10));
+            SafeUpdate(() => this.lbTime.ForeColor = Color.White);
             SafeUpdate(() => this.lbTime.Refresh());
+
+            // TODO : avec les lenteurs de la VM, il arrive que le temps d'éxécution soit plus long que le max théorique, donc on filtre pour ne pas avoir une exception...
+            int val = (elapseTime.TotalSeconds > totalDuration.TotalSeconds) ? (int)totalDuration.TotalSeconds : (int)elapseTime.TotalSeconds;
+
+            SafeUpdate(() => this.toolStripProgressBar1.Value = val);
+            SafeUpdate(() => this.toolStripProgressBar1.Maximum = (int) totalDuration.TotalSeconds);
+
+            if (totalDuration.Subtract(elapseTime).TotalSeconds <= 3)
+            {
+                SafeUpdate(() => this.lbTime.ForeColor = Color.Yellow);
+                Console.Beep();
+            }
         }
 
         /// <summary>
@@ -156,18 +174,18 @@ namespace DigitalDarkroom
             {
                 case EngineStatus.Started:
                     this.SafeUpdate(() => this.btPlay.Enabled = false);
+                    this.SafeUpdate(() => this.btStop.Enabled = true);
                     break;
                 case EngineStatus.Running:
                     // TODO récupérer le temps écoulé pour l'afficher
                     Console.WriteLine("Running");
                     break;
                 case EngineStatus.Stopped:
-                    this.SafeUpdate(() => display.Hide());
-                    this.SafeUpdate(() => this.btPlay.Enabled = true);
-                    break;
                 case EngineStatus.Ended:
                     this.SafeUpdate(() => display.Hide());
-                    this.SafeUpdate(() => this.btPlay.Enabled = true);
+                    this.SafeUpdate(() => this.btPlay.Enabled = false);
+                    this.SafeUpdate(() => this.btStop.Enabled = false);
+                    this.SafeUpdate(() => this.btUnloadTest_Click(null, null));
                     break;
             }
         }
@@ -188,9 +206,123 @@ namespace DigitalDarkroom
 
         #endregion
 
-        private void btTest1_Click(object sender, EventArgs e)
+        #region Integrated tests
+
+        private RadioButton selectedrbTest;
+
+        /// <summary>
+        /// Load the list of integrated tests
+        /// </summary>
+        private void LoadTests()
         {
-            Tests.Test1.Load();
+            this.rbTest1.Tag = new Tests.Test1() as object;
+            this.rbTest1.Text = ((ITest)this.rbTest1.Tag).Name;
+
+            this.rbTest2.Tag = new Tests.Test2() as object;
+            this.rbTest2.Text = ((ITest)this.rbTest2.Tag).Name;
+
+            btUnloadTest.Enabled = false;
+        }
+
+        void radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+
+            if (rb == null)
+            {
+                return;
+            }
+
+            if (rb.Checked)
+            {
+                selectedrbTest = rb;
+            }
+        }
+        /// <summary>
+        /// Load the selected test
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btLoadTest_Click(object sender, EventArgs e)
+        {
+            if (selectedrbTest == null)
+            {
+                return;
+            }
+
+            // TODO : status bar ?
+
+            this.SuspendLayout(); // TODO : usefull ?
+
+            ITest test = selectedrbTest.Tag as ITest;
+            test.Load(5000);
+
+            listView1.Items.Clear();
+            ImageList imageList = engine.GetImageList();
+            listView1.LargeImageList = imageList;
+
+            //foreach (Image i in imageList.Images)
+            for (int i = 0; i < imageList.Images.Count; i++)
+            {
+                string key = i.ToString();
+
+                var listViewItem = listView1.Items.Add(new ListViewItem(key));
+
+                listViewItem.Tag = key; // TODO : idealement il faut mettre l'objet ImageLayer
+                listViewItem.ImageKey = key;
+            }
+
+            btLoadTest.Enabled = false;
+            btUnloadTest.Enabled = true;
+
+            this.rbTest1.Enabled = false;
+            this.rbTest2.Enabled = false;
+            this.rbTest3.Enabled = false;
+
+            this.toolStripProgressBar1.Value = 0;
+            this.btPlay.Enabled = true;
+
+            this.ResumeLayout(true); // TODO : usefull ?
+        }
+
+        /// <summary>
+        /// Unload current loaded test
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btUnloadTest_Click(object sender, EventArgs e)
+        {
+            if (selectedrbTest == null)
+            {
+                return;
+            }
+
+            this.SuspendLayout(); // TODO : usefull ?
+
+            ITest test = selectedrbTest.Tag as ITest;
+            test.Unload();
+
+            // TODO : status bar ?
+
+            btLoadTest.Enabled = true;
+            btUnloadTest.Enabled = false;
+
+            this.rbTest1.Enabled = true;
+            this.rbTest2.Enabled = true;
+            this.rbTest3.Enabled = true;
+
+            listView1.Items.Clear();
+
+            this.ResumeLayout(true); // TODO : usefull ?
+        }
+
+        #endregion
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListView lv = sender as ListView;
+            
+            this.propertyGrid1.SelectedObject = lv.SelectedItems[0].Tag as string;
         }
 
         /// <summary>
@@ -304,5 +436,6 @@ namespace DigitalDarkroom
         }
 
         #endregion
+
     }
 }

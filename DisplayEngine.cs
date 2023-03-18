@@ -1,5 +1,6 @@
 ﻿using DigitalDarkroom.Panels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,7 +20,7 @@ namespace DigitalDarkroom
 
     public delegate void NewImageEvent(Bitmap bmp);
     public delegate void NewPanelSizeEvent(int width, int height);
-    public delegate void NewProgessEvent(int imageLayerIndex, TimeSpan timeSpan);
+    public delegate void NewProgessEvent(int imageLayerIndex, TimeSpan elapseTime, TimeSpan totalDuration);
 
     public class DisplayEngine // TODO : FSM
     {
@@ -48,16 +49,11 @@ namespace DigitalDarkroom
 
         private Thread thread;
 
-        //private System.Timers.Timer timer = new System.Timers.Timer();
-
         /// <summary>
         /// Display Engine private constructor, use only the GetInstance
         /// </summary>
         private DisplayEngine() 
         {
-            //this.timer.Interval = 1000;
-            //this.timer.Elapsed += Timer_Elapsed;
-
             this.EngineStatusNotify += DisplayEngine_EngineStatusNotify;
         }
 
@@ -71,7 +67,9 @@ namespace DigitalDarkroom
         /// </summary>
         public event NewPanelSizeEvent OnNewPanelSize;
 
-
+        /// <summary>
+        /// Progress event
+        /// </summary>
         public event NewProgessEvent OnNewProgress;
 
         public event EventHandler<EngineStatus> EngineStatusNotify;
@@ -101,17 +99,18 @@ namespace DigitalDarkroom
             this.OnNewPanelSize?.Invoke(width, height);
         }
 
-        //private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        //{
-        //    EngineStatusNotify?.Invoke(this, EngineStatus.Running);
-        //}
-
+        /// <summary>
+        /// Engine self notification
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DisplayEngine_EngineStatusNotify(object sender, EngineStatus e)
         {
             switch (e) 
             { 
                 case EngineStatus.Stopped:
                 case EngineStatus.Ended:
+                    this.layers.Clear();
                     this.OnNewImage?.Invoke(null); // Force black screen (because Background controls color are set to black)
                     break; 
             }
@@ -134,27 +133,42 @@ namespace DigitalDarkroom
             layers.Enqueue(new ImageLayer(bitmap, expositionDuration));
         }
 
-        //private static ManualResetEvent oStopEvent = new ManualResetEvent(false);
+        public ImageList GetImageList()
+        {
+            ImageList il = new ImageList();
 
+            ImageLayer[] arr = layers.ToArray();
 
+            //foreach (ImageLayer i in this.layers)
+            for (int y = 0; y < arr.Length; y++)
+            {
+                ImageLayer i = arr[y] as ImageLayer;
+                il.Images.Add(y.ToString(), i.GetThumbnail());
+            }
+
+            return il;
+        }
+
+        /// <summary>
+        /// Thread Engine
+        /// </summary>
+        /// <param name="obj"></param>
         private static void ThreadProc(object obj)
         {
             DisplayEngine de = (DisplayEngine)obj;
 
             Thread.CurrentThread.IsBackground = true;
 
-            // TODO : cummuler toutes les expositionDuration et faire un décompte ?
-
-            int sum = 0;
+            TimeSpan tsTotalDuration = TimeSpan.Zero;
 
             foreach (ImageLayer i in de.layers)
             {
-                sum += i.GetExpositionDuration();
+                tsTotalDuration += TimeSpan.FromMilliseconds(i.GetExpositionDuration());
             }
 
             de.EngineStatusNotify?.Invoke(de, EngineStatus.Started);
             Stopwatch stopwatch = Stopwatch.StartNew();
-            de.OnNewProgress?.Invoke(0, new TimeSpan(0, 0, 0));
+            de.OnNewProgress?.Invoke(0, TimeSpan.Zero, tsTotalDuration);
 
             while (de.layers.Count > 0)
             {
@@ -181,19 +195,24 @@ namespace DigitalDarkroom
 
                 de.OnNewImage?.Invoke(bmpToDisplay);
 
-                int iter = il.GetExpositionDuration() / 1000; // convert in seconds
+                int iter = il.GetExpositionDuration() / 500; // convert in number of 0.5 seconds
 
                 for (int i = 0; i < iter; i++)
                 {
-                    Thread.Sleep(5000);
+                    Thread.Sleep(500);
 
                     if (de._stop)
                     {
                         break;
                     }
 
-                    de.OnNewProgress?.Invoke(0, stopwatch.Elapsed); // TODO : put ImageLayerIndex
+                    if (i % 2 == 0 || iter == 1)
+                    {
+                        de.OnNewProgress?.Invoke(0, stopwatch.Elapsed, tsTotalDuration); // TODO : put ImageLayerIndex
+                    }
                 }
+
+                il.Dispose();
             }
 
             stopwatch.Stop();
@@ -202,7 +221,7 @@ namespace DigitalDarkroom
         }
 
         /// <summary>
-        /// 
+        /// Start Engine
         /// </summary>
         public void Start() 
         {
@@ -210,14 +229,16 @@ namespace DigitalDarkroom
 
             this.thread = new Thread(ThreadProc);
 
-            //oStopEvent.Reset();
             this.thread.Start((object)this);
         }
 
-        private bool _stop = false; // TODO do an FSM ?
+        /// <summary>
+        /// Thread stop flag
+        /// </summary>
+        private bool _stop = false;
 
         /// <summary>
-        /// 
+        /// Stop Engine
         /// </summary>
         public void Stop() 
         {
@@ -227,12 +248,9 @@ namespace DigitalDarkroom
                 return;
             }
 
-            //this.OnNewImage?.Invoke(null); // Force black screen (because Background controls color are set to black)
-
             _stop = true;
 
-            //oStopEvent.Set();
-            this.thread.Join();
+            this.thread.Join(); // TODO : nedded ?
             this.EngineStatusNotify?.Invoke(this, EngineStatus.Stopped);
         }
 
@@ -240,6 +258,21 @@ namespace DigitalDarkroom
         public void Next() { }
         public void Reset() 
         { 
+        }
+
+        /// <summary>
+        /// Clear and free layers
+        /// </summary>
+        public void Clear()
+        {
+            foreach(ImageLayer il in this.layers)
+            {
+                il.Dispose();
+            }
+
+            this.layers.Clear();
+
+            GC.Collect();
         }
 
         /// <summary>

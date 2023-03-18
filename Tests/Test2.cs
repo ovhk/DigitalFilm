@@ -7,12 +7,39 @@ using System.Threading.Tasks;
 
 namespace DigitalDarkroom.Tests
 {
-    internal class Test2
+    internal class Test2 : ITest
     {
-        public static void Load()
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Name => "Test 2";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Test2() { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        bool ITest.Load(int duration)
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
             GenerateMasquesTemps(engine.Width, engine.Height);
+
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool Unload()
+        {
+            DisplayEngine engine = DisplayEngine.GetInstance();
+            engine.Clear();
+            return true;
         }
 
         private static void GenerateMasquesTemps(int width, int height)

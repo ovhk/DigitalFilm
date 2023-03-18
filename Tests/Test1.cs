@@ -7,9 +7,23 @@ using System.Threading.Tasks;
 
 namespace DigitalDarkroom.Tests
 {
-    internal class Test1
+    internal class Test1 : ITest
     {
-        public static void Load()
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Name => "Test 1";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Test1() { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        bool ITest.Load(int duration)
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
 
@@ -29,7 +43,21 @@ namespace DigitalDarkroom.Tests
                 }
             }
 
-            engine.PushImage(b, 60000);
+            engine.PushImage(b, duration);
+
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool Unload()
+        {
+            DisplayEngine engine = DisplayEngine.GetInstance();
+            engine.Clear();
+
+            return true;
         }
     }
 }

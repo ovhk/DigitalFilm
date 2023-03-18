@@ -48,10 +48,19 @@
             this.btReset = new System.Windows.Forms.Button();
             this.pbDisplay = new System.Windows.Forms.PictureBox();
             this.lbTime = new System.Windows.Forms.Label();
-            this.btTest1 = new System.Windows.Forms.Button();
             this.cbPanels = new System.Windows.Forms.ComboBox();
+            this.gbTests = new System.Windows.Forms.GroupBox();
+            this.rbTest3 = new System.Windows.Forms.RadioButton();
+            this.rbTest2 = new System.Windows.Forms.RadioButton();
+            this.rbTest1 = new System.Windows.Forms.RadioButton();
+            this.btUnloadTest = new System.Windows.Forms.Button();
+            this.btLoadTest = new System.Windows.Forms.Button();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDisplay)).BeginInit();
+            this.gbTests.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonTest
@@ -78,9 +87,11 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripProgressBar1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 465);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(887, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -91,7 +102,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(887, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -151,7 +162,7 @@
             // 
             // btPlay
             // 
-            this.btPlay.Location = new System.Drawing.Point(106, 327);
+            this.btPlay.Location = new System.Drawing.Point(174, 327);
             this.btPlay.Name = "btPlay";
             this.btPlay.Size = new System.Drawing.Size(75, 23);
             this.btPlay.TabIndex = 4;
@@ -161,7 +172,7 @@
             // 
             // btPause
             // 
-            this.btPause.Location = new System.Drawing.Point(187, 327);
+            this.btPause.Location = new System.Drawing.Point(336, 327);
             this.btPause.Name = "btPause";
             this.btPause.Size = new System.Drawing.Size(75, 23);
             this.btPause.TabIndex = 5;
@@ -171,7 +182,7 @@
             // 
             // btStop
             // 
-            this.btStop.Location = new System.Drawing.Point(268, 327);
+            this.btStop.Location = new System.Drawing.Point(255, 327);
             this.btStop.Name = "btStop";
             this.btStop.Size = new System.Drawing.Size(75, 23);
             this.btStop.TabIndex = 6;
@@ -181,7 +192,7 @@
             // 
             // btNext
             // 
-            this.btNext.Location = new System.Drawing.Point(349, 327);
+            this.btNext.Location = new System.Drawing.Point(417, 327);
             this.btNext.Name = "btNext";
             this.btNext.Size = new System.Drawing.Size(75, 23);
             this.btNext.TabIndex = 7;
@@ -191,7 +202,7 @@
             // 
             // btReset
             // 
-            this.btReset.Location = new System.Drawing.Point(430, 327);
+            this.btReset.Location = new System.Drawing.Point(498, 327);
             this.btReset.Name = "btReset";
             this.btReset.Size = new System.Drawing.Size(75, 23);
             this.btReset.TabIndex = 8;
@@ -202,7 +213,7 @@
             // pbDisplay
             // 
             this.pbDisplay.BackColor = System.Drawing.Color.Black;
-            this.pbDisplay.Location = new System.Drawing.Point(106, 77);
+            this.pbDisplay.Location = new System.Drawing.Point(158, 87);
             this.pbDisplay.Name = "pbDisplay";
             this.pbDisplay.Size = new System.Drawing.Size(424, 233);
             this.pbDisplay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -212,21 +223,12 @@
             // lbTime
             // 
             this.lbTime.AutoSize = true;
-            this.lbTime.Location = new System.Drawing.Point(652, 385);
+            this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTime.Location = new System.Drawing.Point(659, 394);
             this.lbTime.Name = "lbTime";
-            this.lbTime.Size = new System.Drawing.Size(35, 13);
+            this.lbTime.Size = new System.Drawing.Size(80, 24);
             this.lbTime.TabIndex = 10;
-            this.lbTime.Text = "label1";
-            // 
-            // btTest1
-            // 
-            this.btTest1.Location = new System.Drawing.Point(12, 87);
-            this.btTest1.Name = "btTest1";
-            this.btTest1.Size = new System.Drawing.Size(75, 23);
-            this.btTest1.TabIndex = 11;
-            this.btTest1.Text = "Test 1";
-            this.btTest1.UseVisualStyleBackColor = true;
-            this.btTest1.Click += new System.EventHandler(this.btTest1_Click);
+            this.lbTime.Text = "00:00.00";
             // 
             // cbPanels
             // 
@@ -237,14 +239,103 @@
             this.cbPanels.TabIndex = 12;
             this.cbPanels.SelectedIndexChanged += new System.EventHandler(this.cbPanels_SelectedIndexChanged);
             // 
+            // gbTests
+            // 
+            this.gbTests.Controls.Add(this.rbTest3);
+            this.gbTests.Controls.Add(this.rbTest2);
+            this.gbTests.Controls.Add(this.rbTest1);
+            this.gbTests.Controls.Add(this.btUnloadTest);
+            this.gbTests.Controls.Add(this.btLoadTest);
+            this.gbTests.Location = new System.Drawing.Point(12, 96);
+            this.gbTests.Name = "gbTests";
+            this.gbTests.Size = new System.Drawing.Size(121, 265);
+            this.gbTests.TabIndex = 14;
+            this.gbTests.TabStop = false;
+            this.gbTests.Text = "Tests";
+            // 
+            // rbTest3
+            // 
+            this.rbTest3.AutoSize = true;
+            this.rbTest3.Location = new System.Drawing.Point(19, 80);
+            this.rbTest3.Name = "rbTest3";
+            this.rbTest3.Size = new System.Drawing.Size(55, 17);
+            this.rbTest3.TabIndex = 18;
+            this.rbTest3.TabStop = true;
+            this.rbTest3.Text = "Test 3";
+            this.rbTest3.UseVisualStyleBackColor = true;
+            this.rbTest3.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
+            // 
+            // rbTest2
+            // 
+            this.rbTest2.AutoSize = true;
+            this.rbTest2.Location = new System.Drawing.Point(19, 57);
+            this.rbTest2.Name = "rbTest2";
+            this.rbTest2.Size = new System.Drawing.Size(55, 17);
+            this.rbTest2.TabIndex = 17;
+            this.rbTest2.TabStop = true;
+            this.rbTest2.Text = "Test 2";
+            this.rbTest2.UseVisualStyleBackColor = true;
+            this.rbTest2.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
+            // 
+            // rbTest1
+            // 
+            this.rbTest1.AutoSize = true;
+            this.rbTest1.Location = new System.Drawing.Point(19, 34);
+            this.rbTest1.Name = "rbTest1";
+            this.rbTest1.Size = new System.Drawing.Size(55, 17);
+            this.rbTest1.TabIndex = 16;
+            this.rbTest1.TabStop = true;
+            this.rbTest1.Text = "Test 1";
+            this.rbTest1.UseVisualStyleBackColor = true;
+            this.rbTest1.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
+            // 
+            // btUnloadTest
+            // 
+            this.btUnloadTest.Location = new System.Drawing.Point(19, 231);
+            this.btUnloadTest.Name = "btUnloadTest";
+            this.btUnloadTest.Size = new System.Drawing.Size(75, 23);
+            this.btUnloadTest.TabIndex = 15;
+            this.btUnloadTest.Text = "Unload";
+            this.btUnloadTest.UseVisualStyleBackColor = true;
+            this.btUnloadTest.Click += new System.EventHandler(this.btUnloadTest_Click);
+            // 
+            // btLoadTest
+            // 
+            this.btLoadTest.Location = new System.Drawing.Point(19, 202);
+            this.btLoadTest.Name = "btLoadTest";
+            this.btLoadTest.Size = new System.Drawing.Size(75, 23);
+            this.btLoadTest.TabIndex = 14;
+            this.btLoadTest.Text = "Load";
+            this.btLoadTest.UseVisualStyleBackColor = true;
+            this.btLoadTest.Click += new System.EventHandler(this.btLoadTest_Click);
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            // 
+            // listView1
+            // 
+            this.listView1.Alignment = System.Windows.Forms.ListViewAlignment.Left;
+            this.listView1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(12, 371);
+            this.listView1.MultiSelect = false;
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(614, 78);
+            this.listView1.TabIndex = 15;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(887, 487);
+            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.gbTests);
             this.Controls.Add(this.cbPanels);
-            this.Controls.Add(this.btTest1);
             this.Controls.Add(this.lbTime);
             this.Controls.Add(this.pbDisplay);
             this.Controls.Add(this.btReset);
@@ -260,9 +351,13 @@
             this.Name = "frmMain";
             this.Text = "DigitalDarkroom";
             this.Load += new System.EventHandler(this.frmMain_Load);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDisplay)).EndInit();
+            this.gbTests.ResumeLayout(false);
+            this.gbTests.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,8 +385,15 @@
         private System.Windows.Forms.Button btReset;
         private System.Windows.Forms.PictureBox pbDisplay;
         private System.Windows.Forms.Label lbTime;
-        private System.Windows.Forms.Button btTest1;
         private System.Windows.Forms.ComboBox cbPanels;
+        private System.Windows.Forms.GroupBox gbTests;
+        private System.Windows.Forms.RadioButton rbTest3;
+        private System.Windows.Forms.RadioButton rbTest2;
+        private System.Windows.Forms.RadioButton rbTest1;
+        private System.Windows.Forms.Button btUnloadTest;
+        private System.Windows.Forms.Button btLoadTest;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+        private System.Windows.Forms.ListView listView1;
     }
 }
 
