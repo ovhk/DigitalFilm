@@ -19,7 +19,7 @@ namespace DigitalDarkroom
     }
 
     public delegate void NewImageEvent(Bitmap bmp);
-    public delegate void NewPanelSizeEvent(int width, int height);
+    public delegate void NewPanelEvent(IPanel panel);
     public delegate void NewProgessEvent(int imageLayerIndex, TimeSpan elapseTime, TimeSpan totalDuration);
 
     /// <summary>
@@ -78,38 +78,49 @@ namespace DigitalDarkroom
         /// <summary>
         /// Change panel size event
         /// </summary>
-        public event NewPanelSizeEvent OnNewPanelSize;
+        public event NewPanelEvent OnNewPanel;
 
         /// <summary>
         /// Progress event
         /// </summary>
         public event NewProgessEvent OnNewProgress;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<EngineStatus> EngineStatusNotify;
 
-        private int _width;
-        private int _height;
+        /// <summary>
+        /// 
+        /// </summary>
+        private IPanel panel;
+
+        // TODO use GetPanel instead ?
 
         /// <summary>
         /// Get panel's width
         /// </summary>
-        public int Width { get => this._width; }
+        public int Width { get => this.panel.Width; }
 
         /// <summary>
         /// Get panel's height
         /// </summary>
-        public int Height { get => this._height; }
+        public int Height { get => this.panel.Height; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int NumberOfColors { get => this.panel.NumberOfColors; }
 
         /// <summary>
         /// Set the size of the panel
         /// </summary>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        public void setSize(int width, int height)
+        public void setPanel(IPanel panel)
         {
-            this._height = height;
-            this._width = width;
-            this.OnNewPanelSize?.Invoke(width, height);
+            this.panel = panel;
+            this.OnNewPanel?.Invoke(panel);
         }
 
         /// <summary>
@@ -142,10 +153,13 @@ namespace DigitalDarkroom
         /// <param name="expositionDuration"></param>
         public void PushImage(Bitmap bitmap, int expositionDuration)
         {
-            // TODO : put grayslace filter here ?
             layers.Enqueue(new ImageLayer(bitmap, expositionDuration));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ImageList GetImageList()
         {
             ImageList il = new ImageList();
@@ -154,14 +168,38 @@ namespace DigitalDarkroom
 
             ImageLayer[] arr = layers.ToArray();
 
-            //foreach (ImageLayer i in this.layers)
             for (int y = 0; y < arr.Length; y++)
             {
                 ImageLayer i = arr[y] as ImageLayer;
-                il.Images.Add(y.ToString(), i.GetThumbnail());
+                string key = y.ToString();
+                il.Images.Add(key, i.GetThumbnail());
             }
 
             return il;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<ListViewItem> GetListViewItems()
+        {
+            List<ListViewItem> list = new List<ListViewItem>();
+
+            ImageLayer[] arr = layers.ToArray();
+
+            for (int y = 0; y < arr.Length; y++)
+            {
+                ImageLayer i = arr[y] as ImageLayer;
+                string key = y.ToString();
+                ListViewItem lvi = new ListViewItem(key);
+
+                lvi.Tag = i;
+                lvi.ImageKey = key;
+                list.Add(lvi);
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -187,42 +225,42 @@ namespace DigitalDarkroom
 
             while (de.layers.Count > 0)
             {
+                // Please do as fast as possible here !
+
                 ImageLayer il = de.layers.Dequeue();
 
                 Bitmap b = il.GetBitmap();
 
-                Bitmap bmpToDisplay = b;
+                Bitmap bmpToDisplay = new Bitmap(b); // TODO : quand on va trop vite, on n'a pas le temps d'afficher que la ressource est libéré, donc on duplique mais ça prend du temps....;
 
-                //switch (b.PixelFormat) // TODO : work here !
-                //{
-                //    case PixelFormat.Format32bppArgb:
-                //    case PixelFormat.Format32bppRgb:
-                //        bmpToDisplay = MakeGrayscale3(b);
-                //        break;
-                //    case PixelFormat.Format8bppIndexed:
-                //        bmpToDisplay = b;
-                //        bmpToDisplay.Palette = GetGrayScalePalette();
-                //        break;
-                //    default:
-                //        bmpToDisplay = new Bitmap(b); ;
-                //        break;
-                //}
+                if (de._stop)
+                {
+                    break;
+                }
 
                 de.OnNewImage?.Invoke(bmpToDisplay);
 
-                int iter = il.GetExpositionDuration() / 500; // convert in number of 0.5 seconds
+                int duration = il.GetExpositionDuration();
 
-                for (int i = 0; i < iter; i++)
+                // if duration is small, we don't cut it in seconds
+                if (duration <= 1000)
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(duration);
+                    //de.OnNewProgress?.Invoke(0, stopwatch.Elapsed, tsTotalDuration); // TODO : put ImageLayerIndex et ATTENTION C'EST TROP LONG
+                } 
+                else
+                {
+                    int iter = il.GetExpositionDuration() / 1000; // convert in number of secondes
 
-                    if (de._stop)
+                    for (int i = 0; i < iter; i++)
                     {
-                        break;
-                    }
+                        Thread.Sleep(1000);
 
-                    if (i % 2 == 0 || iter == 1)
-                    {
+                        if (de._stop)
+                        {
+                            break;
+                        }
+
                         de.OnNewProgress?.Invoke(0, stopwatch.Elapsed, tsTotalDuration); // TODO : put ImageLayerIndex
                     }
                 }
@@ -269,9 +307,7 @@ namespace DigitalDarkroom
 
         public void Pause() { }
         public void Next() { }
-        public void Reset() 
-        { 
-        }
+        public void Reset() { }
 
         /// <summary>
         /// Clear and free layers
@@ -286,61 +322,6 @@ namespace DigitalDarkroom
             this.layers.Clear();
 
             GC.Collect();
-        }
-
-        /// <summary>
-        /// Based on http://www.switchonthecode.com/tutorials/csharp-tutorial-convert-a-color-image-to-grayscale
-        /// </summary>
-        /// <returns></returns>
-        static ColorPalette GetGrayScalePalette() // TODO : mode to tools ?
-        {
-            Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed);
-
-            ColorPalette monoPalette = bmp.Palette;
-
-            Color[] entries = monoPalette.Entries;
-
-            for (int i = 0; i < 256; i++)
-            {
-                entries[i] = Color.FromArgb(i, i, i);
-            }
-
-            return monoPalette;
-        }
-
-        static Bitmap MakeGrayscale3(Bitmap original) // TODO : mode to tools ?
-        {
-            //create a blank bitmap the same size as original
-            Bitmap newBitmap = new Bitmap(original.Width, original.Height);
-
-            //get a graphics object from the new image
-            Graphics g = Graphics.FromImage(newBitmap);
-
-            //create the grayscale ColorMatrix
-            ColorMatrix colorMatrix = new ColorMatrix(
-               new float[][]
-               {
-                 new float[] {.3f, .3f, .3f, 0, 0},
-                 new float[] {.59f, .59f, .59f, 0, 0},
-                 new float[] {.11f, .11f, .11f, 0, 0},
-                 new float[] {0, 0, 0, 1, 0},
-                 new float[] {0, 0, 0, 0, 1}
-               });
-
-            //create some image attributes
-            ImageAttributes attributes = new ImageAttributes();
-
-            //set the color matrix attribute
-            attributes.SetColorMatrix(colorMatrix);
-
-            //draw the original image on the new image
-            //using the grayscale color matrix
-            g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height),
-               0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
-
-            //dispose the Graphics object
-            g.Dispose();
-            return newBitmap;
         }
     }
 }

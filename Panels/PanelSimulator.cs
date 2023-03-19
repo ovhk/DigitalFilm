@@ -16,6 +16,8 @@ namespace DigitalDarkroom.Panels
 
         int IPanel.Height => 768;
 
+        int IPanel.NumberOfColors => 256;
+
         public override string ToString()
         {
             return this._name;

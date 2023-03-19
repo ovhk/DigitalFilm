@@ -1,5 +1,5 @@
 ﻿using DigitalDarkroom.Panels;
-using DigitalDarkroom.Tests;
+using DigitalDarkroom.Modes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace DigitalDarkroom
 {
@@ -47,7 +48,7 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void frmMain_Load(object sender, EventArgs e)
         {
-            LoadTests();
+            LoadModes();
 
             engine = DisplayEngine.GetInstance();
             engine.EngineStatusNotify += Engine_EngineStatusNotify;
@@ -55,6 +56,7 @@ namespace DigitalDarkroom
             engine.OnNewProgress += Engine_OnNewProgress;
             engine.Stop(); // Call engine notification to enable/disable controls
 
+            cbPanels.Items.Add(new Panels.NoPanel());
             cbPanels.Items.Add(new Panels.PanelSimulator());
             cbPanels.Items.Add(new Panels.WisecocoTOP103MONO8K01A());
             cbPanels.SelectedIndex = 0; // Select first panel in list
@@ -112,6 +114,18 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //ListView lv = sender as ListView;
+
+            //if (lv.SelectedItems.Count == 0)
+            //{
+            //    return;
+            //}
+
+            //this.propertyGrid1.SelectedObject = lv.SelectedItems[0].Tag as string;
+        }
+
+        private void listView1_ItemActivate(object sender, EventArgs e)
+        {
             ListView lv = sender as ListView;
 
             if (lv.SelectedItems.Count == 0)
@@ -119,12 +133,13 @@ namespace DigitalDarkroom
                 return;
             }
 
-            this.propertyGrid1.SelectedObject = lv.SelectedItems[0].Tag as string;
-        }
-
-        private void listView1_ItemActivate(object sender, EventArgs e)
-        {
-            // TODO test du click ?
+            ImageLayer il = lv.SelectedItems[0].Tag as ImageLayer;
+            
+            if (il != null)
+            {
+                this.pbDisplay.Image = il.GetBitmap();
+                this.propertyGrid1.SelectedObject = lv.SelectedItems[0].Tag as ImageLayer;
+            }
         }
 
         #endregion
@@ -160,10 +175,10 @@ namespace DigitalDarkroom
         /// <param name="bmp"></param>
         private void Engine_OnNewImage(Bitmap bmp)
         {
-            Image old = this.pbDisplay.Image;
+            //Image old = this.pbDisplay.Image; // this cause Exception
             SafeUpdate(() => this.pbDisplay.Image = bmp);
             //SafeUpdate(() => this.pbDisplay.Refresh());
-            if (old != null) old.Dispose();
+            //if (old != null) old.Dispose(); // this cause Exception
         }
 
         /// <summary>
@@ -197,53 +212,13 @@ namespace DigitalDarkroom
 
         #region TODO REMOVE THIS
 
-        private void buttonTest_Click(object sender, EventArgs e)
-        {
-            IPanel selectedPanel = (IPanel)this.cbPanels.SelectedItem;
-
-            if (selectedPanel == null || !(selectedPanel is IPanel))
-            {
-                return;
-            }
-
-            int Width = selectedPanel.Width;
-            int Height = selectedPanel.Height;
-
-            engine.setSize(Width, Height);
-            display.Show();
-
-            Image img = Image.FromFile(@"C:\Users\sectronic\Desktop\Digital-Picture-to-Analog-Darkroom-print-master\test.png");
-
-            Bitmap a = new Bitmap(img);
-
-            engine.PushImage(a, 2000);
-
-            Bitmap b = new Bitmap(Width, Height);
-
-            for (int Xcount = 0; Xcount < b.Width; Xcount++)
-            {
-                for (int Ycount = 0; Ycount < b.Height; Ycount++)
-                {
-                    b.SetPixel(Xcount, Ycount, Color.Red);
-                }
-            }
-
-            engine.PushImage(new Bitmap(b), 2000);
-
-            //engine.PushImage(GenerateGreylevelBands8bit(Width, Height), 5000);
-            //engine.PushImage(GenerateGreylevelBands(Width, Height), 5000);
-
-           
-            //display.Run();
-        }
-
         private Bitmap GenerateGreylevelBands8bit(int width, int height)
         {
             Bitmap b = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
 
             for (int i = 0; i < 256; i++)
             {
-                Tools.FillIndexedRectangle(b, new Rectangle(i * (width / 256), 0, width / 256, height), Color.FromArgb(i, i, i));
+                ToolsTODO.FillIndexedRectangle(b, new Rectangle(i * (width / 256), 0, width / 256, height), Color.FromArgb(i, i, i));
             }
 
             return b;
@@ -286,22 +261,57 @@ namespace DigitalDarkroom
 
         #endregion
 
-        #region Integrated tests
+        #region Modes Management
 
-        private RadioButton selectedrbTest;
+        private RadioButton selectedrbMode;
 
         /// <summary>
         /// Load the list of integrated tests
         /// </summary>
-        private void LoadTests()
+        private void LoadModes()
         {
-            this.rbTest1.Tag = new Tests.Test1() as object;
-            this.rbTest1.Text = ((ITest)this.rbTest1.Tag).Name;
+            this.rbMode1.Tag = new Modes.Mode1() as object;
+            this.rbMode1.Text = ((IMode)this.rbMode1.Tag).Name;
 
-            this.rbTest2.Tag = new Tests.Test2() as object;
-            this.rbTest2.Text = ((ITest)this.rbTest2.Tag).Name;
+            this.rbMode2.Tag = new Modes.Mode2() as object;
+            this.rbMode2.Text = ((IMode)this.rbMode2.Tag).Name;
 
-            btUnloadTest.Enabled = false;
+            this.rbMode3.Tag = new Modes.Mode3() as object;
+            this.rbMode3.Text = ((IMode)this.rbMode3.Tag).Name;
+
+            this.rbMode4.Tag = new Modes.Mode4() as object;
+            this.rbMode4.Text = ((IMode)this.rbMode4.Tag).Name;
+
+            this.rbMode5.Tag = new Modes.Mode5() as object;
+            this.rbMode5.Text = ((IMode)this.rbMode5.Tag).Name;
+
+            this.rbMode6.Tag = new Modes.Mode6() as object;
+            this.rbMode6.Text = ((IMode)this.rbMode6.Tag).Name;
+
+            btUnloadMode.Enabled = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btBrowseImgFiles_Click(object sender, EventArgs e)
+        {
+            var fileContent = string.Empty;
+            var filePath[];
+ 
+            openFileDialog1.InitialDirectory = "c:\\";
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+            openFileDialog1.Multiselect = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //Get the path of specified file
+                filePath = openFileDialog1.FileNames;
+            }
         }
 
         /// <summary>
@@ -320,7 +330,9 @@ namespace DigitalDarkroom
 
             if (rb.Checked)
             {
-                selectedrbTest = rb;
+                selectedrbMode = rb;
+                IMode mode = rb.Tag as IMode;
+                this.tbModeDescription.Text = mode.Description;
             }
         }
         /// <summary>
@@ -330,7 +342,7 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void btLoadTest_Click(object sender, EventArgs e)
         {
-            if (selectedrbTest == null)
+            if (selectedrbMode == null)
             {
                 return;
             }
@@ -339,30 +351,26 @@ namespace DigitalDarkroom
 
             this.SuspendLayout(); // TODO : usefull ?
 
-            ITest test = selectedrbTest.Tag as ITest;
-            test.Load(5000);
+            IMode mode = selectedrbMode.Tag as IMode;
 
-            listView1.Items.Clear();
-            ImageList imageList = engine.GetImageList();
-            listView1.LargeImageList = imageList;
+            int duration = int.Parse(tbDuration.Text);
 
-            //foreach (Image i in imageList.Images)
-            for (int i = 0; i < imageList.Images.Count; i++)
-            {
-                string key = i.ToString();
+            mode.Load(null, duration);
 
-                var listViewItem = listView1.Items.Add(new ListViewItem(key));
+            this.listView1.Items.Clear();
+            this.listView1.LargeImageList = engine.GetImageList();
+            this.listView1.Items.AddRange(engine.GetListViewItems().ToArray());
 
-                listViewItem.Tag = key; // TODO : idealement il faut mettre l'objet ImageLayer
-                listViewItem.ImageKey = key;
-            }
+            this.btLoadMode.Enabled = false;
+            this.btUnloadMode.Enabled = true;
 
-            btLoadTest.Enabled = false;
-            btUnloadTest.Enabled = true;
-
-            this.rbTest1.Enabled = false;
-            this.rbTest2.Enabled = false;
-            this.rbTest3.Enabled = false;
+            this.tbDuration.Enabled = false;
+            this.rbMode1.Enabled = false;
+            this.rbMode2.Enabled = false;
+            this.rbMode3.Enabled = false;
+            this.rbMode4.Enabled = false;
+            this.rbMode5.Enabled = false;
+            this.rbMode6.Enabled = false;
 
             this.toolStripProgressBar1.Value = 0;
             this.btPlay.Enabled = true;
@@ -377,28 +385,48 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void btUnloadTest_Click(object sender, EventArgs e)
         {
-            if (selectedrbTest == null)
+            if (selectedrbMode == null)
             {
                 return;
             }
 
             this.SuspendLayout(); // TODO : usefull ?
 
-            ITest test = selectedrbTest.Tag as ITest;
+            IMode test = selectedrbMode.Tag as IMode;
             test.Unload();
 
             // TODO : status bar ?
 
-            btLoadTest.Enabled = true;
-            btUnloadTest.Enabled = false;
+            this.btLoadMode.Enabled = true;
+            this.btUnloadMode.Enabled = false;
 
-            this.rbTest1.Enabled = true;
-            this.rbTest2.Enabled = true;
-            this.rbTest3.Enabled = true;
+            this.tbDuration.Enabled = true;
+            this.rbMode1.Enabled = true;
+            this.rbMode2.Enabled = true;
+            this.rbMode3.Enabled = true;
+            this.rbMode4.Enabled = true;
+            this.rbMode5.Enabled = true;
+            this.rbMode6.Enabled = true;
 
-            listView1.Items.Clear();
+            this.listView1.Items.Clear();
 
             this.ResumeLayout(true); // TODO : usefull ?
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tbDuration_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            int val = 0;
+
+            if (int.TryParse(tb.Text, out val) == false)
+            {
+                tb.Text = "5000";
+            }
         }
 
         #endregion
@@ -410,15 +438,21 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void cbPanels_SelectedIndexChanged(object sender, EventArgs e)
         {
-            IPanel selectedPanel = (IPanel)this.cbPanels.SelectedItem;
+            IPanel selectedPanel = this.cbPanels.SelectedItem as IPanel;
 
             if (selectedPanel == null || !(selectedPanel is IPanel))
             {
                 return;
             }
 
+            if (selectedPanel.ToString() == "No Panel")
+            {
+                engine.setPanel(selectedPanel);
+                return;
+            }
+
             // Let update frmDisplat size following the selected panel in the list
-            engine.setSize(selectedPanel.Width, selectedPanel.Height);
+            engine.setPanel(selectedPanel);
         }
 
         /// <summary>
@@ -428,8 +462,13 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void btPlay_Click(object sender, EventArgs e)
         {
-            display.Show();
-            Thread.Sleep(100); // Just to be sure that the display frame is loaded
+            IPanel selectedPanel = this.cbPanels.SelectedItem as IPanel;
+
+            if (selectedPanel.ToString() != "No Panel")
+            {
+                display.Show();
+                Thread.Sleep(100); // Just to be sure that the display frame is loaded
+            }
             engine.Start();
         }
 

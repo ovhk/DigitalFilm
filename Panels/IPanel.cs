@@ -11,5 +11,6 @@ namespace DigitalDarkroom.Panels
         string Name { get; }
         int Width { get; }
         int Height { get; }
+        int NumberOfColors { get; }
     }
 }

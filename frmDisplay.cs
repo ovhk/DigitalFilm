@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Collections;
 using System.Threading;
+using DigitalDarkroom.Panels;
 
 namespace DigitalDarkroom
 {
@@ -31,8 +32,8 @@ namespace DigitalDarkroom
             InitializeComponent();
             this.DoubleBuffered = true; // Needed to eliminate flickering
             engine = DisplayEngine.GetInstance();
-            engine.OnNewImage += Engine_OnNewImage;
-            engine.OnNewPanelSize += Engine_OnNewPanelSize;
+            engine.OnNewImage += Engine_OnNewImage; // TODO : uniquement au Show ? et on se désabonne au close ?
+            engine.OnNewPanel += Engine_OnNewPanel;
         }
 
         // TODO : déplacer la fenête sur un autre écran : https://stackoverflow.com/questions/8420203/move-form-onto-specified-screen
@@ -52,10 +53,10 @@ namespace DigitalDarkroom
         /// </summary>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        private void Engine_OnNewPanelSize(int width, int height)
+        private void Engine_OnNewPanel(IPanel panel)
         {
-            SafeUpdate(() => this.Width = width);
-            SafeUpdate(() => this.Height = height);
+            SafeUpdate(() => this.Width = panel.Width);
+            SafeUpdate(() => this.Height = panel.Height);
         }
 
         /// <summary>

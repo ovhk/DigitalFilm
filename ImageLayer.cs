@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,10 @@ namespace DigitalDarkroom
         /// 
         /// </summary>
         private int expositionDuration;
+
+        [CategoryAttribute("Duration"),
+        DescriptionAttribute("Exposition duration")]
+        public int ExpositionDuration { get { return expositionDuration; } }
 
         /// <summary>
         /// 
