@@ -23,9 +23,13 @@ namespace DigitalDarkroom
         /// </summary>
         private DisplayEngine engine;
 
+        /// <summary>
+        /// FrmDisplay constructor
+        /// </summary>
         public frmDisplay()
         {
             InitializeComponent();
+            this.DoubleBuffered = true; // Needed to eliminate flickering
             engine = DisplayEngine.GetInstance();
             engine.OnNewImage += Engine_OnNewImage;
             engine.OnNewPanelSize += Engine_OnNewPanelSize;
@@ -39,10 +43,8 @@ namespace DigitalDarkroom
         /// <param name="bmp"></param>
         private void Engine_OnNewImage(Bitmap bmp)
         {
-            Image old = this.BackgroundImage;
-            SafeUpdate(() => this.BackgroundImage = bmp); // TODO c'est long à afficher !!!!
-            //SafeUpdate(() => this.Refresh());
-            if (old != null) old.Dispose();
+            this.imageToDisplay = bmp;
+            SafeUpdate(() => this.Refresh());
         }
 
         /// <summary>
@@ -54,6 +56,26 @@ namespace DigitalDarkroom
         {
             SafeUpdate(() => this.Width = width);
             SafeUpdate(() => this.Height = height);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        Bitmap imageToDisplay;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            if (this.imageToDisplay != null)
+            {
+                // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
+                e.Graphics.DrawImage(this.imageToDisplay, 0, 0);
+            }
         }
 
         #region Invoke Management
@@ -79,7 +101,14 @@ namespace DigitalDarkroom
         /// </summary>
         private bool dragging = false;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private Point dragCursorPoint;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private Point dragFormPoint;
 
         /// <summary>

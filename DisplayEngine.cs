@@ -22,14 +22,27 @@ namespace DigitalDarkroom
     public delegate void NewPanelSizeEvent(int width, int height);
     public delegate void NewProgessEvent(int imageLayerIndex, TimeSpan elapseTime, TimeSpan totalDuration);
 
-    public class DisplayEngine // TODO : FSM
+    /// <summary>
+    /// This is this Display engine. It manage the scheduling of displaying the list of image
+    /// </summary>
+    public class DisplayEngine
     {
         #region Singleton
 
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
         private static DisplayEngine _instance;
 
+        /// <summary>
+        /// Lock object
+        /// </summary>
         private static readonly object _lock = new object();
 
+        /// <summary>
+        /// Get the instance of the singleton
+        /// </summary>
+        /// <returns></returns>
         public static DisplayEngine GetInstance()
         {
             if (_instance == null)
@@ -136,6 +149,8 @@ namespace DigitalDarkroom
         public ImageList GetImageList()
         {
             ImageList il = new ImageList();
+            
+            il.ImageSize = new Size(128, 128); // TODO must match with ImageLayer 256 max, get value from TileSize ?
 
             ImageLayer[] arr = layers.ToArray();
 
@@ -242,15 +257,13 @@ namespace DigitalDarkroom
         /// </summary>
         public void Stop() 
         {
-            if (this.thread == null) return;
-            if (this.thread.ThreadState == System.Threading.ThreadState.Stopped)
-            {
-                return;
-            }
-
             _stop = true;
 
-            this.thread.Join(); // TODO : nedded ?
+            if (this.thread != null && this.thread.ThreadState == System.Threading.ThreadState.Running)
+            {
+                this.thread.Join(); // TODO : nedded ?
+            }
+
             this.EngineStatusNotify?.Invoke(this, EngineStatus.Stopped);
         }
 

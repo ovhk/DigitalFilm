@@ -33,6 +33,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +56,6 @@
             this.rbTest1 = new System.Windows.Forms.RadioButton();
             this.btUnloadTest = new System.Windows.Forms.Button();
             this.btLoadTest = new System.Windows.Forms.Button();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.listView1 = new System.Windows.Forms.ListView();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -75,7 +75,7 @@
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Location = new System.Drawing.Point(588, 48);
+            this.propertyGrid1.Location = new System.Drawing.Point(780, 30);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.Size = new System.Drawing.Size(200, 302);
             this.propertyGrid1.TabIndex = 1;
@@ -89,11 +89,16 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 465);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 540);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(887, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(988, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
             // 
             // menuStrip1
             // 
@@ -102,7 +107,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(887, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(988, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -213,9 +218,9 @@
             // pbDisplay
             // 
             this.pbDisplay.BackColor = System.Drawing.Color.Black;
-            this.pbDisplay.Location = new System.Drawing.Point(158, 87);
+            this.pbDisplay.Location = new System.Drawing.Point(158, 76);
             this.pbDisplay.Name = "pbDisplay";
-            this.pbDisplay.Size = new System.Drawing.Size(424, 233);
+            this.pbDisplay.Size = new System.Drawing.Size(561, 244);
             this.pbDisplay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbDisplay.TabIndex = 9;
             this.pbDisplay.TabStop = false;
@@ -224,7 +229,7 @@
             // 
             this.lbTime.AutoSize = true;
             this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTime.Location = new System.Drawing.Point(659, 394);
+            this.lbTime.Location = new System.Drawing.Point(824, 410);
             this.lbTime.Name = "lbTime";
             this.lbTime.Size = new System.Drawing.Size(80, 24);
             this.lbTime.TabIndex = 10;
@@ -309,11 +314,6 @@
             this.btLoadTest.UseVisualStyleBackColor = true;
             this.btLoadTest.Click += new System.EventHandler(this.btLoadTest_Click);
             // 
-            // toolStripProgressBar1
-            // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
-            // 
             // listView1
             // 
             this.listView1.Alignment = System.Windows.Forms.ListViewAlignment.Left;
@@ -322,9 +322,12 @@
             this.listView1.Location = new System.Drawing.Point(12, 371);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(614, 78);
+            this.listView1.Size = new System.Drawing.Size(707, 153);
             this.listView1.TabIndex = 15;
+            this.listView1.TileSize = new System.Drawing.Size(128, 128);
             this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Tile;
+            this.listView1.ItemActivate += new System.EventHandler(this.listView1_ItemActivate);
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // frmMain
@@ -332,7 +335,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(887, 487);
+            this.ClientSize = new System.Drawing.Size(988, 562);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.gbTests);
             this.Controls.Add(this.cbPanels);

@@ -37,7 +37,7 @@ namespace DigitalDarkroom
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 
             this.bmp = bmp;
-            this.thumbnail = bmp.GetThumbnailImage(100, 100, callback, new IntPtr());
+            this.thumbnail = bmp.GetThumbnailImage(128, 128, callback, new IntPtr()); // 256x256 max
             this.expositionDuration = expositionDuration;
         }
 
