@@ -23,25 +23,25 @@ namespace DigitalDarkroom.Modes
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
 
-            Bitmap b = new Bitmap(engine.Width, engine.Height);
+            Bitmap b = new Bitmap(engine.Panel.Width, engine.Panel.Height);
 
-            int width = engine.Width;
-            int height = engine.Height;
+            int width = engine.Panel.Width;
+            int height = engine.Panel.Height;
 
             using (Graphics gfx = Graphics.FromImage(b))
             {
-                for (int i = 0; i < engine.NumberOfColors; i++)
+                for (int i = 0; i < engine.Panel.NumberOfColors; i++)
                 {
-                    using (SolidBrush brush = new SolidBrush(Color.FromArgb(engine.NumberOfColors - 1 - i, engine.NumberOfColors - 1 - i, engine.NumberOfColors - 1 - i)))
+                    using (SolidBrush brush = new SolidBrush(Color.FromArgb(engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i)))
                     {
-                        gfx.FillRectangle(brush, i * (width / engine.NumberOfColors), 0, width / engine.NumberOfColors, height / 2);
+                        gfx.FillRectangle(brush, i * (width / engine.Panel.NumberOfColors), 0, width / engine.Panel.NumberOfColors, height / 2);
                     }
                 }
 
                 SolidBrush brushBlack = new SolidBrush(Color.Black);
                 SolidBrush brushWhite = new SolidBrush(Color.White);
 
-                int size = engine.NumberOfColors;
+                int size = engine.Panel.NumberOfColors;
 
                 for (int i = 0; i < size; i++)
                 {

@@ -56,7 +56,7 @@ namespace DigitalDarkroom
             engine.OnNewProgress += Engine_OnNewProgress;
             engine.Stop(); // Call engine notification to enable/disable controls
 
-            cbPanels.Items.Add(new Panels.NoPanel());
+            cbPanels.Items.Add(new Panels.NoPanel(this.propertyGrid1));
             cbPanels.Items.Add(new Panels.PanelSimulator());
             cbPanels.Items.Add(new Panels.WisecocoTOP103MONO8K01A());
             cbPanels.SelectedIndex = 0; // Select first panel in list
@@ -298,20 +298,38 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void btBrowseImgFiles_Click(object sender, EventArgs e)
         {
-            var fileContent = string.Empty;
-            var filePath[];
- 
-            openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            string[] filesPath;
+
+            //openFileDialog1.InitialDirectory = "c:\\";
+            //openFileDialog1.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.tif;...";
+            openFileDialog1.Filter = GetImageFilter();
             openFileDialog1.FilterIndex = 2;
-            openFileDialog1.RestoreDirectory = true;
+            //openFileDialog1.RestoreDirectory = true;
             openFileDialog1.Multiselect = true;
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 //Get the path of specified file
-                filePath = openFileDialog1.FileNames;
+                filesPath =  openFileDialog1.FileNames;
             }
+        }
+
+        private static string GetImageFilter()
+        {
+            return
+                "All Files (*.*)|*.*" +
+                "|All Pictures (*.emf;*.wmf;*.jpg;*.jpeg;*.jfif;*.jpe;*.png;*.bmp;*.dib;*.rle;*.gif;*.emz;*.wmz;*.tif;*.tiff;*.svg;*.ico)" +
+                    "|*.emf;*.wmf;*.jpg;*.jpeg;*.jfif;*.jpe;*.png;*.bmp;*.dib;*.rle;*.gif;*.emz;*.wmz;*.tif;*.tiff;*.svg;*.ico" +
+                "|Windows Enhanced Metafile (*.emf)|*.emf" +
+                "|Windows Metafile (*.wmf)|*.wmf" +
+                "|JPEG File Interchange Format (*.jpg;*.jpeg;*.jfif;*.jpe)|*.jpg;*.jpeg;*.jfif;*.jpe" +
+                "|Portable Network Graphics (*.png)|*.png" +
+                "|Bitmap Image File (*.bmp;*.dib;*.rle)|*.bmp;*.dib;*.rle" +
+                "|Compressed Windows Enhanced Metafile (*.emz)|*.emz" +
+                "|Compressed Windows MetaFile (*.wmz)|*.wmz" +
+                "|Tag Image File Format (*.tif;*.tiff)|*.tif;*.tiff" +
+                "|Scalable Vector Graphics (*.svg)|*.svg" +
+                "|Icon (*.ico)|*.ico";
         }
 
         /// <summary>
@@ -447,12 +465,12 @@ namespace DigitalDarkroom
 
             if (selectedPanel.ToString() == "No Panel")
             {
-                engine.setPanel(selectedPanel);
+                engine.Panel = selectedPanel;
                 return;
             }
 
-            // Let update frmDisplat size following the selected panel in the list
-            engine.setPanel(selectedPanel);
+            // Let update frmDisplay size following the selected panel in the list
+            engine.Panel = selectedPanel;
         }
 
         /// <summary>

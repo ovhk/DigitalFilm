@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DigitalDarkroom.Panels
 {
@@ -11,9 +12,12 @@ namespace DigitalDarkroom.Panels
         private string _name;
         string IPanel.Name => this._name;
 
-        int IPanel.Width => 0;
+        private int width;
 
-        int IPanel.Height => 0;
+        int IPanel.Width => this.width;
+
+        private int height;
+        int IPanel.Height => this.height;
 
         int IPanel.NumberOfColors => 256;
 
@@ -24,6 +28,13 @@ namespace DigitalDarkroom.Panels
 
         public NoPanel()
         {
+            this._name = "No Panel";
+        }
+
+        public NoPanel(PropertyGrid pg)
+        {
+            this.height = pg.Height;
+            this.width = pg.Width;
             this._name = "No Panel";
         }
     }

@@ -23,7 +23,7 @@ namespace DigitalDarkroom.Modes
         bool IMode.Load(string[] imgPaths, int duration)
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
-            GenerateMasquesTemps(engine.Width, engine.Height);
+            GenerateMasquesTemps(engine.Panel.Width, engine.Panel.Height);
 
             return true;
         }
@@ -47,11 +47,11 @@ namespace DigitalDarkroom.Modes
 
             using (Graphics gfx = Graphics.FromImage(b))
             {
-                for (int i = 0; i < engine.NumberOfColors; i++)
+                for (int i = 0; i < engine.Panel.NumberOfColors; i++)
                 {
-                    using (SolidBrush brush = new SolidBrush(Color.FromArgb(engine.NumberOfColors - 1 - i, engine.NumberOfColors - 1 - i, engine.NumberOfColors - 1 - i)))
+                    using (SolidBrush brush = new SolidBrush(Color.FromArgb(engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i)))
                     {
-                        gfx.FillRectangle(brush, i * (width / engine.NumberOfColors), 0, width / engine.NumberOfColors, height / 2);
+                        gfx.FillRectangle(brush, i * (width / engine.Panel.NumberOfColors), 0, width / engine.Panel.NumberOfColors, height / 2);
                     }
                 }
 

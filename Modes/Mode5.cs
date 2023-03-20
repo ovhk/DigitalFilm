@@ -28,7 +28,7 @@ namespace DigitalDarkroom.Modes
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
 
-            Size sz = new Size(engine.Width, engine.Height);
+            Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
 
             Image img = Image.FromFile(@"C:\Users\sectronic\source\repos\DigitalDarkroom\img\F1000015.jpg");
 

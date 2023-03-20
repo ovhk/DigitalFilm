@@ -14,7 +14,7 @@ namespace DigitalDarkroom.Modes
         /// </summary>
         public string Name => "Mode 3";
 
-        public string Description => "";
+        public string Description => "This mode draw mosaic to dertermin contrast capacity.";
 
         /// <summary>
         /// 
@@ -24,7 +24,7 @@ namespace DigitalDarkroom.Modes
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
 
-            Bitmap b = new Bitmap(engine.Width, engine.Height);
+            Bitmap b = new Bitmap(engine.Panel.Width, engine.Panel.Height);
 
             Graphics g = Graphics.FromImage(b);
 

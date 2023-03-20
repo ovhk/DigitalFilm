@@ -32,7 +32,7 @@ namespace DigitalDarkroom.Modes
 
             computeTimings();
 
-            Size sz = new Size(engine.Width, engine.Height);
+            Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
 
             Image img = Image.FromFile(@"C:\Users\sectronic\source\repos\DigitalDarkroom\img\F1000015.jpg");
 
@@ -41,7 +41,7 @@ namespace DigitalDarkroom.Modes
 
             for (int i = 0; i < stepsImages.Length; i++)
             {
-                DirectBitmap b = new DirectBitmap(engine.Width, engine.Height);
+                DirectBitmap b = new DirectBitmap(engine.Panel.Width, engine.Panel.Height);
 
                 for (int x = 0; x < b.Width; x++)
                 {
@@ -86,9 +86,15 @@ namespace DigitalDarkroom.Modes
 
         private void computeTimings()
         {
+            /*It appears that another phenomenon should be taken in account: the paper takes 1 or 2 seconds to react. 
+             * Then it is very sensible for the first 15 seconds, then it gradually looses reactivity, 
+             * so it takes longer to have a slightly darker black.
+             * */
             int cumulatedTimeMs = 0;
+            
             for (int i = 5; i < 256; i++)
             {
+                // y=17.06*ln(x)+96.417
                 cumulatedTimeMs = (int)((-17.06 * Math.Log((double)i) + 96.417) * 1000);
                 //System.out.println("for gray " + i + ", exposure " + cumulatedTimeMs);
                 timings[i] = cumulatedTimeMs;
@@ -97,7 +103,10 @@ namespace DigitalDarkroom.Modes
             for (int i = 5; i < timings.Length - 1; i++)
             {
                 timings[i] = timings[i] - timings[i + 1];
-                if (timings[i] < 80) timings[i] = 80;
+                if (timings[i] < 80)
+                {
+                    timings[i] = 80;
+                }
                 //System.out.println("for gray " + i + ", time " + timings[i]);
             }
 

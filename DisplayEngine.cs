@@ -65,7 +65,7 @@ namespace DigitalDarkroom
         /// <summary>
         /// Display Engine private constructor, use only the GetInstance
         /// </summary>
-        private DisplayEngine() 
+        private DisplayEngine()
         {
             this.EngineStatusNotify += DisplayEngine_EngineStatusNotify;
         }
@@ -95,32 +95,17 @@ namespace DigitalDarkroom
         /// </summary>
         private IPanel panel;
 
-        // TODO use GetPanel instead ?
-
-        /// <summary>
-        /// Get panel's width
-        /// </summary>
-        public int Width { get => this.panel.Width; }
-
-        /// <summary>
-        /// Get panel's height
-        /// </summary>
-        public int Height { get => this.panel.Height; }
-
         /// <summary>
         /// 
         /// </summary>
-        public int NumberOfColors { get => this.panel.NumberOfColors; }
-
-        /// <summary>
-        /// Set the size of the panel
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        public void setPanel(IPanel panel)
+        public IPanel Panel
         {
-            this.panel = panel;
-            this.OnNewPanel?.Invoke(panel);
+            get => this.panel;
+            set
+            {
+                this.panel = value;
+                this.OnNewPanel?.Invoke(this.panel);
+            }
         }
 
         /// <summary>

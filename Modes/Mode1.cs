@@ -24,19 +24,19 @@ namespace DigitalDarkroom.Modes
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
 
-            Bitmap b = new Bitmap(engine.Width, engine.Height);
+            Bitmap b = new Bitmap(engine.Panel.Width, engine.Panel.Height);
 
             using (Graphics gfx = Graphics.FromImage(b))
             {
 
                 using (SolidBrush brush = new SolidBrush(Color.White))
                 {
-                    gfx.FillRectangle(brush, 0, 0, engine.Width / 2, engine.Height);
+                    gfx.FillRectangle(brush, 0, 0, engine.Panel.Width / 2, engine.Panel.Height);
                 }
 
                 using (SolidBrush brush = new SolidBrush(Color.Black))
                 {
-                    gfx.FillRectangle(brush, engine.Width / 2, 0, engine.Width / 2, engine.Height);
+                    gfx.FillRectangle(brush, engine.Panel.Width / 2, 0, engine.Panel.Width / 2, engine.Panel.Height);
                 }
             }
 
