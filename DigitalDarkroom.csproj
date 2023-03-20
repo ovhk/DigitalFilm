@@ -101,7 +101,8 @@
     <Compile Include="Modes\Mode6.cs" />
     <Compile Include="ToolsTODO.cs" />
     <Compile Include="Tools\DirectBitmap.cs" />
-    <Compile Include="Tools\ImageTools.cs" />
+    <Compile Include="Tools\GrayToTime.cs" />
+    <Compile Include="Tools\GrayScale.cs" />
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>

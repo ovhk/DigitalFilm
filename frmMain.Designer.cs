@@ -43,14 +43,12 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btPlay = new System.Windows.Forms.Button();
-            this.btPause = new System.Windows.Forms.Button();
             this.btStop = new System.Windows.Forms.Button();
-            this.btNext = new System.Windows.Forms.Button();
-            this.btReset = new System.Windows.Forms.Button();
             this.pbDisplay = new System.Windows.Forms.PictureBox();
             this.lbTime = new System.Windows.Forms.Label();
             this.cbPanels = new System.Windows.Forms.ComboBox();
             this.gbModes = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.tbModeDescription = new System.Windows.Forms.TextBox();
             this.btBrowseImgFiles = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -85,10 +83,6 @@
             this.propertyGrid1.Size = new System.Drawing.Size(200, 331);
             this.propertyGrid1.TabIndex = 1;
             this.propertyGrid1.ViewBackColor = System.Drawing.SystemColors.ControlDark;
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // statusStrip1
             // 
@@ -181,17 +175,6 @@
             this.btPlay.UseVisualStyleBackColor = true;
             this.btPlay.Click += new System.EventHandler(this.btPlay_Click);
             // 
-            // btPause
-            // 
-            this.btPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btPause.Location = new System.Drawing.Point(354, 372);
-            this.btPause.Name = "btPause";
-            this.btPause.Size = new System.Drawing.Size(75, 34);
-            this.btPause.TabIndex = 5;
-            this.btPause.Text = "Pause";
-            this.btPause.UseVisualStyleBackColor = true;
-            this.btPause.Click += new System.EventHandler(this.btPause_Click);
-            // 
             // btStop
             // 
             this.btStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -202,28 +185,6 @@
             this.btStop.Text = "Stop";
             this.btStop.UseVisualStyleBackColor = true;
             this.btStop.Click += new System.EventHandler(this.btStop_Click);
-            // 
-            // btNext
-            // 
-            this.btNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btNext.Location = new System.Drawing.Point(435, 372);
-            this.btNext.Name = "btNext";
-            this.btNext.Size = new System.Drawing.Size(75, 34);
-            this.btNext.TabIndex = 7;
-            this.btNext.Text = "Next";
-            this.btNext.UseVisualStyleBackColor = true;
-            this.btNext.Click += new System.EventHandler(this.btNext_Click);
-            // 
-            // btReset
-            // 
-            this.btReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btReset.Location = new System.Drawing.Point(516, 372);
-            this.btReset.Name = "btReset";
-            this.btReset.Size = new System.Drawing.Size(75, 34);
-            this.btReset.TabIndex = 8;
-            this.btReset.Text = "Reset";
-            this.btReset.UseVisualStyleBackColor = true;
-            this.btReset.Click += new System.EventHandler(this.btReset_Click);
             // 
             // pbDisplay
             // 
@@ -262,6 +223,7 @@
             // 
             // gbModes
             // 
+            this.gbModes.Controls.Add(this.label2);
             this.gbModes.Controls.Add(this.tbModeDescription);
             this.gbModes.Controls.Add(this.btBrowseImgFiles);
             this.gbModes.Controls.Add(this.label1);
@@ -281,10 +243,20 @@
             this.gbModes.TabStop = false;
             this.gbModes.Text = "Modes";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(18, 201);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(78, 13);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "Browse images";
+            // 
             // tbModeDescription
             // 
             this.tbModeDescription.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.tbModeDescription.Location = new System.Drawing.Point(19, 234);
+            this.tbModeDescription.Margin = new System.Windows.Forms.Padding(4);
             this.tbModeDescription.Multiline = true;
             this.tbModeDescription.Name = "tbModeDescription";
             this.tbModeDescription.ReadOnly = true;
@@ -293,7 +265,7 @@
             // 
             // btBrowseImgFiles
             // 
-            this.btBrowseImgFiles.Location = new System.Drawing.Point(123, 19);
+            this.btBrowseImgFiles.Location = new System.Drawing.Point(121, 191);
             this.btBrowseImgFiles.Name = "btBrowseImgFiles";
             this.btBrowseImgFiles.Size = new System.Drawing.Size(35, 23);
             this.btBrowseImgFiles.TabIndex = 24;
@@ -304,7 +276,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 70);
+            this.label1.Location = new System.Drawing.Point(18, 27);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(69, 13);
             this.label1.TabIndex = 23;
@@ -313,31 +285,31 @@
             // rbMode6
             // 
             this.rbMode6.AutoSize = true;
-            this.rbMode6.Location = new System.Drawing.Point(19, 211);
+            this.rbMode6.Location = new System.Drawing.Point(17, 168);
             this.rbMode6.Name = "rbMode6";
-            this.rbMode6.Size = new System.Drawing.Size(55, 17);
+            this.rbMode6.Size = new System.Drawing.Size(61, 17);
             this.rbMode6.TabIndex = 22;
             this.rbMode6.TabStop = true;
-            this.rbMode6.Text = "Test 6";
+            this.rbMode6.Text = "Mode 6";
             this.rbMode6.UseVisualStyleBackColor = true;
             this.rbMode6.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // rbMode5
             // 
             this.rbMode5.AutoSize = true;
-            this.rbMode5.Location = new System.Drawing.Point(19, 188);
+            this.rbMode5.Location = new System.Drawing.Point(17, 145);
             this.rbMode5.Name = "rbMode5";
-            this.rbMode5.Size = new System.Drawing.Size(55, 17);
+            this.rbMode5.Size = new System.Drawing.Size(61, 17);
             this.rbMode5.TabIndex = 21;
             this.rbMode5.TabStop = true;
-            this.rbMode5.Text = "Test 5";
+            this.rbMode5.Text = "Mode 5";
             this.rbMode5.UseVisualStyleBackColor = true;
             this.rbMode5.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // tbDuration
             // 
             this.tbDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDuration.Location = new System.Drawing.Point(94, 62);
+            this.tbDuration.Location = new System.Drawing.Point(92, 19);
             this.tbDuration.Name = "tbDuration";
             this.tbDuration.Size = new System.Drawing.Size(64, 26);
             this.tbDuration.TabIndex = 20;
@@ -348,65 +320,65 @@
             // rbMode4
             // 
             this.rbMode4.AutoSize = true;
-            this.rbMode4.Location = new System.Drawing.Point(19, 165);
+            this.rbMode4.Location = new System.Drawing.Point(17, 122);
             this.rbMode4.Name = "rbMode4";
-            this.rbMode4.Size = new System.Drawing.Size(55, 17);
+            this.rbMode4.Size = new System.Drawing.Size(61, 17);
             this.rbMode4.TabIndex = 19;
             this.rbMode4.TabStop = true;
-            this.rbMode4.Text = "Test 4";
+            this.rbMode4.Text = "Mode 4";
             this.rbMode4.UseVisualStyleBackColor = true;
             this.rbMode4.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // rbMode3
             // 
             this.rbMode3.AutoSize = true;
-            this.rbMode3.Location = new System.Drawing.Point(19, 142);
+            this.rbMode3.Location = new System.Drawing.Point(17, 99);
             this.rbMode3.Name = "rbMode3";
-            this.rbMode3.Size = new System.Drawing.Size(55, 17);
+            this.rbMode3.Size = new System.Drawing.Size(61, 17);
             this.rbMode3.TabIndex = 18;
             this.rbMode3.TabStop = true;
-            this.rbMode3.Text = "Test 3";
+            this.rbMode3.Text = "Mode 3";
             this.rbMode3.UseVisualStyleBackColor = true;
             this.rbMode3.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // rbMode2
             // 
             this.rbMode2.AutoSize = true;
-            this.rbMode2.Location = new System.Drawing.Point(19, 119);
+            this.rbMode2.Location = new System.Drawing.Point(17, 76);
             this.rbMode2.Name = "rbMode2";
-            this.rbMode2.Size = new System.Drawing.Size(55, 17);
+            this.rbMode2.Size = new System.Drawing.Size(61, 17);
             this.rbMode2.TabIndex = 17;
             this.rbMode2.TabStop = true;
-            this.rbMode2.Text = "Test 2";
+            this.rbMode2.Text = "Mode 2";
             this.rbMode2.UseVisualStyleBackColor = true;
             this.rbMode2.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // rbMode1
             // 
             this.rbMode1.AutoSize = true;
-            this.rbMode1.Location = new System.Drawing.Point(19, 96);
+            this.rbMode1.Location = new System.Drawing.Point(17, 53);
             this.rbMode1.Name = "rbMode1";
-            this.rbMode1.Size = new System.Drawing.Size(55, 17);
+            this.rbMode1.Size = new System.Drawing.Size(61, 17);
             this.rbMode1.TabIndex = 16;
             this.rbMode1.TabStop = true;
-            this.rbMode1.Text = "Test 1";
+            this.rbMode1.Text = "Mode 1";
             this.rbMode1.UseVisualStyleBackColor = true;
             this.rbMode1.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
-            // btUnloadTest
+            // btUnloadMode
             // 
             this.btUnloadMode.Location = new System.Drawing.Point(95, 308);
-            this.btUnloadMode.Name = "btUnloadTest";
+            this.btUnloadMode.Name = "btUnloadMode";
             this.btUnloadMode.Size = new System.Drawing.Size(61, 23);
             this.btUnloadMode.TabIndex = 15;
             this.btUnloadMode.Text = "Unload";
             this.btUnloadMode.UseVisualStyleBackColor = true;
             this.btUnloadMode.Click += new System.EventHandler(this.btUnloadTest_Click);
             // 
-            // btLoadTest
+            // btLoadMode
             // 
             this.btLoadMode.Location = new System.Drawing.Point(19, 308);
-            this.btLoadMode.Name = "btLoadTest";
+            this.btLoadMode.Name = "btLoadMode";
             this.btLoadMode.Size = new System.Drawing.Size(61, 23);
             this.btLoadMode.TabIndex = 14;
             this.btLoadMode.Text = "Load";
@@ -442,10 +414,7 @@
             this.Controls.Add(this.cbPanels);
             this.Controls.Add(this.lbTime);
             this.Controls.Add(this.pbDisplay);
-            this.Controls.Add(this.btReset);
-            this.Controls.Add(this.btNext);
             this.Controls.Add(this.btStop);
-            this.Controls.Add(this.btPause);
             this.Controls.Add(this.btPlay);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -484,10 +453,7 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Button btPlay;
-        private System.Windows.Forms.Button btPause;
         private System.Windows.Forms.Button btStop;
-        private System.Windows.Forms.Button btNext;
-        private System.Windows.Forms.Button btReset;
         private System.Windows.Forms.PictureBox pbDisplay;
         private System.Windows.Forms.Label lbTime;
         private System.Windows.Forms.ComboBox cbPanels;
@@ -506,6 +472,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbModeDescription;
         private System.Windows.Forms.Button btBrowseImgFiles;
+        private System.Windows.Forms.Label label2;
     }
 }
 

@@ -13,13 +13,32 @@ using System.Windows.Forms;
 
 namespace DigitalDarkroom
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum EngineStatus
     {
-        Started, Running, Stopped, Ended
+        Started, Running, Stopped, Ended // TODO determine engine status
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bmp"></param>
     public delegate void NewImageEvent(Bitmap bmp);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="panel"></param>
     public delegate void NewPanelEvent(IPanel panel);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="imageLayerIndex"></param>
+    /// <param name="elapseTime"></param>
+    /// <param name="totalDuration"></param>
     public delegate void NewProgessEvent(int imageLayerIndex, TimeSpan elapseTime, TimeSpan totalDuration);
 
     /// <summary>
@@ -130,7 +149,6 @@ namespace DigitalDarkroom
         /// </summary>
         private Queue<ImageLayer> layers = new Queue<ImageLayer>();
 
-
         /// <summary>
         /// Add an image in the DisplayEngine queue
         /// </summary>
@@ -139,6 +157,15 @@ namespace DigitalDarkroom
         public void PushImage(Bitmap bitmap, int expositionDuration)
         {
             layers.Enqueue(new ImageLayer(bitmap, expositionDuration));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imageLayer"></param>
+        public void PushImage(ImageLayer imageLayer)
+        {
+            layers.Enqueue(imageLayer);
         }
 
         /// <summary>

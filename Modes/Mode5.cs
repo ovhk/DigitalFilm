@@ -16,7 +16,7 @@ namespace DigitalDarkroom.Modes
         /// </summary>
         public string Name => "Mode 5";
 
-        public string Description => "";
+        public string Description => "Display the selected picture in grayscale.";
 
         /// <summary>
         /// 
@@ -26,13 +26,17 @@ namespace DigitalDarkroom.Modes
         /// <exception cref="NotImplementedException"></exception>
         public bool Load(string[] imgPaths, int duration)
         {
+            if (imgPaths == null || imgPaths.Length == 0) return false;
+
             DisplayEngine engine = DisplayEngine.GetInstance();
 
             Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
 
-            Image img = Image.FromFile(@"C:\Users\sectronic\source\repos\DigitalDarkroom\img\F1000015.jpg");
+            //@"C:\Users\sectronic\source\repos\DigitalDarkroom\img\F1000015.jpg"
 
-            Bitmap b = ImageTools.MakeGrayscale3(new Bitmap(img, sz));
+            Image img = Image.FromFile(imgPaths[0]);
+
+            Bitmap b = GrayScale.MakeGrayscale3(new Bitmap(img, sz));
 
             engine.PushImage(b, duration);
 

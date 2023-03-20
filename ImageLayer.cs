@@ -11,7 +11,7 @@ namespace DigitalDarkroom
     /// <summary>
     /// 
     /// </summary>
-    internal class ImageLayer : IDisposable
+    public class ImageLayer : IDisposable
     {
         /// <summary>
         /// 

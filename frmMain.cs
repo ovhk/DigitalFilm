@@ -14,6 +14,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.CodeDom;
+using Newtonsoft.Json.Linq;
 
 namespace DigitalDarkroom
 {
@@ -63,6 +65,17 @@ namespace DigitalDarkroom
 
             listView1.OwnerDraw = true;
             listView1.DrawItem += listView1_DrawItem;
+
+            // TODO : this is for test
+            if (false)
+            {
+                File.FileFormat file = new File.FileFormat();
+                // Write the contents of the variable someClass to a file.
+                File.FileManagement.WriteToJsonFile<File.FileFormat>(@"C:\someClass.txt", file);
+
+                // Read the file contents back into a variable.
+                File.FileFormat object1 = File.FileManagement.ReadFromJsonFile<File.FileFormat>(@"C:\someClass.txt");
+            }
         }
 
         #region ListView Tile Management
@@ -210,57 +223,6 @@ namespace DigitalDarkroom
 
         #endregion
 
-        #region TODO REMOVE THIS
-
-        private Bitmap GenerateGreylevelBands8bit(int width, int height)
-        {
-            Bitmap b = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
-
-            for (int i = 0; i < 256; i++)
-            {
-                ToolsTODO.FillIndexedRectangle(b, new Rectangle(i * (width / 256), 0, width / 256, height), Color.FromArgb(i, i, i));
-            }
-
-            return b;
-        }
-
-        private Bitmap GenerateGreylevelBands(int width, int height)
-        {
-            Bitmap b = new Bitmap(width, height);
-
-            using (Graphics gfx = Graphics.FromImage(b))
-            {
-                for (int i = 0; i < 256; i++)
-                {
-                    using (SolidBrush brush = new SolidBrush(Color.FromArgb(i, i, i)))
-                    {
-                        gfx.FillRectangle(brush, i * (width / 256), 0, width / 256, height);
-                    }
-                }
-            }
-
-            return b;
-        }
-
-        #endregion
-
-
-        #region Invoke Management
-
-        private void SafeUpdate(Action action)
-        {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(action);
-            }
-            else
-            {
-                action();
-            }
-        }
-
-        #endregion
-
         #region Modes Management
 
         private RadioButton selectedrbMode;
@@ -288,8 +250,12 @@ namespace DigitalDarkroom
             this.rbMode6.Tag = new Modes.Mode6() as object;
             this.rbMode6.Text = ((IMode)this.rbMode6.Tag).Name;
 
-            btUnloadMode.Enabled = false;
+            this.btBrowseImgFiles.Enabled = false;
+
+            this.btUnloadMode.Enabled = false;
         }
+
+        private string[] selectedFilesPath;
 
         /// <summary>
         /// 
@@ -298,19 +264,17 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void btBrowseImgFiles_Click(object sender, EventArgs e)
         {
-            string[] filesPath;
-
-            //openFileDialog1.InitialDirectory = "c:\\";
             //openFileDialog1.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.tif;...";
-            openFileDialog1.Filter = GetImageFilter();
-            openFileDialog1.FilterIndex = 2;
+            this.openFileDialog1.Filter = GetImageFilter();
+            this.openFileDialog1.FilterIndex = 2;
             //openFileDialog1.RestoreDirectory = true;
-            openFileDialog1.Multiselect = true;
+            this.openFileDialog1.Multiselect = true;
 
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 //Get the path of specified file
-                filesPath =  openFileDialog1.FileNames;
+                this.selectedFilesPath = this.openFileDialog1.FileNames;
+                this.btBrowseImgFiles.Enabled = false;
             }
         }
 
@@ -351,6 +315,20 @@ namespace DigitalDarkroom
                 selectedrbMode = rb;
                 IMode mode = rb.Tag as IMode;
                 this.tbModeDescription.Text = mode.Description;
+
+                Type t = mode.GetType();
+                if (t.Equals(typeof(Mode5)))
+                {
+                    this.btBrowseImgFiles.Enabled = true;
+                } 
+                else if (t.Equals(typeof(Mode6)))
+                {
+                    this.btBrowseImgFiles.Enabled = true;
+                }
+                else
+                {
+                    this.btBrowseImgFiles.Enabled = false;
+                }
             }
         }
         /// <summary>
@@ -365,15 +343,17 @@ namespace DigitalDarkroom
                 return;
             }
 
+            Cursor.Current = Cursors.WaitCursor;
+
             // TODO : status bar ?
 
-            this.SuspendLayout(); // TODO : usefull ?
+            this.SuspendLayout();
 
             IMode mode = selectedrbMode.Tag as IMode;
 
             int duration = int.Parse(tbDuration.Text);
 
-            mode.Load(null, duration);
+            mode.Load(this.selectedFilesPath, duration);
 
             this.listView1.Items.Clear();
             this.listView1.LargeImageList = engine.GetImageList();
@@ -389,11 +369,14 @@ namespace DigitalDarkroom
             this.rbMode4.Enabled = false;
             this.rbMode5.Enabled = false;
             this.rbMode6.Enabled = false;
+            this.btBrowseImgFiles.Enabled = false;
 
             this.toolStripProgressBar1.Value = 0;
             this.btPlay.Enabled = true;
 
-            this.ResumeLayout(true); // TODO : usefull ?
+            this.ResumeLayout(true);
+
+            Cursor.Current = Cursors.Default;
         }
 
         /// <summary>
@@ -408,7 +391,9 @@ namespace DigitalDarkroom
                 return;
             }
 
-            this.SuspendLayout(); // TODO : usefull ?
+            Cursor.Current = Cursors.WaitCursor;
+
+            this.SuspendLayout();
 
             IMode test = selectedrbMode.Tag as IMode;
             test.Unload();
@@ -425,10 +410,13 @@ namespace DigitalDarkroom
             this.rbMode4.Enabled = true;
             this.rbMode5.Enabled = true;
             this.rbMode6.Enabled = true;
+            this.btBrowseImgFiles.Enabled = true;
 
             this.listView1.Items.Clear();
 
-            this.ResumeLayout(true); // TODO : usefull ?
+            this.ResumeLayout(true);
+
+            Cursor.Current = Cursors.Default;
         }
 
         /// <summary>
@@ -473,6 +461,8 @@ namespace DigitalDarkroom
             engine.Panel = selectedPanel;
         }
 
+        #region Engine Play/Stop buttons
+
         /// <summary>
         /// 
         /// </summary>
@@ -495,47 +485,12 @@ namespace DigitalDarkroom
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btPause_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btStop_Click(object sender, EventArgs e)
         {
             engine.Stop();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btNext_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btReset_Click(object sender, EventArgs e)
-        {
-            // TODO : this is for test
-
-            File.FileFormat file = new File.FileFormat();
-            // Write the contents of the variable someClass to a file.
-            File.FileManagement.WriteToJsonFile<File.FileFormat>(@"C:\someClass.txt", file);
-
-            // Read the file contents back into a variable.
-            File.FileFormat object1 = File.FileManagement.ReadFromJsonFile<File.FileFormat>(@"C:\someClass.txt");
-        }
+        #endregion
 
         #region Menu
 
@@ -564,6 +519,11 @@ namespace DigitalDarkroom
             Application.Exit();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmAbout about = new frmAbout();
@@ -572,5 +532,20 @@ namespace DigitalDarkroom
 
         #endregion
 
+        #region Invoke Management
+
+        private void SafeUpdate(Action action)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(action);
+            }
+            else
+            {
+                action();
+            }
+        }
+
+        #endregion
     }
 }

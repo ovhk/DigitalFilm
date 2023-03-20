@@ -11,6 +11,19 @@ namespace DigitalDarkroom
 {
     internal class ToolsTODO
     {
+
+        private Bitmap GenerateGreylevelBands8bit(int width, int height)
+        {
+            Bitmap b = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+
+            for (int i = 0; i < 256; i++)
+            {
+                ToolsTODO.FillIndexedRectangle(b, new Rectangle(i * (width / 256), 0, width / 256, height), Color.FromArgb(i, i, i));
+            }
+
+            return b;
+        }
+
         public static void FillIndexedRectangle(Bitmap bmp8bpp, Rectangle rect, Color col)
         {
             var bitmapData =

@@ -79,6 +79,8 @@ namespace DigitalDarkroom.Modes
                     }
                     engine.PushImage(new Bitmap(b), 500);
                 }
+
+                //TODO : ajouter un autre tier d'image avec l'algo de PMUTH
             }
         }
 

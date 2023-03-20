@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DigitalDarkroom.Tools
 {
-    internal class ImageTools
+    internal class GrayScale
     {
         public static Bitmap MakeGrayscale3(Bitmap original) // TODO : move to tools ?
         {

@@ -28,7 +28,6 @@ namespace DigitalDarkroom.Panels
 
         public NoPanel()
         {
-            this._name = "No Panel";
         }
 
         public NoPanel(PropertyGrid pg)
