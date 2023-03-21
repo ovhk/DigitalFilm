@@ -10,7 +10,7 @@ namespace DigitalDarkroom.Tools
 {
     internal class GrayScale
     {
-        public static Bitmap MakeGrayscale3(Bitmap original) // TODO : move to tools ?
+        public static Bitmap MakeGrayscale3(Bitmap original)
         {
             //create a blank bitmap the same size as original
             Bitmap newBitmap = new Bitmap(original.Width, original.Height);
@@ -49,7 +49,7 @@ namespace DigitalDarkroom.Tools
         /// Based on http://www.switchonthecode.com/tutorials/csharp-tutorial-convert-a-color-image-to-grayscale
         /// </summary>
         /// <returns></returns>
-        static ColorPalette GetGrayScalePalette() // TODO : mode to tools ?
+        static ColorPalette GetGrayScalePalette()
         {
             Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed);
 

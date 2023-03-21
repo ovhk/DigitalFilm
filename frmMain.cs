@@ -159,6 +159,12 @@ namespace DigitalDarkroom
 
         #region Display Engine notifications
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imageLayerIndex"></param>
+        /// <param name="elapseTime"></param>
+        /// <param name="totalDuration"></param>
         private void Engine_OnNewProgress(int imageLayerIndex, TimeSpan elapseTime, TimeSpan totalDuration)
         {
             SafeUpdate(() => this.lbTime.Text = String.Format("{0:00}:{1:00}.{2:00}",
@@ -166,7 +172,7 @@ namespace DigitalDarkroom
             SafeUpdate(() => this.lbTime.ForeColor = Color.White);
             SafeUpdate(() => this.lbTime.Refresh());
 
-            // TODO : use imageLayerIndex to update selected tile
+            // TODO : use imageLayerIndex to update selected tile mais ça va être trop lent...
             //SafeUpdate(() => listView1.Items[imageLayerIndex].Selected = true); //marche pas
 
             // TODO : avec les lenteurs de la VM, il arrive que le temps d'éxécution soit plus long que le max théorique, donc on filtre pour ne pas avoir une exception...
@@ -343,6 +349,15 @@ namespace DigitalDarkroom
                 return;
             }
 
+            if (this.btBrowseImgFiles.Enabled) // this mean that this mode need a file or files
+            {
+                if (this.selectedFilesPath == null)
+                {
+                    MessageBox.Show("No file selected");
+                    return;
+                }
+            }
+
             Cursor.Current = Cursors.WaitCursor;
 
             // TODO : status bar ?
@@ -353,7 +368,12 @@ namespace DigitalDarkroom
 
             int duration = int.Parse(tbDuration.Text);
 
-            mode.Load(this.selectedFilesPath, duration);
+            if (mode.Load(this.selectedFilesPath, duration) == false)
+            {
+                MessageBox.Show("Fail to load selected mode!");
+                btUnloadTest_Click(null, null);
+                return;
+            }
 
             this.listView1.Items.Clear();
             this.listView1.LargeImageList = engine.GetImageList();

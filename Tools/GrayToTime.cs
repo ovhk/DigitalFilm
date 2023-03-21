@@ -7,13 +7,19 @@ using System.Threading.Tasks;
 
 namespace DigitalDarkroom.Tools
 {
+    /// <summary>
+    /// // This is Pierre MUTH algo : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/ 
+    /// </summary>
     internal class GrayToTime
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private static int[] timings = new int[256];
 
-
-        // This is Pierre MUTH algo : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/ 
-
+        /// <summary>
+        /// 
+        /// </summary>
         private static void computeTimings()
         {
             /* It appears that another phenomenon should be taken in account: the paper takes 1 or 2 seconds to react. 
@@ -34,6 +40,7 @@ namespace DigitalDarkroom.Tools
             {
                 timings[i] = timings[i] - timings[i + 1];
 
+                // on fixe le mini à 80 ms
                 if (timings[i] < 80)
                 {
                     timings[i] = 80;
@@ -41,14 +48,23 @@ namespace DigitalDarkroom.Tools
                 //System.out.println("for gray " + i + ", time " + timings[i]);
             }
 
+            // on fixe les 5 premiers
             for (int i = 0; i < 5; i++)
             {
                 timings[i] = timings[5] + 100;
             }
 
+            // on fixe le dernier à 800 ms
             timings[255] = 800;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static List<ImageLayer> GetImageLayers(Bitmap bitmap, int width, int height)
         {
             List<ImageLayer> imageLayers = new List<ImageLayer>();
@@ -65,6 +81,8 @@ namespace DigitalDarkroom.Tools
                     for (int y = 0; y < b.Height; y++)
                     {
                         Color c = bitmap.GetPixel(x, y);
+                        
+                        // we use R but G or B are equal
                         if (c.R < i)
                         {
                             b.SetPixel(x, y, Color.FromArgb(255, 255, 255));

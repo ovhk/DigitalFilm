@@ -47,6 +47,7 @@ namespace DigitalDarkroom.Modes
 
             using (Graphics gfx = Graphics.FromImage(b))
             {
+                // Generate gray levels
                 for (int i = 0; i < engine.Panel.NumberOfColors; i++)
                 {
                     using (SolidBrush brush = new SolidBrush(Color.FromArgb(engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i)))
