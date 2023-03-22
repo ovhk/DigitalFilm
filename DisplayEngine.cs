@@ -79,6 +79,9 @@ namespace DigitalDarkroom
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
         private Thread thread;
 
         /// <summary>
@@ -240,6 +243,7 @@ namespace DigitalDarkroom
             while (de.layers.Count > 0)
             {
                 // Please do as fast as possible here !
+                DateTime dtStart = DateTime.Now;
 
                 ImageLayer il = de.layers.Dequeue();
 
@@ -260,11 +264,11 @@ namespace DigitalDarkroom
                 if (duration <= 1000)
                 {
                     Thread.Sleep(duration);
-                    de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration); // TODO : ATTENTION C'EST TROP LONG
+                    //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration); // TODO : ATTENTION C'EST TROP LONG
                 } 
                 else
                 {
-                    int iter = il.GetExpositionDuration() / 1000; // convert in number of secondes
+                    int iter = duration / 1000; // convert in number of secondes
 
                     for (int i = 0; i < iter; i++)
                     {
@@ -275,11 +279,13 @@ namespace DigitalDarkroom
                             break;
                         }
 
-                        de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);
+                        //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);  // TODO : ATTENTION C'EST TROP LONG
                     }
                 }
 
                 il.Dispose();
+                //TODO : mesurer un peu plus les temps
+                Console.WriteLine("Step Count=" + de.layers.Count + ", " + duration + "ms, measured: " + (DateTime.Now - dtStart).TotalMilliseconds);
             }
 
             stopwatch.Stop();
@@ -318,10 +324,6 @@ namespace DigitalDarkroom
 
             this.EngineStatusNotify?.Invoke(this, EngineStatus.Stopped);
         }
-
-        public void Pause() { }
-        public void Next() { }
-        public void Reset() { }
 
         /// <summary>
         /// Clear and free layers

@@ -14,7 +14,10 @@ namespace DigitalDarkroom.Modes
         /// </summary>
         public string Name => "Mode 3";
 
-        public string Description => "This mode draw mosaic to dertermin contrast capacity.";
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Description => "This mode draw mosaic to dertermine contrast capacity.";
 
         /// <summary>
         /// 
@@ -89,8 +92,8 @@ namespace DigitalDarkroom.Modes
                 }
             }
 
-            // TODO : for test only
-            b.Save(@"C:\Users\sectronic\Desktop\mode3.bmp");
+            // for test only
+            //b.Save(@"C:\Users\sectronic\Desktop\mode3.bmp");
 
             engine.PushImage(b, duration);
 

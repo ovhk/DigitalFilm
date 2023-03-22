@@ -203,10 +203,10 @@
             // 
             this.lbTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbTime.AutoSize = true;
-            this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTime.Location = new System.Drawing.Point(837, 499);
+            this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTime.Location = new System.Drawing.Point(837, 478);
             this.lbTime.Name = "lbTime";
-            this.lbTime.Size = new System.Drawing.Size(80, 24);
+            this.lbTime.Size = new System.Drawing.Size(96, 25);
             this.lbTime.TabIndex = 10;
             this.lbTime.Text = "00:00.00";
             this.lbTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

@@ -265,6 +265,9 @@ namespace DigitalDarkroom
             this.btUnloadMode.Enabled = false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private string[] selectedFilesPath;
 
         /// <summary>
@@ -277,17 +280,19 @@ namespace DigitalDarkroom
             //openFileDialog1.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.tif;...";
             this.openFileDialog1.Filter = GetImageFilter();
             this.openFileDialog1.FilterIndex = 2;
-            //openFileDialog1.RestoreDirectory = true;
             this.openFileDialog1.Multiselect = true;
 
             if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 //Get the path of specified file
                 this.selectedFilesPath = this.openFileDialog1.FileNames;
-                this.btBrowseImgFiles.Enabled = false;
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private static string GetImageFilter()
         {
             return
@@ -393,7 +398,6 @@ namespace DigitalDarkroom
             this.rbMode4.Enabled = false;
             this.rbMode5.Enabled = false;
             this.rbMode6.Enabled = false;
-            this.btBrowseImgFiles.Enabled = false;
 
             this.toolStripProgressBar1.Value = 0;
             this.btPlay.Enabled = true;
@@ -434,7 +438,6 @@ namespace DigitalDarkroom
             this.rbMode4.Enabled = true;
             this.rbMode5.Enabled = true;
             this.rbMode6.Enabled = true;
-            this.btBrowseImgFiles.Enabled = true;
 
             this.listView1.Items.Clear();
 

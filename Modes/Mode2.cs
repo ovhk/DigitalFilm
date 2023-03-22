@@ -14,7 +14,7 @@ namespace DigitalDarkroom.Modes
         /// </summary>
         public string Name => "Mode 2";
 
-        public string Description => "";
+        public string Description => "Generate gray scale and linear B&W scale";
 
         /// <summary>
         /// 
