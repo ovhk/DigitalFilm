@@ -28,6 +28,17 @@ namespace DigitalDarkroom
         /// </summary>
         private int expositionDuration;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private int index;
+
+        public int Index 
+        { 
+            get { return index; } 
+            set { index = value; }
+        }
+
         [CategoryAttribute("Duration"),
         DescriptionAttribute("Exposition duration")]
         public int ExpositionDuration { get { return expositionDuration; } }
@@ -37,7 +48,24 @@ namespace DigitalDarkroom
         /// </summary>
         /// <param name="bmp"></param>
         /// <param name="expositionDuration"></param>
-        public ImageLayer (Bitmap bmp, int expositionDuration)
+        /// <param name="index">index of the bitmap to use in ListView</param>
+        public ImageLayer (Bitmap bmp, int expositionDuration, int index)
+        {
+            Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+
+            this.bmp = bmp;
+            this.thumbnail = bmp.GetThumbnailImage(128, 128, callback, new IntPtr()); // 256x256 max
+            this.expositionDuration = expositionDuration;
+            
+            this.index = index;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="expositionDuration"></param>
+        public ImageLayer(Bitmap bmp, int expositionDuration)
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 
@@ -50,7 +78,6 @@ namespace DigitalDarkroom
         {
             return true;
         }
-
 
         /// <summary>
         /// 

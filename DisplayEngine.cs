@@ -156,7 +156,7 @@ namespace DigitalDarkroom
         /// <param name="expositionDuration"></param>
         public void PushImage(Bitmap bitmap, int expositionDuration)
         {
-            layers.Enqueue(new ImageLayer(bitmap, expositionDuration));
+            layers.Enqueue(new ImageLayer(bitmap, expositionDuration, layers.Count));
         }
 
         /// <summary>
@@ -165,6 +165,7 @@ namespace DigitalDarkroom
         /// <param name="imageLayer"></param>
         public void PushImage(ImageLayer imageLayer)
         {
+            imageLayer.Index = layers.Count;
             layers.Enqueue(imageLayer);
         }
 
@@ -206,6 +207,7 @@ namespace DigitalDarkroom
                 string key = y.ToString();
                 ListViewItem lvi = new ListViewItem(key);
 
+                lvi.ImageIndex = i.Index;
                 lvi.Tag = i;
                 lvi.ImageKey = key;
                 list.Add(lvi);
@@ -258,7 +260,7 @@ namespace DigitalDarkroom
                 if (duration <= 1000)
                 {
                     Thread.Sleep(duration);
-                    //de.OnNewProgress?.Invoke(0, stopwatch.Elapsed, tsTotalDuration); // TODO : put ImageLayerIndex et ATTENTION C'EST TROP LONG
+                    de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration); // TODO : ATTENTION C'EST TROP LONG
                 } 
                 else
                 {
@@ -273,7 +275,7 @@ namespace DigitalDarkroom
                             break;
                         }
 
-                        de.OnNewProgress?.Invoke(0, stopwatch.Elapsed, tsTotalDuration); // TODO : put ImageLayerIndex
+                        de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);
                     }
                 }
 

@@ -172,8 +172,12 @@ namespace DigitalDarkroom
             SafeUpdate(() => this.lbTime.ForeColor = Color.White);
             SafeUpdate(() => this.lbTime.Refresh());
 
-            // TODO : use imageLayerIndex to update selected tile mais ça va être trop lent...
-            //SafeUpdate(() => listView1.Items[imageLayerIndex].Selected = true); //marche pas
+            // TODO : Trop lent ?
+            try
+            {
+                SafeUpdate(() => listView1.Items[imageLayerIndex].Selected = true); // Select
+                SafeUpdate(() => listView1.Items[imageLayerIndex].EnsureVisible()); // Scroll
+            } catch { } // In case of a stop, Items could be empty so that trow an exception
 
             // TODO : avec les lenteurs de la VM, il arrive que le temps d'éxécution soit plus long que le max théorique, donc on filtre pour ne pas avoir une exception...
             int val = (elapseTime.TotalSeconds > totalDuration.TotalSeconds) ? (int)totalDuration.TotalSeconds : (int)elapseTime.TotalSeconds;
