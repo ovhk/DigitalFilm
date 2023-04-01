@@ -13,10 +13,12 @@ namespace DigitalDarkroom
         /// </summary>
         [STAThread]
         static void Main()
-        { 
+        {
+            Log.WriteLine("Starting");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frmMain());
+            Log.Close();
         }
     }
 }

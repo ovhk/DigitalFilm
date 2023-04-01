@@ -275,14 +275,17 @@ namespace DigitalDarkroom
                         {
                             break;
                         }
-
-                        //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);  // TODO : ATTENTION C'EST TROP LONG
                     }
+
+                    Thread.Sleep(duration - (iter * 1000) - 1); // -1 for calls and calculation
+
+                    //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);  // TODO : ATTENTION C'EST TROP LONG
                 }
 
                 //il.Dispose();
                 //TODO : mesurer un peu plus les temps
-                Console.WriteLine("Step Count=" + de.layers.Count + ", " + duration + "ms, measured: " + (DateTime.Now - dtStart).TotalMilliseconds);
+                //Console.WriteLine("Step Count=" + de.layers.Count + ", " + duration + "ms, measured: " + (DateTime.Now - dtStart).TotalMilliseconds);
+                Log.WriteLine("Step Count=" + de.layers.Count + ", " + duration + "ms, measured: " + (DateTime.Now - dtStart).TotalMilliseconds);
             }
 
             stopwatch.Stop();
