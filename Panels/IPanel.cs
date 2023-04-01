@@ -12,5 +12,6 @@ namespace DigitalDarkroom.Panels
         int Width { get; }
         int Height { get; }
         int NumberOfColors { get; }
+        bool IsFullScreen { get; }
     }
 }

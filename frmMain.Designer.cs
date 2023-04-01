@@ -373,7 +373,7 @@
             this.btUnloadMode.TabIndex = 15;
             this.btUnloadMode.Text = "Unload";
             this.btUnloadMode.UseVisualStyleBackColor = true;
-            this.btUnloadMode.Click += new System.EventHandler(this.btUnloadTest_Click);
+            this.btUnloadMode.Click += new System.EventHandler(this.btUnloadMode_Click);
             // 
             // btLoadMode
             // 
@@ -383,7 +383,7 @@
             this.btLoadMode.TabIndex = 14;
             this.btLoadMode.Text = "Load";
             this.btLoadMode.UseVisualStyleBackColor = true;
-            this.btLoadMode.Click += new System.EventHandler(this.btLoadTest_Click);
+            this.btLoadMode.Click += new System.EventHandler(this.btLoadMode_Click);
             // 
             // listView1
             // 

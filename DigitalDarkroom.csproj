@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Console.cs" />
     <Compile Include="DisplayEngine.cs" />
     <Compile Include="File\FileFormat.cs" />
     <Compile Include="File\FileManagement.cs" />
@@ -85,13 +86,15 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageFileFilter.cs" />
     <Compile Include="ImageLayer.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Panels\IPanel.cs" />
     <Compile Include="Panels\NoPanel.cs" />
     <Compile Include="Panels\PanelSimulator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Panels\WisecocoTOP103MONO8K01A.cs" />
+    <Compile Include="Panels\ExternalPanel.cs" />
     <Compile Include="Modes\IMode.cs" />
     <Compile Include="Modes\Mode1.cs" />
     <Compile Include="Modes\Mode2.cs" />

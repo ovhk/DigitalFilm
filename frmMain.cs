@@ -60,7 +60,17 @@ namespace DigitalDarkroom
 
             cbPanels.Items.Add(new Panels.NoPanel(this.propertyGrid1));
             cbPanels.Items.Add(new Panels.PanelSimulator());
-            cbPanels.Items.Add(new Panels.WisecocoTOP103MONO8K01A());
+
+            // Find first external screen
+            foreach (var screen in System.Windows.Forms.Screen.AllScreens)
+            {
+                if (screen.Primary == false)
+                {
+                    cbPanels.Items.Add(new Panels.ExternalPanel(screen));
+                    break;
+                }
+            }
+
             cbPanels.SelectedIndex = 0; // Select first panel in list
 
             listView1.OwnerDraw = true;
@@ -223,10 +233,9 @@ namespace DigitalDarkroom
                     break;
                 case EngineStatus.Stopped:
                 case EngineStatus.Ended:
-                    this.SafeUpdate(() => display.Hide());
                     this.SafeUpdate(() => this.btPlay.Enabled = false);
                     this.SafeUpdate(() => this.btStop.Enabled = false);
-                    this.SafeUpdate(() => this.btUnloadTest_Click(null, null));
+                    this.SafeUpdate(() => this.btUnloadMode_Click(null, null));
                     break;
             }
         }
@@ -278,7 +287,7 @@ namespace DigitalDarkroom
         private void btBrowseImgFiles_Click(object sender, EventArgs e)
         {
             //openFileDialog1.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.tif;...";
-            this.openFileDialog1.Filter = GetImageFilter();
+            this.openFileDialog1.Filter = ImageFileFilter.GetImageFilter();
             this.openFileDialog1.FilterIndex = 2;
             this.openFileDialog1.Multiselect = true;
 
@@ -287,28 +296,6 @@ namespace DigitalDarkroom
                 //Get the path of specified file
                 this.selectedFilesPath = this.openFileDialog1.FileNames;
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private static string GetImageFilter()
-        {
-            return
-                "All Files (*.*)|*.*" +
-                "|All Pictures (*.emf;*.wmf;*.jpg;*.jpeg;*.jfif;*.jpe;*.png;*.bmp;*.dib;*.rle;*.gif;*.emz;*.wmz;*.tif;*.tiff;*.svg;*.ico)" +
-                    "|*.emf;*.wmf;*.jpg;*.jpeg;*.jfif;*.jpe;*.png;*.bmp;*.dib;*.rle;*.gif;*.emz;*.wmz;*.tif;*.tiff;*.svg;*.ico" +
-                "|Windows Enhanced Metafile (*.emf)|*.emf" +
-                "|Windows Metafile (*.wmf)|*.wmf" +
-                "|JPEG File Interchange Format (*.jpg;*.jpeg;*.jfif;*.jpe)|*.jpg;*.jpeg;*.jfif;*.jpe" +
-                "|Portable Network Graphics (*.png)|*.png" +
-                "|Bitmap Image File (*.bmp;*.dib;*.rle)|*.bmp;*.dib;*.rle" +
-                "|Compressed Windows Enhanced Metafile (*.emz)|*.emz" +
-                "|Compressed Windows MetaFile (*.wmz)|*.wmz" +
-                "|Tag Image File Format (*.tif;*.tiff)|*.tif;*.tiff" +
-                "|Scalable Vector Graphics (*.svg)|*.svg" +
-                "|Icon (*.ico)|*.ico";
         }
 
         /// <summary>
@@ -347,11 +334,11 @@ namespace DigitalDarkroom
             }
         }
         /// <summary>
-        /// Load the selected test
+        /// Load the selected mode
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btLoadTest_Click(object sender, EventArgs e)
+        private void btLoadMode_Click(object sender, EventArgs e)
         {
             if (selectedrbMode == null)
             {
@@ -380,7 +367,7 @@ namespace DigitalDarkroom
             if (mode.Load(this.selectedFilesPath, duration) == false)
             {
                 MessageBox.Show("Fail to load selected mode!");
-                btUnloadTest_Click(null, null);
+                this.btUnloadMode_Click(null, null);
                 return;
             }
 
@@ -404,15 +391,21 @@ namespace DigitalDarkroom
 
             this.ResumeLayout(true);
 
+            // If panel is an external panel, show on Load button
+            if (engine.Panel is ExternalPanel)
+            {
+                display.Show();
+            }
+
             Cursor.Current = Cursors.Default;
         }
 
         /// <summary>
-        /// Unload current loaded test
+        /// Unload current loaded mode
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btUnloadTest_Click(object sender, EventArgs e)
+        private void btUnloadMode_Click(object sender, EventArgs e)
         {
             if (selectedrbMode == null)
             {
@@ -421,10 +414,15 @@ namespace DigitalDarkroom
 
             Cursor.Current = Cursors.WaitCursor;
 
+            if (!(engine.Panel is ExternalPanel))
+            {
+                this.SafeUpdate(() => display.Hide());
+            }
+
             this.SuspendLayout();
 
-            IMode test = selectedrbMode.Tag as IMode;
-            test.Unload();
+            IMode mode = selectedrbMode.Tag as IMode;
+            mode.Unload();
 
             // TODO : status bar ?
 
@@ -478,14 +476,11 @@ namespace DigitalDarkroom
                 return;
             }
 
-            if (selectedPanel.ToString() == "No Panel")
-            {
-                engine.Panel = selectedPanel;
-                return;
-            }
+            this.display.Hide();
+            this.btUnloadMode_Click(null, null);
 
             // Let update frmDisplay size following the selected panel in the list
-            engine.Panel = selectedPanel;
+            this.engine.Panel = selectedPanel;
         }
 
         #region Engine Play/Stop buttons
@@ -497,13 +492,12 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void btPlay_Click(object sender, EventArgs e)
         {
-            IPanel selectedPanel = this.cbPanels.SelectedItem as IPanel;
-
-            if (selectedPanel.ToString() != "No Panel")
+            if (engine.Panel is PanelSimulator)
             {
                 display.Show();
                 Thread.Sleep(100); // Just to be sure that the display frame is loaded
             }
+            
             engine.Start();
         }
 

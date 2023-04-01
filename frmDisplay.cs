@@ -36,8 +36,6 @@ namespace DigitalDarkroom
             engine.OnNewPanel += Engine_OnNewPanel;
         }
 
-        // TODO : déplacer la fenête sur un autre écran : https://stackoverflow.com/questions/8420203/move-form-onto-specified-screen
-
         /// <summary>
         /// DisplayEngine send us a new image to display
         /// </summary>
@@ -134,9 +132,12 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void frmDisplay_MouseDown(object sender, MouseEventArgs e)
         {
-            dragging = true;
-            dragCursorPoint = Cursor.Position;
-            dragFormPoint = this.Location;
+            if (engine.Panel.IsFullScreen == false)
+            {
+                dragging = true;
+                dragCursorPoint = Cursor.Position;
+                dragFormPoint = this.Location;
+            }
         }
 
         /// <summary>
@@ -151,5 +152,31 @@ namespace DigitalDarkroom
         }
 
         #endregion
+
+        private void frmDisplay_Activated(object sender, EventArgs e)
+        {
+            if (engine.Panel.IsFullScreen)
+            {
+                ExternalPanel ep = engine.Panel as ExternalPanel; // TODO : à revoir
+
+                Point p = new Point
+                {
+                    X = ep.Screen.WorkingArea.Left,
+                    Y = ep.Screen.WorkingArea.Top
+                };
+
+                this.Location = p;
+            }
+            if (engine.Panel is PanelSimulator)
+            {
+                Point p = new Point
+                {
+                    X = Screen.PrimaryScreen.WorkingArea.Left,
+                    Y = Screen.PrimaryScreen.WorkingArea.Top
+                };
+
+                this.Location = p;
+            }
+        }
     }
 }

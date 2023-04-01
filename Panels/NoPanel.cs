@@ -21,6 +21,8 @@ namespace DigitalDarkroom.Panels
 
         int IPanel.NumberOfColors => 256;
 
+        bool IPanel.IsFullScreen => false;
+
         public override string ToString()
         {
             return this._name;
