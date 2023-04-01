@@ -20,16 +20,18 @@ namespace DigitalDarkroom
         private const int FLUSH_INTERVAL = 90; // in seconds
         private const string FILE_NAME = "log.txt";
 
+        private static DisplayEngine engine = DisplayEngine.GetInstance();
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="text"></param>
         internal static void Write(string text)
         {
-            sb.Append(string.Format("{0} {1} : ", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString()));
+            sb.Append(string.Format("{0} {1} : ", DateTime.Now.ToShortDateString(), DateTime.Now.ToLongTimeString()));
             sb.Append(string.Format("{0}", text));
 
-            if ((DateTime.Now - lastDT).TotalSeconds > FLUSH_INTERVAL)
+            if ((DateTime.Now - lastDT).TotalSeconds > FLUSH_INTERVAL && engine.Status != EngineStatus.Running)
             {
                 System.IO.File.AppendAllText(filePath + "\\" + FILE_NAME, sb.ToString());
                 sb.Clear();

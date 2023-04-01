@@ -133,6 +133,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="DisplayDatasheets\TOP103MONO8K01A  10.3 inch 黑白屏.pdf" />
     <None Include="LICENSE" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

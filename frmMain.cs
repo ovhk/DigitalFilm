@@ -244,7 +244,6 @@ namespace DigitalDarkroom
                     break;
                 case EngineStatus.Running:
                     // TODO récupérer le temps écoulé pour l'afficher
-                    Console.WriteLine("Running");
                     break;
                 case EngineStatus.Stopped:
                 case EngineStatus.Ended:

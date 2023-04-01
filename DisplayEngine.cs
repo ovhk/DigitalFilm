@@ -115,20 +115,24 @@ namespace DigitalDarkroom
         /// <summary>
         /// 
         /// </summary>
-        private IPanel panel;
+        private IPanel _panel;
 
         /// <summary>
         /// 
         /// </summary>
         public IPanel Panel
         {
-            get => this.panel;
+            get => this._panel;
             set
             {
-                this.panel = value;
-                this.OnNewPanel?.Invoke(this.panel);
+                this._panel = value;
+                this.OnNewPanel?.Invoke(this._panel);
             }
         }
+
+        private EngineStatus _status;
+
+        public EngineStatus Status => this._status;
 
         /// <summary>
         /// Engine self notification
@@ -137,6 +141,7 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void DisplayEngine_EngineStatusNotify(object sender, EngineStatus e)
         {
+            this._status = e;
             switch (e) 
             { 
                 case EngineStatus.Stopped:
@@ -227,17 +232,20 @@ namespace DigitalDarkroom
         {
             DisplayEngine de = (DisplayEngine)obj;
 
+            de.EngineStatusNotify?.Invoke(de, EngineStatus.Running);
+
             Thread.CurrentThread.IsBackground = true;
 
             TimeSpan tsTotalDuration = TimeSpan.Zero;
+            int iNotificationInterval = 0;
 
             foreach (ImageLayer i in de.layers)
             {
                 tsTotalDuration += TimeSpan.FromMilliseconds(i.GetExpositionDuration());
             }
-
-            de.EngineStatusNotify?.Invoke(de, EngineStatus.Started);
+            
             Stopwatch stopwatch = Stopwatch.StartNew();
+
             de.OnNewProgress?.Invoke(0, TimeSpan.Zero, tsTotalDuration);
 
             while (de.layers.Count > 0)
@@ -257,10 +265,13 @@ namespace DigitalDarkroom
 
                 int duration = il.GetExpositionDuration();
 
+                iNotificationInterval += duration;
+
                 // if duration is small, we don't cut it in seconds
                 if (duration <= 1000)
                 {
-                    Thread.Sleep(duration);
+                    Thread.Sleep(duration - 1); // -1 for calls and calculation
+
                     //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration); // TODO : ATTENTION C'EST TROP LONG
                 } 
                 else
@@ -282,8 +293,14 @@ namespace DigitalDarkroom
                     //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);  // TODO : ATTENTION C'EST TROP LONG
                 }
 
-                //il.Dispose();
-                //TODO : mesurer un peu plus les temps
+                if (iNotificationInterval >= 500) // TODO : ATTENTION C'EST TROP LONG
+                {
+                    iNotificationInterval = 0;
+                    de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);
+                }
+
+                //il.Dispose(); // TODO TEST TIMING WITH !!!
+
                 //Console.WriteLine("Step Count=" + de.layers.Count + ", " + duration + "ms, measured: " + (DateTime.Now - dtStart).TotalMilliseconds);
                 Log.WriteLine("Step Count=" + de.layers.Count + ", " + duration + "ms, measured: " + (DateTime.Now - dtStart).TotalMilliseconds);
             }
@@ -306,6 +323,8 @@ namespace DigitalDarkroom
             this.thread = new Thread(ThreadProc);
 
             this.thread.Start((object)this);
+
+            this.EngineStatusNotify?.Invoke(this, EngineStatus.Started);
         }
 
         /// <summary>
