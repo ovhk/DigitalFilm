@@ -89,6 +89,12 @@
     <Compile Include="ImageFileFilter.cs" />
     <Compile Include="ImageLayer.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="MyPictureBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MyPictureBox.Designer.cs">
+      <DependentUpon>MyPictureBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Panels\IPanel.cs" />
     <Compile Include="Panels\NoPanel.cs" />
     <Compile Include="Panels\PanelSimulator.cs" />
@@ -114,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyPictureBox.resx">
+      <DependentUpon>MyPictureBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

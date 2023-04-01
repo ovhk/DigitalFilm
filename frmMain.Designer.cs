@@ -44,7 +44,6 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btPlay = new System.Windows.Forms.Button();
             this.btStop = new System.Windows.Forms.Button();
-            this.pbDisplay = new System.Windows.Forms.PictureBox();
             this.lbTime = new System.Windows.Forms.Label();
             this.cbPanels = new System.Windows.Forms.ComboBox();
             this.gbModes = new System.Windows.Forms.GroupBox();
@@ -62,9 +61,9 @@
             this.btUnloadMode = new System.Windows.Forms.Button();
             this.btLoadMode = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.myPictureBox1 = new DigitalDarkroom.MyPictureBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbDisplay)).BeginInit();
             this.gbModes.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -185,19 +184,6 @@
             this.btStop.Text = "Stop";
             this.btStop.UseVisualStyleBackColor = true;
             this.btStop.Click += new System.EventHandler(this.btStop_Click);
-            // 
-            // pbDisplay
-            // 
-            this.pbDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbDisplay.BackColor = System.Drawing.Color.Black;
-            this.pbDisplay.Location = new System.Drawing.Point(192, 30);
-            this.pbDisplay.Name = "pbDisplay";
-            this.pbDisplay.Size = new System.Drawing.Size(582, 335);
-            this.pbDisplay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbDisplay.TabIndex = 9;
-            this.pbDisplay.TabStop = false;
             // 
             // lbTime
             // 
@@ -403,17 +389,29 @@
             this.listView1.ItemActivate += new System.EventHandler(this.listView1_ItemActivate);
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
+            // myPictureBox1
+            // 
+            this.myPictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.myPictureBox1.BackColor = System.Drawing.Color.Black;
+            this.myPictureBox1.Image = null;
+            this.myPictureBox1.Location = new System.Drawing.Point(192, 30);
+            this.myPictureBox1.Name = "myPictureBox1";
+            this.myPictureBox1.Size = new System.Drawing.Size(582, 336);
+            this.myPictureBox1.TabIndex = 17;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(988, 607);
+            this.Controls.Add(this.myPictureBox1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.gbModes);
             this.Controls.Add(this.cbPanels);
             this.Controls.Add(this.lbTime);
-            this.Controls.Add(this.pbDisplay);
             this.Controls.Add(this.btStop);
             this.Controls.Add(this.btPlay);
             this.Controls.Add(this.statusStrip1);
@@ -429,7 +427,6 @@
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbDisplay)).EndInit();
             this.gbModes.ResumeLayout(false);
             this.gbModes.PerformLayout();
             this.ResumeLayout(false);
@@ -454,7 +451,6 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Button btPlay;
         private System.Windows.Forms.Button btStop;
-        private System.Windows.Forms.PictureBox pbDisplay;
         private System.Windows.Forms.Label lbTime;
         private System.Windows.Forms.ComboBox cbPanels;
         private System.Windows.Forms.GroupBox gbModes;
@@ -473,6 +469,7 @@
         private System.Windows.Forms.TextBox tbModeDescription;
         private System.Windows.Forms.Button btBrowseImgFiles;
         private System.Windows.Forms.Label label2;
+        private MyPictureBox myPictureBox1;
     }
 }
 

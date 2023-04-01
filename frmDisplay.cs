@@ -32,7 +32,6 @@ namespace DigitalDarkroom
             InitializeComponent();
             this.DoubleBuffered = true; // Needed to eliminate flickering
             engine = DisplayEngine.GetInstance();
-            engine.OnNewImage += Engine_OnNewImage; // TODO : uniquement au Show ? et on se désabonne au close ?
             engine.OnNewPanel += Engine_OnNewPanel;
         }
 
@@ -42,7 +41,15 @@ namespace DigitalDarkroom
         /// <param name="bmp"></param>
         private void Engine_OnNewImage(Bitmap bmp)
         {
-            this.imageToDisplay = bmp;
+            if (bmp != null)
+            {
+                // Need to clone before engine dispose
+                this.imageToDisplay = (Bitmap)bmp.Clone();
+            }
+            else
+            {
+                this.imageToDisplay = null;
+            }
             SafeUpdate(() => this.Refresh());
         }
 
@@ -68,12 +75,19 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+            //base.OnPaint(e);
 
             if (this.imageToDisplay != null)
             {
                 // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
                 e.Graphics.DrawImage(this.imageToDisplay, 0, 0);
+            }
+            else
+            {
+                using (SolidBrush brush = new SolidBrush(Color.Black))
+                {
+                    e.Graphics.FillRectangle(brush, 0, 0, this.Width, this.Height);
+                }
             }
         }
 
@@ -157,7 +171,7 @@ namespace DigitalDarkroom
         {
             if (engine.Panel.IsFullScreen)
             {
-                ExternalPanel ep = engine.Panel as ExternalPanel; // TODO : à revoir
+                ExternalPanel ep = engine.Panel as ExternalPanel;
 
                 Point p = new Point
                 {
@@ -176,6 +190,24 @@ namespace DigitalDarkroom
                 };
 
                 this.Location = p;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void frmDisplay_VisibleChanged(object sender, EventArgs e)
+        {
+            // Subscribe to NewImage only if Form is Visible
+            if (this.Visible)
+            {
+                engine.OnNewImage += Engine_OnNewImage;
+            }
+            else
+            {
+                engine.OnNewImage -= Engine_OnNewImage;
             }
         }
     }

@@ -88,6 +88,31 @@ namespace DigitalDarkroom
             }
         }
 
+        #region Panels Management
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbPanels_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IPanel selectedPanel = this.cbPanels.SelectedItem as IPanel;
+
+            if (selectedPanel == null || !(selectedPanel is IPanel))
+            {
+                return;
+            }
+
+            this.display.Hide();
+            this.btUnloadMode_Click(null, null);
+
+            // Let update frmDisplay size following the selected panel in the list
+            this.engine.Panel = selectedPanel;
+        }
+
+        #endregion
+
         #region ListView Tile Management
 
         /// <summary>
@@ -137,14 +162,7 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //ListView lv = sender as ListView;
 
-            //if (lv.SelectedItems.Count == 0)
-            //{
-            //    return;
-            //}
-
-            //this.propertyGrid1.SelectedObject = lv.SelectedItems[0].Tag as string;
         }
 
         private void listView1_ItemActivate(object sender, EventArgs e)
@@ -160,7 +178,7 @@ namespace DigitalDarkroom
             
             if (il != null)
             {
-                this.pbDisplay.Image = il.GetBitmap();
+                this.myPictureBox1.Image = il.GetBitmap();
                 this.propertyGrid1.SelectedObject = lv.SelectedItems[0].Tag as ImageLayer;
             }
         }
@@ -208,10 +226,7 @@ namespace DigitalDarkroom
         /// <param name="bmp"></param>
         private void Engine_OnNewImage(Bitmap bmp)
         {
-            //Image old = this.pbDisplay.Image; // this cause Exception
-            SafeUpdate(() => this.pbDisplay.Image = bmp);
-            //SafeUpdate(() => this.pbDisplay.Refresh());
-            //if (old != null) old.Dispose(); // this cause Exception
+            SafeUpdate(() => this.myPictureBox1.Image = bmp);
         }
 
         /// <summary>
@@ -461,27 +476,6 @@ namespace DigitalDarkroom
         }
 
         #endregion
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void cbPanels_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            IPanel selectedPanel = this.cbPanels.SelectedItem as IPanel;
-
-            if (selectedPanel == null || !(selectedPanel is IPanel))
-            {
-                return;
-            }
-
-            this.display.Hide();
-            this.btUnloadMode_Click(null, null);
-
-            // Let update frmDisplay size following the selected panel in the list
-            this.engine.Panel = selectedPanel;
-        }
 
         #region Engine Play/Stop buttons
 

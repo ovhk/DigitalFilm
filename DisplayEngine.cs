@@ -247,16 +247,13 @@ namespace DigitalDarkroom
 
                 ImageLayer il = de.layers.Dequeue();
 
-                Bitmap b = il.GetBitmap();
-
-                Bitmap bmpToDisplay = new Bitmap(b); // TODO : quand on va trop vite, on n'a pas le temps d'afficher que la ressource est libéré, donc on duplique mais ça prend du temps....;
-
                 if (de._stop)
                 {
                     break;
                 }
 
-                de.OnNewImage?.Invoke(bmpToDisplay);
+                // Subscribers need to Clone the object to keep it
+                de.OnNewImage?.Invoke(il.GetBitmap());
 
                 int duration = il.GetExpositionDuration();
 
@@ -283,12 +280,15 @@ namespace DigitalDarkroom
                     }
                 }
 
-                il.Dispose();
+                //il.Dispose();
                 //TODO : mesurer un peu plus les temps
                 Console.WriteLine("Step Count=" + de.layers.Count + ", " + duration + "ms, measured: " + (DateTime.Now - dtStart).TotalMilliseconds);
             }
 
             stopwatch.Stop();
+
+            // Last black image
+            de.OnNewImage?.Invoke(null);
 
             de.EngineStatusNotify?.Invoke(de, EngineStatus.Ended);
         }
@@ -323,6 +323,8 @@ namespace DigitalDarkroom
             }
 
             this.EngineStatusNotify?.Invoke(this, EngineStatus.Stopped);
+
+            this.thread = null;
         }
 
         /// <summary>
