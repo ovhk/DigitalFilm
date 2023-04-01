@@ -14,6 +14,7 @@ namespace DigitalDarkroom
         [STAThread]
         static void Main()
         {
+            Log.WriteLine("######################################################");
             Log.WriteLine("Starting");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

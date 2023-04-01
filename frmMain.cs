@@ -200,23 +200,23 @@ namespace DigitalDarkroom
             SafeUpdate(() => this.lbTime.ForeColor = Color.White);
             SafeUpdate(() => this.lbTime.Refresh());
 
-            // TODO : Trop lent ?
             try
             {
                 SafeUpdate(() => listView1.Items[imageLayerIndex].Selected = true); // Select
                 SafeUpdate(() => listView1.Items[imageLayerIndex].EnsureVisible()); // Scroll
-            } catch { } // In case of a stop, Items could be empty so that trow an exception
+            }
+            catch { } // In case of a stop, Items could be empty so that trow an exception
 
-            // TODO : avec les lenteurs de la VM, il arrive que le temps d'éxécution soit plus long que le max théorique, donc on filtre pour ne pas avoir une exception...
+            // avec les lenteurs de la VM, il arrive que le temps d'éxécution soit plus long que le max théorique, donc on filtre pour ne pas avoir une exception...
             int val = (elapseTime.TotalSeconds > totalDuration.TotalSeconds) ? (int)totalDuration.TotalSeconds : (int)elapseTime.TotalSeconds;
 
             SafeUpdate(() => this.toolStripProgressBar1.Value = val);
-            SafeUpdate(() => this.toolStripProgressBar1.Maximum = (int) totalDuration.TotalSeconds);
+            SafeUpdate(() => this.toolStripProgressBar1.Maximum = (int)totalDuration.TotalSeconds);
 
             if (totalDuration.Subtract(elapseTime).TotalSeconds <= 3)
             {
                 SafeUpdate(() => this.lbTime.ForeColor = Color.Yellow);
-                Console.Beep();
+                //Console.Beep(); // ça prend 200 ms -- NE PAS UTILISER
             }
         }
 

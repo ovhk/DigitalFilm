@@ -26,10 +26,10 @@ namespace DigitalDarkroom
         /// 
         /// </summary>
         /// <param name="text"></param>
-        internal static void Write(string text)
+        internal static void Write(string text, params object[] parameters)
         {
             sb.Append(string.Format("{0} {1} : ", DateTime.Now.ToShortDateString(), DateTime.Now.ToLongTimeString()));
-            sb.Append(string.Format("{0}", text));
+            sb.Append(string.Format(text, parameters));
 
             if ((DateTime.Now - lastDT).TotalSeconds > FLUSH_INTERVAL && engine.Status != EngineStatus.Running)
             {
@@ -43,9 +43,9 @@ namespace DigitalDarkroom
         /// 
         /// </summary>
         /// <param name="text"></param>
-        internal static void WriteLine(string text)
+        internal static void WriteLine(string text, params object[] parameters)
         {
-            Write(text + "\r\n");
+            Write(text + "\r\n", parameters);
         }
 
         /// <summary>
