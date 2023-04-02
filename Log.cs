@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -30,6 +31,13 @@ namespace DigitalDarkroom
         {
             sb.Append(string.Format("{0} {1} : ", DateTime.Now.ToShortDateString(), DateTime.Now.ToLongTimeString()));
             sb.Append(string.Format(text, parameters));
+
+#if DEBUG
+            if (Debugger.IsAttached)
+            {
+                Console.Write(string.Format(text, parameters));
+            }
+#endif
 
             if ((DateTime.Now - lastDT).TotalSeconds > FLUSH_INTERVAL && engine.Status != EngineStatus.Running)
             {

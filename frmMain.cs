@@ -51,7 +51,6 @@ namespace DigitalDarkroom
         private void frmMain_Load(object sender, EventArgs e)
         {
             LoadModes();
-
             engine = DisplayEngine.GetInstance();
             engine.EngineStatusNotify += Engine_EngineStatusNotify;
             engine.OnNewImage += Engine_OnNewImage;
@@ -75,6 +74,8 @@ namespace DigitalDarkroom
 
             listView1.OwnerDraw = true;
             listView1.DrawItem += listView1_DrawItem;
+
+            toolStripStatusLabel1.Text = "Welcome to DigitalDarkroom!";
 
             // TODO : this is for test
             if (false)
@@ -109,6 +110,12 @@ namespace DigitalDarkroom
 
             // Let update frmDisplay size following the selected panel in the list
             this.engine.Panel = selectedPanel;
+
+            {
+                string s = String.Format("New selected panel : {0}", selectedPanel.Name);
+                toolStripStatusLabel1.Text = s;
+                Log.WriteLine(s);
+            }
         }
 
         #endregion
@@ -202,8 +209,9 @@ namespace DigitalDarkroom
 
             try
             {
-                SafeUpdate(() => listView1.Items[imageLayerIndex].Selected = true); // Select
-                SafeUpdate(() => listView1.Items[imageLayerIndex].EnsureVisible()); // Scroll
+                
+                SafeUpdate(() => { if (listView1.Items?[imageLayerIndex] != null) listView1.Items[imageLayerIndex].Selected = true; }); // Select
+                SafeUpdate(() => listView1.Items?[imageLayerIndex].EnsureVisible()); // Scroll
             }
             catch { } // In case of a stop, Items could be empty so that trow an exception
 
@@ -345,6 +353,12 @@ namespace DigitalDarkroom
                 {
                     this.btBrowseImgFiles.Enabled = false;
                 }
+
+                {
+                    string s = String.Format("New selected mode : {0}", mode.Name);
+                    toolStripStatusLabel1.Text = s;
+                    Log.WriteLine(s);
+                }
             }
         }
         /// <summary>
@@ -359,28 +373,39 @@ namespace DigitalDarkroom
                 return;
             }
 
+            IMode mode = selectedrbMode.Tag as IMode;
+
+            toolStripStatusLabel1.Text = "Loading mode " + mode.Name + "...";
+            Log.WriteLine("Loading mode {0}", mode.Name);
+
             if (this.btBrowseImgFiles.Enabled) // this mean that this mode need a file or files
             {
                 if (this.selectedFilesPath == null)
                 {
-                    MessageBox.Show("No file selected");
+                    {
+                        string s = "No file selected";
+                        toolStripStatusLabel1.Text = s;
+                        Log.WriteLine(s);
+                        MessageBox.Show(s);
+                    }
                     return;
                 }
             }
 
             Cursor.Current = Cursors.WaitCursor;
 
-            // TODO : status bar ?
-
             this.SuspendLayout();
-
-            IMode mode = selectedrbMode.Tag as IMode;
 
             int duration = int.Parse(tbDuration.Text);
 
             if (mode.Load(this.selectedFilesPath, duration) == false)
             {
-                MessageBox.Show("Fail to load selected mode!");
+                {
+                    string s = "Fail to load selected mode!";
+                    toolStripStatusLabel1.Text = s;
+                    Log.WriteLine(s);
+                    MessageBox.Show(s);
+                }
                 this.btUnloadMode_Click(null, null);
                 return;
             }
@@ -411,6 +436,12 @@ namespace DigitalDarkroom
                 display.Show();
             }
 
+            {
+                string s = "Mode loaded";
+                toolStripStatusLabel1.Text = s;
+                Log.WriteLine(s);
+            }
+
             Cursor.Current = Cursors.Default;
         }
 
@@ -426,6 +457,12 @@ namespace DigitalDarkroom
                 return;
             }
 
+            {
+                string s = "Unloaded current mode";
+                toolStripStatusLabel1.Text = s;
+                Log.WriteLine(s);
+            }
+
             Cursor.Current = Cursors.WaitCursor;
 
             if (!(engine.Panel is ExternalPanel))
@@ -437,8 +474,6 @@ namespace DigitalDarkroom
 
             IMode mode = selectedrbMode.Tag as IMode;
             mode.Unload();
-
-            // TODO : status bar ?
 
             this.btLoadMode.Enabled = true;
             this.btUnloadMode.Enabled = false;
@@ -454,6 +489,12 @@ namespace DigitalDarkroom
             this.listView1.Items.Clear();
 
             this.ResumeLayout(true);
+
+            {
+                string s = "Mode unloaded";
+                toolStripStatusLabel1.Text = s;
+                Log.WriteLine(s);
+            }
 
             Cursor.Current = Cursors.Default;
         }
@@ -485,10 +526,16 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void btPlay_Click(object sender, EventArgs e)
         {
+            {
+                string s = "Playing";
+                toolStripStatusLabel1.Text = s;
+                Log.WriteLine(s);
+            }
+
             if (engine.Panel is PanelSimulator)
             {
                 display.Show();
-                Thread.Sleep(100); // Just to be sure that the display frame is loaded
+                Thread.Sleep(200); // Just to be sure that the display frame is loaded
             }
             
             engine.Start();
@@ -502,6 +549,12 @@ namespace DigitalDarkroom
         private void btStop_Click(object sender, EventArgs e)
         {
             engine.Stop();
+
+            {
+                string s = "Stop";
+                toolStripStatusLabel1.Text = s;
+                Log.WriteLine(s);
+            }
         }
 
         #endregion

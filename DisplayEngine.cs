@@ -273,7 +273,7 @@ namespace DigitalDarkroom
                     Thread.Sleep(duration - 1); // -1 for calls and calculation
 
                     //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);
-                } 
+                }
                 else
                 {
                     int iter = duration / 1000; // convert in number of secondes
@@ -288,9 +288,19 @@ namespace DigitalDarkroom
                         }
                     }
 
-                    Thread.Sleep(duration - (iter * 1000) - 1); // -1 for calls and calculation
+                    int wait = duration - (iter * 1000) - 1;
+
+                    if (wait > 1)
+                    {
+                        Thread.Sleep(wait); // -1 for calls and calculation
+                    }
 
                     //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);
+                }
+
+                if (de._stop)
+                {
+                    break;
                 }
 
                 if (iNotificationInterval >= 500) // Do not send progress event too much...
@@ -301,9 +311,8 @@ namespace DigitalDarkroom
 
                 //il.Dispose(); // TODO TEST TIMING WITH !!!
 
-                //Console.WriteLine("Step Count=" + de.layers.Count + ", " + duration + "ms, measured: " + (DateTime.Now - dtStart).TotalMilliseconds);
                 double mesured = (DateTime.Now - dtStart).TotalMilliseconds;
-                //Log.WriteLine("Step Count=" + de.layers.Count + ", " + duration + "ms, measured: " + mesured + " delta: " + (duration - mesured) + "ms ");
+
                 Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", de.layers.Count, duration, mesured, string.Format("{0:N1}", (mesured - duration)));
             }
 
