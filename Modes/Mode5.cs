@@ -31,11 +31,13 @@ namespace DigitalDarkroom.Modes
 
             Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
 
-            //@"C:\Users\sectronic\source\repos\DigitalDarkroom\img\F1000015.jpg"
+            Bitmap b;
 
-            Image img = Image.FromFile(imgPaths[0]);
-
-            Bitmap b = GrayScale.MakeGrayscale3(new Bitmap(img, sz));
+            // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
+            using (var bmpTemp = new Bitmap(imgPaths[0]))
+            {
+                b = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
+            }
 
             engine.PushImage(b, duration);
 

@@ -309,8 +309,9 @@ namespace DigitalDarkroom
                     de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);
                 }
 
-                //il.Dispose(); // TODO TEST TIMING WITH !!!
-
+#if TEST_FILE
+                il.Dispose(); // TODO TEST TIMING WITH !!!
+#endif
                 double mesured = (DateTime.Now - dtStart).TotalMilliseconds;
 
                 Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", de.layers.Count, duration, mesured, string.Format("{0:N1}", (mesured - duration)));

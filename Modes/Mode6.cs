@@ -3,6 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DigitalDarkroom.Tools;
@@ -31,21 +32,21 @@ namespace DigitalDarkroom.Modes
 
             Task t = Task.Run(() => {
 
-                Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
-
-                //@"C:\Users\sectronic\source\repos\DigitalDarkroom\img\F1000015.jpg"
-
-                Image img = Image.FromFile(imgPaths[0]);
-
-                Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(img, sz));
-
-                List<ImageLayer> ils = GrayToTime.GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
-
-                foreach (ImageLayer il in ils)
+                // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
+                using (var bmpTemp = new Bitmap(imgPaths[0]))
                 {
-                    engine.PushImage(il);
-                }
+                    Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
+                    Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
 
+                    // TODO : move GrayToTime algo here to save memory
+                    // TODO : use PushImage with index to save to file
+                    List<ImageLayer> ils = GrayToTime.GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
+
+                    foreach (ImageLayer il in ils)
+                    {
+                        engine.PushImage(il);
+                    }
+                }
             });
 
             t.Wait();
