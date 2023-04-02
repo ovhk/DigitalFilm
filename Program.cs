@@ -19,6 +19,7 @@ namespace DigitalDarkroom
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frmMain());
+            Log.WriteLine("Closing!");
             Log.Close();
         }
     }

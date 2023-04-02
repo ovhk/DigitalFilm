@@ -39,6 +39,11 @@ namespace DigitalDarkroom.Modes
             return true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         private static void GenerateMasquesTemps(int width, int height)
         {
             DisplayEngine engine = DisplayEngine.GetInstance();

@@ -53,7 +53,6 @@ namespace DigitalDarkroom
         /// </summary>
         internal static void Close()
         {
-            WriteLine("Closing!");
             System.IO.File.AppendAllText(filePath + "\\" + FILE_NAME, sb.ToString());
             sb.Clear();
         }

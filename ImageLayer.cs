@@ -16,32 +16,42 @@ namespace DigitalDarkroom
         /// <summary>
         /// 
         /// </summary>
-        private Bitmap bmp;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private Image thumbnail;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private int expositionDuration;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private int index;
-
-        public int Index 
-        { 
-            get { return index; } 
-            set { index = value; }
+        public Bitmap Bitmap
+        {
+            get;
+            private set;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public Image Thumbnail
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         [CategoryAttribute("Duration"),
         DescriptionAttribute("Exposition duration")]
-        public int ExpositionDuration { get { return expositionDuration; } }
+        public int ExpositionDuration
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [CategoryAttribute("Index"),
+        DescriptionAttribute("Display Index")]
+        public int Index 
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 
@@ -53,11 +63,10 @@ namespace DigitalDarkroom
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 
-            this.bmp = bmp;
-            this.thumbnail = bmp.GetThumbnailImage(128, 128, callback, new IntPtr()); // 256x256 max
-            this.expositionDuration = expositionDuration;
-            
-            this.index = index;
+            this.Bitmap = bmp;
+            this.Thumbnail = bmp.GetThumbnailImage(128, 128, callback, new IntPtr()); // 256x256 max
+            this.ExpositionDuration = expositionDuration;
+            this.Index = index;
         }
 
         /// <summary>
@@ -69,11 +78,15 @@ namespace DigitalDarkroom
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 
-            this.bmp = bmp;
-            this.thumbnail = bmp.GetThumbnailImage(128, 128, callback, new IntPtr()); // 256x256 max
-            this.expositionDuration = expositionDuration;
+            this.Bitmap = bmp;
+            this.Thumbnail = bmp.GetThumbnailImage(128, 128, callback, new IntPtr()); // 256x256 max
+            this.ExpositionDuration = expositionDuration;
         }
 
+        /// <summary>
+        /// This is for GetThumbnailImageAbort call
+        /// </summary>
+        /// <returns></returns>
         private bool ThumbnailCallback()
         {
             return true;
@@ -82,36 +95,10 @@ namespace DigitalDarkroom
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        public Image GetThumbnail()
-        {
-            return this.thumbnail;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Bitmap GetBitmap()
-        {
-            return this.bmp;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public int GetExpositionDuration()
-        { 
-            return this.expositionDuration; 
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public void Dispose()
         {
-            this.bmp.Dispose();
-            this.thumbnail.Dispose();
+            this.Bitmap.Dispose();
+            this.Thumbnail.Dispose();
         }
     }
 }

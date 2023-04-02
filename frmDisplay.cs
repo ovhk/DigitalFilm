@@ -67,7 +67,7 @@ namespace DigitalDarkroom
         /// <summary>
         /// 
         /// </summary>
-        Bitmap imageToDisplay;
+        private Bitmap imageToDisplay;
 
         /// <summary>
         /// 
@@ -80,13 +80,13 @@ namespace DigitalDarkroom
             if (this.imageToDisplay != null)
             {
                 // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
-                e.Graphics.DrawImage(this.imageToDisplay, 0, 0);
+                e.Graphics.DrawImage(this.imageToDisplay, this.ClientRectangle);
             }
             else
             {
                 using (SolidBrush brush = new SolidBrush(Color.Black))
                 {
-                    e.Graphics.FillRectangle(brush, 0, 0, this.Width, this.Height);
+                    e.Graphics.FillRectangle(brush, this.ClientRectangle);
                 }
             }
         }
@@ -167,8 +167,14 @@ namespace DigitalDarkroom
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmDisplay_Activated(object sender, EventArgs e)
         {
+            // TODO test it into frmDisplay_VisibleChanged ?
             if (engine.Panel.IsFullScreen)
             {
                 ExternalPanel ep = engine.Panel as ExternalPanel;

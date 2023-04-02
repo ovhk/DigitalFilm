@@ -10,13 +10,24 @@ using System.Windows.Forms;
 
 namespace DigitalDarkroom
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class frmAbout : Form
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public frmAbout()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btClose_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;

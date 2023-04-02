@@ -178,7 +178,7 @@ namespace DigitalDarkroom
             
             if (il != null)
             {
-                this.myPictureBox1.Image = il.GetBitmap();
+                this.myPictureBox1.Image = il.Bitmap;
                 this.propertyGrid1.SelectedObject = lv.SelectedItems[0].Tag as ImageLayer;
             }
         }

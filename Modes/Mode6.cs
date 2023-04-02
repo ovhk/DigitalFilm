@@ -23,7 +23,6 @@ namespace DigitalDarkroom.Modes
         /// </summary>
         /// <param name="duration"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public bool Load(string[] imgPaths, int duration)
         {
             if (imgPaths == null || imgPaths.Length == 0) return false;
@@ -58,7 +57,6 @@ namespace DigitalDarkroom.Modes
         /// 
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public bool Unload()
         {
             DisplayEngine engine = DisplayEngine.GetInstance();

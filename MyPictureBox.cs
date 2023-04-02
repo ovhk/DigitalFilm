@@ -56,13 +56,13 @@ namespace DigitalDarkroom
             if (this._image != null)
             {
                  // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
-                 e.Graphics.DrawImage(this._image, 0, 0, this.Width, this.Height);
+                 e.Graphics.DrawImage(this._image, this.ClientRectangle);
             }
             else
             {
                 using (SolidBrush brush = new SolidBrush(Color.Black))
                 {
-                    e.Graphics.FillRectangle(brush, 0, 0, this.Width, this.Height);
+                    e.Graphics.FillRectangle(brush, this.ClientRectangle);
                 }
             }
         }

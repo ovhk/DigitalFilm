@@ -9,15 +9,17 @@ namespace DigitalDarkroom.Panels
 {
     public class ExternalPanel : IPanel
     {
-        private Screen _screen;
-
-        public Screen Screen => this._screen;
+        public Screen Screen
+        {
+            get; 
+            private set;
+        }
 
         private string _name;
         string IPanel.Name => this._name;
-        int IPanel.Width => this._screen.Bounds.Width;
+        int IPanel.Width => this.Screen.Bounds.Width;
 
-        int IPanel.Height => this._screen.Bounds.Height;
+        int IPanel.Height => this.Screen.Bounds.Height;
 
         int IPanel.NumberOfColors => 256;
 
@@ -36,7 +38,7 @@ namespace DigitalDarkroom.Panels
         public ExternalPanel(Screen screen)
         {
             this._name = screen.DeviceName;
-            this._screen = screen;
+            this.Screen = screen;
         }
     }
 }

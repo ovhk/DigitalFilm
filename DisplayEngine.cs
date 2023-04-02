@@ -193,7 +193,7 @@ namespace DigitalDarkroom
             {
                 ImageLayer i = arr[y] as ImageLayer;
                 string key = y.ToString();
-                il.Images.Add(key, i.GetThumbnail());
+                il.Images.Add(key, i.Thumbnail);
             }
 
             return il;
@@ -241,7 +241,7 @@ namespace DigitalDarkroom
 
             foreach (ImageLayer i in de.layers)
             {
-                tsTotalDuration += TimeSpan.FromMilliseconds(i.GetExpositionDuration());
+                tsTotalDuration += TimeSpan.FromMilliseconds(i.ExpositionDuration);
             }
             
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -261,9 +261,9 @@ namespace DigitalDarkroom
                 }
 
                 // Subscribers need to Clone the object to keep it
-                de.OnNewImage?.Invoke(il.GetBitmap());
+                de.OnNewImage?.Invoke(il.Bitmap);
 
-                int duration = il.GetExpositionDuration();
+                int duration = il.ExpositionDuration;
 
                 iNotificationInterval += duration;
 
