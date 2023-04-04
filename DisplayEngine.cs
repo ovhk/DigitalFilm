@@ -271,8 +271,6 @@ namespace DigitalDarkroom
                 if (duration <= 1000)
                 {
                     Thread.Sleep(duration - 1); // -1 for calls and calculation
-
-                    //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);
                 }
                 else
                 {
@@ -294,8 +292,6 @@ namespace DigitalDarkroom
                     {
                         Thread.Sleep(wait); // -1 for calls and calculation
                     }
-
-                    //de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);
                 }
 
                 if (de._stop)
@@ -353,7 +349,7 @@ namespace DigitalDarkroom
 
             if (this.thread != null && this.thread.ThreadState == System.Threading.ThreadState.Running)
             {
-                this.thread.Join(); // TODO : nedded ?
+                this.thread.Join(); // Wait for the end of the thread excecution
             }
 
             this.EngineStatusNotify?.Invoke(this, EngineStatus.Stopped);

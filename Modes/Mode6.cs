@@ -38,8 +38,6 @@ namespace DigitalDarkroom.Modes
                     Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
                     Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
 
-                    // TODO : move GrayToTime algo here to save memory
-                    // TODO : use PushImage with index to save to file
                     List<ImageLayer> ils = GrayToTime.GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
 
                     foreach (ImageLayer il in ils)

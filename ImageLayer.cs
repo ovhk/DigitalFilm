@@ -96,24 +96,6 @@ namespace DigitalDarkroom
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bmp"></param>
-        /// <param name="expositionDuration"></param>
-        public ImageLayer(Bitmap bmp, int expositionDuration)
-        {
-            Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
-#if TEST_FILE
-            // TODO : !!!!!!!!!!!
-            // Problème, je n'ai pas d'index ici...
-#else
-            this.Bitmap = bmp;
-#endif
-            this.Thumbnail = bmp.GetThumbnailImage(128, 128, callback, new IntPtr()); // 256x256 max
-            this.ExpositionDuration = expositionDuration;
-        }
-
-        /// <summary>
         /// This is for GetThumbnailImageAbort call
         /// </summary>
         /// <returns></returns>

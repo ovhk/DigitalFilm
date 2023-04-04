@@ -68,33 +68,33 @@ namespace DigitalDarkroom.Tools
         public static List<ImageLayer> GetImageLayers(Bitmap bitmap, int width, int height)
         {
             List<ImageLayer> imageLayers = new List<ImageLayer>();
-            Bitmap[] stepsImages = new Bitmap[256];
 
             computeTimings();
 
-            for (int i = 0; i < stepsImages.Length; i++)
+            for (int i = 0; i < timings.Length; i++)
             {
-                DirectBitmap b = new DirectBitmap(width, height);
-
-                for (int x = 0; x < b.Width; x++)
+                using (DirectBitmap b = new DirectBitmap(width, height))
                 {
-                    for (int y = 0; y < b.Height; y++)
+                    for (int x = 0; x < b.Width; x++)
                     {
-                        Color c = bitmap.GetPixel(x, y);
-                        
-                        // we use R but G or B are equal
-                        if (c.R < i)
+                        for (int y = 0; y < b.Height; y++)
                         {
-                            b.SetPixel(x, y, Color.FromArgb(255, 255, 255));
-                        }
-                        else
-                        {
-                            b.SetPixel(x, y, Color.FromArgb(0, 0, 0));
+                            Color c = bitmap.GetPixel(x, y);
+
+                            // we use R but G or B are equal
+                            if (c.R < i)
+                            {
+                                b.SetPixel(x, y, Color.FromArgb(255, 255, 255));
+                            }
+                            else
+                            {
+                                b.SetPixel(x, y, Color.FromArgb(0, 0, 0));
+                            }
                         }
                     }
-                }
 
-                imageLayers.Add(new ImageLayer(b.Bitmap, timings[i]));
+                    imageLayers.Add(new ImageLayer(b.Bitmap, timings[i], i));
+                }
             }
 
             return imageLayers;
