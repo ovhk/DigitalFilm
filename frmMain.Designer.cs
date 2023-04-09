@@ -245,6 +245,7 @@
             this.cbMode.Location = new System.Drawing.Point(12, 21);
             this.cbMode.Name = "cbMode";
             this.cbMode.Size = new System.Drawing.Size(151, 24);
+            this.cbMode.Sorted = true;
             this.cbMode.TabIndex = 25;
             this.cbMode.SelectedIndexChanged += new System.EventHandler(this.cbMode_SelectedIndexChanged);
             // 

@@ -16,8 +16,6 @@ namespace DigitalDarkroom.Modes
         [Browsable(false)]
         public string Name => "Gray vs B&W Linear";
 
-        // TODO : bug sur le temps, idem Mode 4 et 7 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         /// <summary>
         /// 
         /// </summary>
@@ -28,9 +26,9 @@ namespace DigitalDarkroom.Modes
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Display duration")]
+        [Description("Display duration in ms")]
         public int Duration
-        { get; set; } = 5000;
+        { get; set; } = 11000;
 
         /// <summary>
         /// 
@@ -46,33 +44,35 @@ namespace DigitalDarkroom.Modes
                 return false;
             }
 
-            using (Bitmap b = new Bitmap(engine.Panel.Width, engine.Panel.Height))
-            {
-                int width = engine.Panel.Width;
-                int height = engine.Panel.Height;
+            int width = engine.Panel.Width;
+            int height = engine.Panel.Height;
+            int iWidth = (width / engine.Panel.NumberOfColors);
 
+            // width / engine.Panel.NumberOfColors not round so we adjust...
+            width = iWidth * engine.Panel.NumberOfColors;
+
+            using (Bitmap b = new Bitmap(width, height))
+            {
                 using (Graphics gfx = Graphics.FromImage(b))
                 {
                     for (int i = 0; i < engine.Panel.NumberOfColors; i++)
                     {
                         using (SolidBrush brush = new SolidBrush(Color.FromArgb(engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i)))
                         {
-                            gfx.FillRectangle(brush, i * (width / engine.Panel.NumberOfColors), 0, width / engine.Panel.NumberOfColors, height / 2);
+                            gfx.FillRectangle(brush, i * iWidth, 0, iWidth, height / 2);
                         }
                     }
 
                     SolidBrush brushBlack = new SolidBrush(Color.Black);
                     SolidBrush brushWhite = new SolidBrush(Color.White);
 
-                    int size = engine.Panel.NumberOfColors;
-
-                    for (int i = 0; i < size; i++)
+                    for (int i = 0; i < engine.Panel.NumberOfColors; i++)
                     {
-                        for (int j = 0; j < size; j++)
+                        for (int j = 0; j < engine.Panel.NumberOfColors; j++)
                         {
                             SolidBrush brush = (j > i) ? brushBlack : brushWhite;
 
-                            gfx.FillRectangle(brush, j * (width / size), height / 2, width / size, height / 2);
+                            gfx.FillRectangle(brush, j * iWidth, height / 2, iWidth, height / 2);
                         }
 
                         // new Bitmap because we need a copy, next iteration b will be changed

@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 
 namespace DigitalDarkroom.Modes
 {
-    internal class Mode2 : IMode
+    internal class Mode2 : IMode // TODO : needed anymore? We have mode 4!
     {
         /// <summary>
         /// 
         /// </summary>
         [Browsable(false)]
         public string Name => "Gray vs B&W 500ms";
-
-        // TODO : probablement même bug sur le temps, idem Mode 4 et 7 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         /// <summary>
         /// 
@@ -34,6 +32,10 @@ namespace DigitalDarkroom.Modes
 
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;
+            int iWidth = (width / engine.Panel.NumberOfColors);
+
+            // width / engine.Panel.NumberOfColors not round so we adjust...
+            width = iWidth * engine.Panel.NumberOfColors;
 
             Bitmap b = new Bitmap(width, height);
 
@@ -44,7 +46,7 @@ namespace DigitalDarkroom.Modes
                 {
                     using (SolidBrush brush = new SolidBrush(Color.FromArgb(engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i)))
                     {
-                        gfx.FillRectangle(brush, i * (width / engine.Panel.NumberOfColors), 0, width / engine.Panel.NumberOfColors, height / 2);
+                        gfx.FillRectangle(brush, i * iWidth, 0, iWidth, height / 2);
                     }
                 }
 
@@ -64,6 +66,8 @@ namespace DigitalDarkroom.Modes
 
                         string str = (j + 1).ToString();
 
+                        // TODO adjust font following space available in (width / size)
+
                         SizeF stringSize = new SizeF();
                         stringSize = gfx.MeasureString(str, SystemFonts.DefaultFont);
                         int offset = size / 2 - (int)stringSize.Width / 2;
@@ -72,7 +76,6 @@ namespace DigitalDarkroom.Modes
                     }
                     engine.PushImage(new Bitmap(b), 500);
                 }
-
             }
             
             return true;

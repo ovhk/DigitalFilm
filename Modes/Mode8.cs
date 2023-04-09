@@ -48,6 +48,10 @@ namespace DigitalDarkroom.Modes
 
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;
+            int iWidth = (width / NbInterval);
+
+            // width / NbInterval not round so we adjust...
+            width = iWidth * NbInterval;
 
             Bitmap b = new Bitmap(width, height);
 
@@ -56,24 +60,22 @@ namespace DigitalDarkroom.Modes
                 SolidBrush brushBlack = new SolidBrush(Color.Black);
                 SolidBrush brushWhite = new SolidBrush(Color.White);
 
-                int size = NbInterval;
-
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < NbInterval; i++)
                 {
-                    for (int j = 0; j < size; j++)
+                    for (int j = 0; j < NbInterval; j++)
                     {
                         SolidBrush brush = (j > i) ? brushBlack : brushWhite;
                         SolidBrush brushTxt = (j > i) ? brushWhite : brushBlack;
 
-                        gfx.FillRectangle(brush, j * (width / size), 0, width / size, height);
+                        gfx.FillRectangle(brush, j * iWidth, 0, iWidth, height);
 
                         string str = (j + 1).ToString();
 
                         SizeF stringSize = new SizeF();
                         stringSize = gfx.MeasureString(str, SystemFonts.DefaultFont);
-                        int offset = size / 2 - (int)stringSize.Width / 2 + 10;
+                        int offset = NbInterval / 2 - (int)stringSize.Width / 2 + 10;
 
-                        gfx.DrawString(str, SystemFonts.DefaultFont, brushTxt, j * (width / size) + offset, height - 40);
+                        gfx.DrawString(str, SystemFonts.DefaultFont, brushTxt, j * iWidth + offset, height - 40);
                     }
                     engine.PushImage(new Bitmap(b), IntervalDuration * 1000);
                 }

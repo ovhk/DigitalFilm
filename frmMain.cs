@@ -273,6 +273,8 @@ namespace DigitalDarkroom
                 case EngineStatus.Started:
                     this.SafeUpdate(() => this.btPlay.Enabled = false);
                     this.SafeUpdate(() => this.btStop.Enabled = true);
+                    this.SafeUpdate(() => this.gbModes.Enabled = false);
+                    this.SafeUpdate(() => this.cbPanels.Enabled = false);
                     break;
                 case EngineStatus.Running:
                     // TODO récupérer le temps écoulé pour l'afficher
@@ -282,6 +284,7 @@ namespace DigitalDarkroom
                     this.SafeUpdate(() => this.btPlay.Enabled = false);
                     this.SafeUpdate(() => this.btStop.Enabled = false);
                     this.SafeUpdate(() => this.gbModes.Enabled = true);
+                    this.SafeUpdate(() => this.cbPanels.Enabled = true);
                     this.SafeUpdate(() => this.btUnloadMode_Click(null, null));
                     break;
             }
@@ -455,8 +458,6 @@ namespace DigitalDarkroom
                 display.Show();
                 Thread.Sleep(200); // Just to be sure that the display frame is loaded
             }
-
-            this.gbModes.Enabled = false;
 
             engine.Start();
         }
