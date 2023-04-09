@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -9,18 +10,41 @@ namespace DigitalDarkroom.Modes
 {
     internal class Mode4 : IMode
     {
-        public string Name => "Gray vs B&&W Linear";
+        /// <summary>
+        /// 
+        /// </summary>
+        [Browsable(false)]
+        public string Name => "Gray vs B&W Linear";
 
-        public string Description => "";
+        // TODO : bug sur le temps, idem Mode 4 et 7 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="duration"></param>
+        [Browsable(false)]
+        public string Description => "Compare a grayscale with B&W time interval.";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Category("Configuration")]
+        [Description("Display duration")]
+        public int Duration
+        { get; set; } = 5000;
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
-        public bool Load(string[] imgPaths, int duration)
+        public bool Load()
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
+
+            if (Duration/256 <= 40)
+            {
+                Log.WriteLine("Interval is too short... {0}/256={1} <= 40 ms", Duration, Duration/256);
+                return false;
+            }
 
             using (Bitmap b = new Bitmap(engine.Panel.Width, engine.Panel.Height))
             {
@@ -52,7 +76,7 @@ namespace DigitalDarkroom.Modes
                         }
 
                         // new Bitmap because we need a copy, next iteration b will be changed
-                        engine.PushImage(new Bitmap(b), (duration / 256));
+                        engine.PushImage(new Bitmap(b), (Duration / 256));
                     }
                 }
             }
@@ -70,6 +94,15 @@ namespace DigitalDarkroom.Modes
             engine.Clear();
 
             return true;
+        }
+
+        /// <summary>
+        /// Return the Name parameter
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }

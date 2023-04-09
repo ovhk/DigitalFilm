@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace DigitalDarkroom.Modes
 {
+    /// <summary>
+    /// Interface for modes
+    /// </summary>
     public interface IMode
     {
         string Name { get; }
         string Description { get; }
-        bool Load(string[] imgPaths, int duration);
+        bool Load();
         bool Unload();
     }
 }

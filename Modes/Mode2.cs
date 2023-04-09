@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,44 +13,27 @@ namespace DigitalDarkroom.Modes
         /// <summary>
         /// 
         /// </summary>
+        [Browsable(false)]
         public string Name => "Gray vs B&W 500ms";
 
+        // TODO : probablement même bug sur le temps, idem Mode 4 et 7 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         /// <summary>
         /// 
         /// </summary>
-        public string Description => "Generate gray scale and linear B&W scale";
+        [Browsable(false)]
+        public string Description => "Generate gray scale and linear B&W scale with fixed 500ms interval.";
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        bool IMode.Load(string[] imgPaths, int duration)
+        bool IMode.Load()
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
-            GenerateMasquesTemps(engine.Panel.Width, engine.Panel.Height);
 
-            return true;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public bool Unload()
-        {
-            DisplayEngine engine = DisplayEngine.GetInstance();
-            engine.Clear();
-            return true;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        private static void GenerateMasquesTemps(int width, int height)
-        {
-            DisplayEngine engine = DisplayEngine.GetInstance();
+            int width = engine.Panel.Width;
+            int height = engine.Panel.Height;
 
             Bitmap b = new Bitmap(width, height);
 
@@ -89,9 +73,29 @@ namespace DigitalDarkroom.Modes
                     engine.PushImage(new Bitmap(b), 500);
                 }
 
-                //TODO : ajouter un autre tier d'image avec l'algo de PMUTH
             }
+            
+            return true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool Unload()
+        {
+            DisplayEngine engine = DisplayEngine.GetInstance();
+            engine.Clear();
+            return true;
+        }
+
+        /// <summary>
+        /// Return the Name parameter
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

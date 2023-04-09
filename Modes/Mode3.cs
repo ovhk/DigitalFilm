@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,18 +13,28 @@ namespace DigitalDarkroom.Modes
         /// <summary>
         /// 
         /// </summary>
+        [Browsable(false)]
         public string Name => "Test contrast";
 
         /// <summary>
         /// 
         /// </summary>
+        [Browsable(false)]
         public string Description => "This mode draw mosaic to dertermine contrast capacity.";
 
         /// <summary>
         /// 
         /// </summary>
+        [Category("Configuration")]
+        [Description("Display duration in second")]
+        public int Duration
+        { get; set; } = 10;
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
-        bool IMode.Load(string[] imgPaths, int duration)
+        bool IMode.Load()
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
 
@@ -95,7 +106,7 @@ namespace DigitalDarkroom.Modes
             // for test only
             //b.Save(@"C:\Users\sectronic\Desktop\mode3.bmp");
 
-            engine.PushImage(b, duration);
+            engine.PushImage(b, Duration * 1000);
 
             return true;
         }
@@ -110,6 +121,15 @@ namespace DigitalDarkroom.Modes
             engine.Clear();
 
             return true;
+        }
+
+        /// <summary>
+        /// Return the Name parameter
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }

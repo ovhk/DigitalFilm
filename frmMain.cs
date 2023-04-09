@@ -32,16 +32,13 @@ namespace DigitalDarkroom
             InitializeComponent();
             this.DoubleBuffered = true; // Needed to eliminate display flickering
         }
-
-        /// <summary>
-        /// Display Form
-        /// </summary>
-        private frmDisplay display = new frmDisplay();
         
         /// <summary>
         /// Display Engine
         /// </summary>
         private DisplayEngine engine;
+
+        #region frmMain event callbacks
 
         /// <summary>
         /// Main form load
@@ -104,7 +101,14 @@ namespace DigitalDarkroom
 #endif
         }
 
+        #endregion
+
         #region Panels Management
+
+        /// <summary>
+        /// Display Form
+        /// </summary>
+        private frmDisplay display = new frmDisplay();
 
         /// <summary>
         /// 
@@ -187,6 +191,11 @@ namespace DigitalDarkroom
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void listView1_ItemActivate(object sender, EventArgs e)
         {
             ListView lv = sender as ListView;
@@ -272,6 +281,7 @@ namespace DigitalDarkroom
                 case EngineStatus.Ended:
                     this.SafeUpdate(() => this.btPlay.Enabled = false);
                     this.SafeUpdate(() => this.btStop.Enabled = false);
+                    this.SafeUpdate(() => this.gbModes.Enabled = true);
                     this.SafeUpdate(() => this.btUnloadMode_Click(null, null));
                     break;
             }
@@ -281,35 +291,19 @@ namespace DigitalDarkroom
 
         #region Modes Management
 
-        private RadioButton selectedrbMode;
-
         /// <summary>
         /// Load the list of integrated tests
         /// </summary>
         private void LoadModes()
         {
-            this.rbMode1.Tag = new Modes.Mode1() as object;
-            this.rbMode1.Text = ((IMode)this.rbMode1.Tag).Name;
-
-            this.rbMode2.Tag = new Modes.Mode2() as object;
-            this.rbMode2.Text = ((IMode)this.rbMode2.Tag).Name;
-
-            this.rbMode3.Tag = new Modes.Mode3() as object;
-            this.rbMode3.Text = ((IMode)this.rbMode3.Tag).Name;
-
-            this.rbMode4.Tag = new Modes.Mode4() as object;
-            this.rbMode4.Text = ((IMode)this.rbMode4.Tag).Name;
-
-            this.rbMode5.Tag = new Modes.Mode5() as object;
-            this.rbMode5.Text = ((IMode)this.rbMode5.Tag).Name;
-
-            this.rbMode6.Tag = new Modes.Mode6() as object;
-            this.rbMode6.Text = ((IMode)this.rbMode6.Tag).Name;
-
-            this.rbMode7.Tag = new Modes.Mode7() as object;
-            this.rbMode7.Text = ((IMode)this.rbMode7.Tag).Name;
-
-            this.btBrowseImgFiles.Enabled = false;
+            this.cbMode.Items.Add(new Modes.Mode1());
+            this.cbMode.Items.Add(new Modes.Mode2());
+            this.cbMode.Items.Add(new Modes.Mode3());
+            this.cbMode.Items.Add(new Modes.Mode4());
+            this.cbMode.Items.Add(new Modes.Mode5());
+            this.cbMode.Items.Add(new Modes.Mode6());
+            this.cbMode.Items.Add(new Modes.Mode7());
+            this.cbMode.Items.Add(new Modes.Mode8());
 
             this.btUnloadMode.Enabled = false;
         }
@@ -317,71 +311,25 @@ namespace DigitalDarkroom
         /// <summary>
         /// 
         /// </summary>
-        private string[] selectedFilesPath;
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btBrowseImgFiles_Click(object sender, EventArgs e)
+        private void cbMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //openFileDialog1.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.tif;...";
-            this.openFileDialog1.Filter = ImageFileFilter.GetImageFilter();
-            this.openFileDialog1.FilterIndex = 2;
-            this.openFileDialog1.Multiselect = true;
-
-            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                //Get the path of specified file
-                this.selectedFilesPath = this.openFileDialog1.FileNames;
-            }
-        }
-
-        /// <summary>
-        /// Called when selected test changed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton rb = sender as RadioButton;
-
-            if (rb == null)
+            if (!(cbMode.SelectedItem is IMode mode))
             {
                 return;
             }
 
-            if (rb.Checked)
+            this.tbModeDescription.Text = mode.Description;
+            this.pgMode.SelectedObject = mode;
+
             {
-                selectedrbMode = rb;
-                IMode mode = rb.Tag as IMode;
-                this.tbModeDescription.Text = mode.Description;
-
-                Type t = mode.GetType();
-                if (t.Equals(typeof(Mode5)))
-                {
-                    this.btBrowseImgFiles.Enabled = true;
-                } 
-                else if (t.Equals(typeof(Mode6)))
-                {
-                    this.btBrowseImgFiles.Enabled = true;
-                }
-                else
-                {
-                    this.btBrowseImgFiles.Enabled = false;
-                }
-
-                // TODO TEST
-                this.propertyGrid1.SelectedObject = mode;
-
-                {
-                    string s = String.Format("New selected mode : {0}", mode.Name);
-                    toolStripStatusLabel1.Text = s;
-                    Log.WriteLine(s);
-                }
+                string s = String.Format("New selected mode : {0}", mode.Name);
+                toolStripStatusLabel1.Text = s;
+                Log.WriteLine(s);
             }
         }
+
         /// <summary>
         /// Load the selected mode
         /// </summary>
@@ -389,37 +337,19 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void btLoadMode_Click(object sender, EventArgs e)
         {
-            if (selectedrbMode == null)
+            if (!(cbMode.SelectedItem is IMode mode))
             {
                 return;
             }
 
-            IMode mode = selectedrbMode.Tag as IMode;
-
             toolStripStatusLabel1.Text = "Loading mode " + mode.Name + "...";
             Log.WriteLine("Loading mode {0}", mode.Name);
-
-            if (this.btBrowseImgFiles.Enabled) // this mean that this mode need a file or files
-            {
-                if (this.selectedFilesPath == null)
-                {
-                    {
-                        string s = "No file selected";
-                        toolStripStatusLabel1.Text = s;
-                        Log.WriteLine(s);
-                        MessageBox.Show(s);
-                    }
-                    return;
-                }
-            }
 
             Cursor.Current = Cursors.WaitCursor;
 
             this.SuspendLayout();
 
-            int duration = int.Parse(tbDuration.Text);
-
-            if (mode.Load(this.selectedFilesPath, duration) == false)
+            if (mode.Load() == false)
             {
                 {
                     string s = "Fail to load selected mode!";
@@ -437,14 +367,6 @@ namespace DigitalDarkroom
 
             this.btLoadMode.Enabled = false;
             this.btUnloadMode.Enabled = true;
-
-            this.tbDuration.Enabled = false;
-            this.rbMode1.Enabled = false;
-            this.rbMode2.Enabled = false;
-            this.rbMode3.Enabled = false;
-            this.rbMode4.Enabled = false;
-            this.rbMode5.Enabled = false;
-            this.rbMode6.Enabled = false;
 
             this.toolStripProgressBar1.Value = 0;
             this.btPlay.Enabled = true;
@@ -473,7 +395,7 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void btUnloadMode_Click(object sender, EventArgs e)
         {
-            if (selectedrbMode == null)
+            if (!(cbMode.SelectedItem is IMode mode))
             {
                 return;
             }
@@ -493,19 +415,10 @@ namespace DigitalDarkroom
 
             this.SuspendLayout();
 
-            IMode mode = selectedrbMode.Tag as IMode;
             mode.Unload();
 
             this.btLoadMode.Enabled = true;
             this.btUnloadMode.Enabled = false;
-
-            this.tbDuration.Enabled = true;
-            this.rbMode1.Enabled = true;
-            this.rbMode2.Enabled = true;
-            this.rbMode3.Enabled = true;
-            this.rbMode4.Enabled = true;
-            this.rbMode5.Enabled = true;
-            this.rbMode6.Enabled = true;
 
             this.listView1.Items.Clear();
 
@@ -518,22 +431,6 @@ namespace DigitalDarkroom
             }
 
             Cursor.Current = Cursors.Default;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tbDuration_TextChanged(object sender, EventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            int val = 0;
-
-            if (int.TryParse(tb.Text, out val) == false)
-            {
-                tb.Text = "5000";
-            }
         }
 
         #endregion
@@ -558,7 +455,9 @@ namespace DigitalDarkroom
                 display.Show();
                 Thread.Sleep(200); // Just to be sure that the display frame is loaded
             }
-            
+
+            this.gbModes.Enabled = false;
+
             engine.Start();
         }
 
@@ -570,6 +469,8 @@ namespace DigitalDarkroom
         private void btStop_Click(object sender, EventArgs e)
         {
             engine.Stop();
+
+            this.gbModes.Enabled = true;
 
             {
                 string s = "Stop";
@@ -622,6 +523,10 @@ namespace DigitalDarkroom
 
         #region Invoke Management
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
         private void SafeUpdate(Action action)
         {
             if (this.InvokeRequired)
@@ -635,5 +540,6 @@ namespace DigitalDarkroom
         }
 
         #endregion
+
     }
 }

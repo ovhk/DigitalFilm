@@ -1,6 +1,7 @@
 ﻿using DigitalDarkroom.Tools;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -10,16 +11,25 @@ namespace DigitalDarkroom.Modes
 {
     internal class Mode7 : IMode
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        [Browsable(false)]
         public string Name => "Gray vs GrayToTime";
 
+        // TODO : bug sur le temps, idem Mode 4 et 7 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Browsable(false)]
         public string Description => "";
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="duration"></param>
         /// <returns></returns>
-        public bool Load(string[] imgPaths, int duration)
+        public bool Load()
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
 
@@ -80,6 +90,15 @@ namespace DigitalDarkroom.Modes
             engine.Clear();
 
             return true;
+        }
+
+        /// <summary>
+        /// Return the Name parameter
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }

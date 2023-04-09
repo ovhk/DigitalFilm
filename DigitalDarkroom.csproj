@@ -116,6 +116,7 @@
     <Compile Include="Tools\DirectBitmap.cs" />
     <Compile Include="Tools\GrayToTime.cs" />
     <Compile Include="Tools\GrayScale.cs" />
+    <Compile Include="Tools\ImageFileNameEditor.cs" />
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
       <SubType>Designer</SubType>

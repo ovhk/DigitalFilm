@@ -48,23 +48,14 @@
             this.lbTime = new System.Windows.Forms.Label();
             this.cbPanels = new System.Windows.Forms.ComboBox();
             this.gbModes = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.pgMode = new System.Windows.Forms.PropertyGrid();
+            this.cbMode = new System.Windows.Forms.ComboBox();
             this.tbModeDescription = new System.Windows.Forms.TextBox();
-            this.btBrowseImgFiles = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.rbMode6 = new System.Windows.Forms.RadioButton();
-            this.rbMode5 = new System.Windows.Forms.RadioButton();
-            this.tbDuration = new System.Windows.Forms.TextBox();
-            this.rbMode4 = new System.Windows.Forms.RadioButton();
-            this.rbMode3 = new System.Windows.Forms.RadioButton();
-            this.rbMode2 = new System.Windows.Forms.RadioButton();
-            this.rbMode1 = new System.Windows.Forms.RadioButton();
             this.btUnloadMode = new System.Windows.Forms.Button();
             this.btLoadMode = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.rbMode7 = new System.Windows.Forms.RadioButton();
-            this.myPictureBox1 = new DigitalDarkroom.MyPictureBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.myPictureBox1 = new DigitalDarkroom.MyPictureBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gbModes.SuspendLayout();
@@ -177,9 +168,10 @@
             // btPlay
             // 
             this.btPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btPlay.Location = new System.Drawing.Point(192, 384);
+            this.btPlay.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btPlay.Location = new System.Drawing.Point(12, 326);
             this.btPlay.Name = "btPlay";
-            this.btPlay.Size = new System.Drawing.Size(75, 34);
+            this.btPlay.Size = new System.Drawing.Size(174, 46);
             this.btPlay.TabIndex = 4;
             this.btPlay.Text = "Play";
             this.btPlay.UseVisualStyleBackColor = true;
@@ -188,9 +180,10 @@
             // btStop
             // 
             this.btStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btStop.Location = new System.Drawing.Point(273, 384);
+            this.btStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btStop.Location = new System.Drawing.Point(12, 378);
             this.btStop.Name = "btStop";
-            this.btStop.Size = new System.Drawing.Size(75, 34);
+            this.btStop.Size = new System.Drawing.Size(174, 44);
             this.btStop.TabIndex = 6;
             this.btStop.Text = "Stop";
             this.btStop.UseVisualStyleBackColor = true;
@@ -210,6 +203,7 @@
             // 
             // cbPanels
             // 
+            this.cbPanels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPanels.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbPanels.FormattingEnabled = true;
             this.cbPanels.Location = new System.Drawing.Point(64, 30);
@@ -220,154 +214,59 @@
             // 
             // gbModes
             // 
-            this.gbModes.Controls.Add(this.rbMode7);
-            this.gbModes.Controls.Add(this.label2);
+            this.gbModes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbModes.Controls.Add(this.pgMode);
+            this.gbModes.Controls.Add(this.cbMode);
             this.gbModes.Controls.Add(this.tbModeDescription);
-            this.gbModes.Controls.Add(this.btBrowseImgFiles);
-            this.gbModes.Controls.Add(this.label1);
-            this.gbModes.Controls.Add(this.rbMode6);
-            this.gbModes.Controls.Add(this.rbMode5);
-            this.gbModes.Controls.Add(this.tbDuration);
-            this.gbModes.Controls.Add(this.rbMode4);
-            this.gbModes.Controls.Add(this.rbMode3);
-            this.gbModes.Controls.Add(this.rbMode2);
-            this.gbModes.Controls.Add(this.rbMode1);
             this.gbModes.Controls.Add(this.btUnloadMode);
             this.gbModes.Controls.Add(this.btLoadMode);
             this.gbModes.Location = new System.Drawing.Point(12, 64);
             this.gbModes.Name = "gbModes";
-            this.gbModes.Size = new System.Drawing.Size(174, 354);
+            this.gbModes.Size = new System.Drawing.Size(174, 256);
             this.gbModes.TabIndex = 14;
             this.gbModes.TabStop = false;
             this.gbModes.Text = "Modes";
             // 
-            // label2
+            // pgMode
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 227);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 13);
-            this.label2.TabIndex = 26;
-            this.label2.Text = "Browse images";
+            this.pgMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.pgMode.Location = new System.Drawing.Point(12, 51);
+            this.pgMode.Name = "pgMode";
+            this.pgMode.Size = new System.Drawing.Size(151, 79);
+            this.pgMode.TabIndex = 25;
+            // 
+            // cbMode
+            // 
+            this.cbMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbMode.FormattingEnabled = true;
+            this.cbMode.Location = new System.Drawing.Point(12, 21);
+            this.cbMode.Name = "cbMode";
+            this.cbMode.Size = new System.Drawing.Size(151, 24);
+            this.cbMode.TabIndex = 25;
+            this.cbMode.SelectedIndexChanged += new System.EventHandler(this.cbMode_SelectedIndexChanged);
             // 
             // tbModeDescription
             // 
+            this.tbModeDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.tbModeDescription.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.tbModeDescription.Location = new System.Drawing.Point(17, 247);
+            this.tbModeDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbModeDescription.Location = new System.Drawing.Point(12, 137);
             this.tbModeDescription.Margin = new System.Windows.Forms.Padding(4);
             this.tbModeDescription.Multiline = true;
             this.tbModeDescription.Name = "tbModeDescription";
             this.tbModeDescription.ReadOnly = true;
-            this.tbModeDescription.Size = new System.Drawing.Size(137, 63);
+            this.tbModeDescription.Size = new System.Drawing.Size(151, 74);
             this.tbModeDescription.TabIndex = 25;
-            // 
-            // btBrowseImgFiles
-            // 
-            this.btBrowseImgFiles.Location = new System.Drawing.Point(116, 217);
-            this.btBrowseImgFiles.Name = "btBrowseImgFiles";
-            this.btBrowseImgFiles.Size = new System.Drawing.Size(35, 23);
-            this.btBrowseImgFiles.TabIndex = 24;
-            this.btBrowseImgFiles.Text = "...";
-            this.btBrowseImgFiles.UseVisualStyleBackColor = true;
-            this.btBrowseImgFiles.Click += new System.EventHandler(this.btBrowseImgFiles_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 27);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 13);
-            this.label1.TabIndex = 23;
-            this.label1.Text = "Duration (ms)";
-            // 
-            // rbMode6
-            // 
-            this.rbMode6.AutoSize = true;
-            this.rbMode6.Location = new System.Drawing.Point(17, 168);
-            this.rbMode6.Name = "rbMode6";
-            this.rbMode6.Size = new System.Drawing.Size(61, 17);
-            this.rbMode6.TabIndex = 22;
-            this.rbMode6.TabStop = true;
-            this.rbMode6.Text = "Mode 6";
-            this.rbMode6.UseVisualStyleBackColor = true;
-            this.rbMode6.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
-            // 
-            // rbMode5
-            // 
-            this.rbMode5.AutoSize = true;
-            this.rbMode5.Location = new System.Drawing.Point(17, 145);
-            this.rbMode5.Name = "rbMode5";
-            this.rbMode5.Size = new System.Drawing.Size(61, 17);
-            this.rbMode5.TabIndex = 21;
-            this.rbMode5.TabStop = true;
-            this.rbMode5.Text = "Mode 5";
-            this.rbMode5.UseVisualStyleBackColor = true;
-            this.rbMode5.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
-            // 
-            // tbDuration
-            // 
-            this.tbDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDuration.Location = new System.Drawing.Point(92, 19);
-            this.tbDuration.Name = "tbDuration";
-            this.tbDuration.Size = new System.Drawing.Size(64, 26);
-            this.tbDuration.TabIndex = 20;
-            this.tbDuration.Text = "5000";
-            this.tbDuration.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.tbDuration.TextChanged += new System.EventHandler(this.tbDuration_TextChanged);
-            // 
-            // rbMode4
-            // 
-            this.rbMode4.AutoSize = true;
-            this.rbMode4.Location = new System.Drawing.Point(17, 122);
-            this.rbMode4.Name = "rbMode4";
-            this.rbMode4.Size = new System.Drawing.Size(61, 17);
-            this.rbMode4.TabIndex = 19;
-            this.rbMode4.TabStop = true;
-            this.rbMode4.Text = "Mode 4";
-            this.rbMode4.UseVisualStyleBackColor = true;
-            this.rbMode4.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
-            // 
-            // rbMode3
-            // 
-            this.rbMode3.AutoSize = true;
-            this.rbMode3.Location = new System.Drawing.Point(17, 99);
-            this.rbMode3.Name = "rbMode3";
-            this.rbMode3.Size = new System.Drawing.Size(61, 17);
-            this.rbMode3.TabIndex = 18;
-            this.rbMode3.TabStop = true;
-            this.rbMode3.Text = "Mode 3";
-            this.rbMode3.UseVisualStyleBackColor = true;
-            this.rbMode3.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
-            // 
-            // rbMode2
-            // 
-            this.rbMode2.AutoSize = true;
-            this.rbMode2.Location = new System.Drawing.Point(17, 76);
-            this.rbMode2.Name = "rbMode2";
-            this.rbMode2.Size = new System.Drawing.Size(61, 17);
-            this.rbMode2.TabIndex = 17;
-            this.rbMode2.TabStop = true;
-            this.rbMode2.Text = "Mode 2";
-            this.rbMode2.UseVisualStyleBackColor = true;
-            this.rbMode2.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
-            // 
-            // rbMode1
-            // 
-            this.rbMode1.AutoSize = true;
-            this.rbMode1.Location = new System.Drawing.Point(17, 53);
-            this.rbMode1.Name = "rbMode1";
-            this.rbMode1.Size = new System.Drawing.Size(61, 17);
-            this.rbMode1.TabIndex = 16;
-            this.rbMode1.TabStop = true;
-            this.rbMode1.Text = "Mode 1";
-            this.rbMode1.UseVisualStyleBackColor = true;
-            this.rbMode1.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // btUnloadMode
             // 
-            this.btUnloadMode.Location = new System.Drawing.Point(93, 321);
+            this.btUnloadMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btUnloadMode.Location = new System.Drawing.Point(94, 217);
             this.btUnloadMode.Name = "btUnloadMode";
-            this.btUnloadMode.Size = new System.Drawing.Size(61, 23);
+            this.btUnloadMode.Size = new System.Drawing.Size(69, 32);
             this.btUnloadMode.TabIndex = 15;
             this.btUnloadMode.Text = "Unload";
             this.btUnloadMode.UseVisualStyleBackColor = true;
@@ -375,9 +274,10 @@
             // 
             // btLoadMode
             // 
-            this.btLoadMode.Location = new System.Drawing.Point(17, 321);
+            this.btLoadMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btLoadMode.Location = new System.Drawing.Point(13, 217);
             this.btLoadMode.Name = "btLoadMode";
-            this.btLoadMode.Size = new System.Drawing.Size(61, 23);
+            this.btLoadMode.Size = new System.Drawing.Size(69, 32);
             this.btLoadMode.TabIndex = 14;
             this.btLoadMode.Text = "Load";
             this.btLoadMode.UseVisualStyleBackColor = true;
@@ -401,17 +301,14 @@
             this.listView1.ItemActivate += new System.EventHandler(this.listView1_ItemActivate);
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
-            // rbMode7
+            // label3
             // 
-            this.rbMode7.AutoSize = true;
-            this.rbMode7.Location = new System.Drawing.Point(17, 191);
-            this.rbMode7.Name = "rbMode7";
-            this.rbMode7.Size = new System.Drawing.Size(61, 17);
-            this.rbMode7.TabIndex = 27;
-            this.rbMode7.TabStop = true;
-            this.rbMode7.Text = "Mode 7";
-            this.rbMode7.UseVisualStyleBackColor = true;
-            this.rbMode7.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 38);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 13);
+            this.label3.TabIndex = 24;
+            this.label3.Text = "Screen :";
             // 
             // myPictureBox1
             // 
@@ -422,17 +319,8 @@
             this.myPictureBox1.Image = null;
             this.myPictureBox1.Location = new System.Drawing.Point(192, 30);
             this.myPictureBox1.Name = "myPictureBox1";
-            this.myPictureBox1.Size = new System.Drawing.Size(582, 348);
+            this.myPictureBox1.Size = new System.Drawing.Size(582, 392);
             this.myPictureBox1.TabIndex = 17;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 38);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(47, 13);
-            this.label3.TabIndex = 24;
-            this.label3.Text = "Screen :";
             // 
             // frmMain
             // 
@@ -489,25 +377,16 @@
         private System.Windows.Forms.Label lbTime;
         private System.Windows.Forms.ComboBox cbPanels;
         private System.Windows.Forms.GroupBox gbModes;
-        private System.Windows.Forms.RadioButton rbMode3;
-        private System.Windows.Forms.RadioButton rbMode2;
-        private System.Windows.Forms.RadioButton rbMode1;
         private System.Windows.Forms.Button btUnloadMode;
         private System.Windows.Forms.Button btLoadMode;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.RadioButton rbMode4;
-        private System.Windows.Forms.TextBox tbDuration;
-        private System.Windows.Forms.RadioButton rbMode5;
-        private System.Windows.Forms.RadioButton rbMode6;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbModeDescription;
-        private System.Windows.Forms.Button btBrowseImgFiles;
-        private System.Windows.Forms.Label label2;
         private MyPictureBox myPictureBox1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.RadioButton rbMode7;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cbMode;
+        private System.Windows.Forms.PropertyGrid pgMode;
     }
 }
 
