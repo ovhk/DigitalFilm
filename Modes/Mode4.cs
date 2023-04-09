@@ -9,7 +9,7 @@ namespace DigitalDarkroom.Modes
 {
     internal class Mode4 : IMode
     {
-        public string Name => "Mode 4";
+        public string Name => "Gray vs B&&W Linear";
 
         public string Description => "";
 

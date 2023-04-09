@@ -7,17 +7,27 @@ using System.Threading.Tasks;
 
 namespace DigitalDarkroom.Modes
 {
-    internal class Mode2 : IMode
+    internal class Mode8 : IMode
     {
         /// <summary>
         /// 
         /// </summary>
-        public string Name => "Gray vs B&W 500ms";
+        public string Name => "Test Band";
 
         /// <summary>
         /// 
         /// </summary>
-        public string Description => "Generate gray scale and linear B&W scale";
+        public string Description => "Generate a test band following parameters";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int NbInterval
+        { get; set; } = 10;
+
+
+        public int IntervalDuration
+        { get; set; } = 2000;
 
         /// <summary>
         /// 

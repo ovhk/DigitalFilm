@@ -12,7 +12,7 @@ namespace DigitalDarkroom.Modes
         /// <summary>
         /// 
         /// </summary>
-        public string Name => "Mode 1";
+        public string Name => "Black && White";
 
         public string Description => "Just a black & White zone to check if the diplay panel is able to block light.";
 

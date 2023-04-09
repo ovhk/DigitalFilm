@@ -34,6 +34,7 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,8 +62,9 @@
             this.btUnloadMode = new System.Windows.Forms.Button();
             this.btLoadMode = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.rbMode7 = new System.Windows.Forms.RadioButton();
             this.myPictureBox1 = new DigitalDarkroom.MyPictureBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gbModes.SuspendLayout();
@@ -90,7 +92,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 585);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 597);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(988, 22);
             this.statusStrip1.TabIndex = 2;
@@ -101,6 +103,11 @@
             this.toolStripProgressBar1.BackColor = System.Drawing.SystemColors.Control;
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
             this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
             // menuStrip1
             // 
@@ -170,7 +177,7 @@
             // btPlay
             // 
             this.btPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btPlay.Location = new System.Drawing.Point(192, 372);
+            this.btPlay.Location = new System.Drawing.Point(192, 384);
             this.btPlay.Name = "btPlay";
             this.btPlay.Size = new System.Drawing.Size(75, 34);
             this.btPlay.TabIndex = 4;
@@ -181,7 +188,7 @@
             // btStop
             // 
             this.btStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btStop.Location = new System.Drawing.Point(273, 372);
+            this.btStop.Location = new System.Drawing.Point(273, 384);
             this.btStop.Name = "btStop";
             this.btStop.Size = new System.Drawing.Size(75, 34);
             this.btStop.TabIndex = 6;
@@ -194,7 +201,7 @@
             this.lbTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbTime.AutoSize = true;
             this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTime.Location = new System.Drawing.Point(837, 478);
+            this.lbTime.Location = new System.Drawing.Point(837, 490);
             this.lbTime.Name = "lbTime";
             this.lbTime.Size = new System.Drawing.Size(96, 25);
             this.lbTime.TabIndex = 10;
@@ -205,7 +212,7 @@
             // 
             this.cbPanels.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbPanels.FormattingEnabled = true;
-            this.cbPanels.Location = new System.Drawing.Point(12, 30);
+            this.cbPanels.Location = new System.Drawing.Point(64, 30);
             this.cbPanels.Name = "cbPanels";
             this.cbPanels.Size = new System.Drawing.Size(121, 28);
             this.cbPanels.TabIndex = 12;
@@ -213,6 +220,7 @@
             // 
             // gbModes
             // 
+            this.gbModes.Controls.Add(this.rbMode7);
             this.gbModes.Controls.Add(this.label2);
             this.gbModes.Controls.Add(this.tbModeDescription);
             this.gbModes.Controls.Add(this.btBrowseImgFiles);
@@ -228,7 +236,7 @@
             this.gbModes.Controls.Add(this.btLoadMode);
             this.gbModes.Location = new System.Drawing.Point(12, 64);
             this.gbModes.Name = "gbModes";
-            this.gbModes.Size = new System.Drawing.Size(174, 342);
+            this.gbModes.Size = new System.Drawing.Size(174, 354);
             this.gbModes.TabIndex = 14;
             this.gbModes.TabStop = false;
             this.gbModes.Text = "Modes";
@@ -236,7 +244,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 201);
+            this.label2.Location = new System.Drawing.Point(13, 227);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 26;
@@ -245,7 +253,7 @@
             // tbModeDescription
             // 
             this.tbModeDescription.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.tbModeDescription.Location = new System.Drawing.Point(19, 234);
+            this.tbModeDescription.Location = new System.Drawing.Point(17, 247);
             this.tbModeDescription.Margin = new System.Windows.Forms.Padding(4);
             this.tbModeDescription.Multiline = true;
             this.tbModeDescription.Name = "tbModeDescription";
@@ -255,7 +263,7 @@
             // 
             // btBrowseImgFiles
             // 
-            this.btBrowseImgFiles.Location = new System.Drawing.Point(121, 191);
+            this.btBrowseImgFiles.Location = new System.Drawing.Point(116, 217);
             this.btBrowseImgFiles.Name = "btBrowseImgFiles";
             this.btBrowseImgFiles.Size = new System.Drawing.Size(35, 23);
             this.btBrowseImgFiles.TabIndex = 24;
@@ -357,7 +365,7 @@
             // 
             // btUnloadMode
             // 
-            this.btUnloadMode.Location = new System.Drawing.Point(95, 308);
+            this.btUnloadMode.Location = new System.Drawing.Point(93, 321);
             this.btUnloadMode.Name = "btUnloadMode";
             this.btUnloadMode.Size = new System.Drawing.Size(61, 23);
             this.btUnloadMode.TabIndex = 15;
@@ -367,7 +375,7 @@
             // 
             // btLoadMode
             // 
-            this.btLoadMode.Location = new System.Drawing.Point(19, 308);
+            this.btLoadMode.Location = new System.Drawing.Point(17, 321);
             this.btLoadMode.Name = "btLoadMode";
             this.btLoadMode.Size = new System.Drawing.Size(61, 23);
             this.btLoadMode.TabIndex = 14;
@@ -382,7 +390,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 416);
+            this.listView1.Location = new System.Drawing.Point(12, 428);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(769, 153);
@@ -393,10 +401,17 @@
             this.listView1.ItemActivate += new System.EventHandler(this.listView1_ItemActivate);
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
-            // toolStripStatusLabel1
+            // rbMode7
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            this.rbMode7.AutoSize = true;
+            this.rbMode7.Location = new System.Drawing.Point(17, 191);
+            this.rbMode7.Name = "rbMode7";
+            this.rbMode7.Size = new System.Drawing.Size(61, 17);
+            this.rbMode7.TabIndex = 27;
+            this.rbMode7.TabStop = true;
+            this.rbMode7.Text = "Mode 7";
+            this.rbMode7.UseVisualStyleBackColor = true;
+            this.rbMode7.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // myPictureBox1
             // 
@@ -407,15 +422,25 @@
             this.myPictureBox1.Image = null;
             this.myPictureBox1.Location = new System.Drawing.Point(192, 30);
             this.myPictureBox1.Name = "myPictureBox1";
-            this.myPictureBox1.Size = new System.Drawing.Size(582, 336);
+            this.myPictureBox1.Size = new System.Drawing.Size(582, 348);
             this.myPictureBox1.TabIndex = 17;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 38);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 13);
+            this.label3.TabIndex = 24;
+            this.label3.Text = "Screen :";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(988, 607);
+            this.ClientSize = new System.Drawing.Size(988, 619);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.myPictureBox1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.gbModes);
@@ -431,6 +456,7 @@
             this.Name = "frmMain";
             this.Text = "DigitalDarkroom";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -480,6 +506,8 @@
         private System.Windows.Forms.Label label2;
         private MyPictureBox myPictureBox1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.RadioButton rbMode7;
+        private System.Windows.Forms.Label label3;
     }
 }
 

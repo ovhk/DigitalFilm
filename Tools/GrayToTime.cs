@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DigitalDarkroom.Tools
@@ -15,13 +17,29 @@ namespace DigitalDarkroom.Tools
         /// <summary>
         /// 
         /// </summary>
-        private static int[] timings = new int[256];
+        private static int[] timings;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static int[] GetTimings()
+        { 
+            if( timings == null )
+            {
+                computeTimings();
+            }
+
+            return timings; 
+        } 
 
         /// <summary>
         /// 
         /// </summary>
         private static void computeTimings()
         {
+            timings = new int[256];
+
             /* It appears that another phenomenon should be taken in account: the paper takes 1 or 2 seconds to react. 
              * Then it is very sensible for the first 15 seconds, then it gradually looses reactivity, 
              * so it takes longer to have a slightly darker black.
@@ -71,7 +89,13 @@ namespace DigitalDarkroom.Tools
 
             computeTimings();
 
+#if TEST_PARALELLE
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
+            Parallel.For(0, timings.Length, i =>
+#else
             for (int i = 0; i < timings.Length; i++)
+#endif
             {
                 using (DirectBitmap b = new DirectBitmap(width, height))
                 {
@@ -79,7 +103,7 @@ namespace DigitalDarkroom.Tools
                     {
                         for (int y = 0; y < b.Height; y++)
                         {
-                            Color c = bitmap.GetPixel(x, y);
+                            Color c = bitmap.GetPixel(x, y); ;
 
                             // we use R but G or B are equal
                             if (c.R < i)
@@ -97,6 +121,14 @@ namespace DigitalDarkroom.Tools
                 }
             }
 
+#if TEST_PARALELLE
+            );
+
+            stopwatch.Stop();
+
+        //For: 8727,5777
+            Log.WriteLine("For : {0}", stopwatch.Elapsed.TotalMilliseconds);
+#endif
             return imageLayers;
         }
     }

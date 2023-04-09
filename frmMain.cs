@@ -50,6 +50,9 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void frmMain_Load(object sender, EventArgs e)
         {
+#if TEST_BUFFERED_FILE
+            ImageLayerFile.ClearFiles();
+#endif
             LoadModes();
             engine = DisplayEngine.GetInstance();
             engine.EngineStatusNotify += Engine_EngineStatusNotify;
@@ -57,7 +60,7 @@ namespace DigitalDarkroom
             engine.OnNewProgress += Engine_OnNewProgress;
             engine.Stop(); // Call engine notification to enable/disable controls
 
-            cbPanels.Items.Add(new Panels.NoPanel(this.propertyGrid1));
+            cbPanels.Items.Add(new Panels.NoPanel(this.myPictureBox1));
             cbPanels.Items.Add(new Panels.PanelSimulator());
 
             // Find first external screen
@@ -87,6 +90,18 @@ namespace DigitalDarkroom
                 // Read the file contents back into a variable.
                 File.FileFormat object1 = File.FileManagement.ReadFromJsonFile<File.FileFormat>(@"C:\someClass.txt");
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+#if TEST_BUFFERED_FILE
+            ImageLayerFile.ClearFiles();
+#endif
         }
 
         #region Panels Management
@@ -291,6 +306,9 @@ namespace DigitalDarkroom
             this.rbMode6.Tag = new Modes.Mode6() as object;
             this.rbMode6.Text = ((IMode)this.rbMode6.Tag).Name;
 
+            this.rbMode7.Tag = new Modes.Mode7() as object;
+            this.rbMode7.Text = ((IMode)this.rbMode7.Tag).Name;
+
             this.btBrowseImgFiles.Enabled = false;
 
             this.btUnloadMode.Enabled = false;
@@ -353,6 +371,9 @@ namespace DigitalDarkroom
                 {
                     this.btBrowseImgFiles.Enabled = false;
                 }
+
+                // TODO TEST
+                this.propertyGrid1.SelectedObject = mode;
 
                 {
                     string s = String.Format("New selected mode : {0}", mode.Name);

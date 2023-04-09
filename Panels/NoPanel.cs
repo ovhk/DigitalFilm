@@ -32,10 +32,10 @@ namespace DigitalDarkroom.Panels
         {
         }
 
-        public NoPanel(PropertyGrid pg)
+        public NoPanel(MyPictureBox pb)
         {
-            this.height = pg.Height;
-            this.width = pg.Width;
+            this.height = pb.Height;
+            this.width = pb.Width;
             this._name = "No Panel";
         }
     }

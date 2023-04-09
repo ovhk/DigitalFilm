@@ -14,7 +14,7 @@ namespace DigitalDarkroom.Modes
         /// <summary>
         /// 
         /// </summary>
-        public string Name => "Mode 5";
+        public string Name => "Grayscale picture";
 
         public string Description => "Display the selected picture in grayscale.";
 

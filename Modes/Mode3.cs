@@ -12,7 +12,7 @@ namespace DigitalDarkroom.Modes
         /// <summary>
         /// 
         /// </summary>
-        public string Name => "Mode 3";
+        public string Name => "Test contrast";
 
         /// <summary>
         /// 

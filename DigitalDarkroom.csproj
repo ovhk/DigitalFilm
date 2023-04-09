@@ -34,7 +34,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST_FILE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;TEST_BUFFERED_FILE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -88,8 +88,11 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageFileFilter.cs" />
-    <Compile Include="ImageLayer.cs" />
+    <Compile Include="ImageLayer\ImageLayer.cs" />
+    <Compile Include="ImageLayer\ImageLayerFile.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Modes\Mode7.cs" />
+    <Compile Include="Modes\Mode8.cs" />
     <Compile Include="MyPictureBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -115,12 +118,15 @@
     <Compile Include="Tools\GrayScale.cs" />
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDisplay.resx">
       <DependentUpon>frmDisplay.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MyPictureBox.resx">
       <DependentUpon>MyPictureBox.cs</DependentUpon>

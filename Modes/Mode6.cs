@@ -15,7 +15,7 @@ namespace DigitalDarkroom.Modes
         /// <summary>
         /// 
         /// </summary>
-        public string Name => "Mode 6";
+        public string Name => "GrayToTime picture";
 
         public string Description => "Display the selected picture in 256 B&W pictures with GrayToTime algorithm.";
 
