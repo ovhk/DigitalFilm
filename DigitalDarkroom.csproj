@@ -144,7 +144,9 @@
     </Compile>
     <None Include="DisplayDatasheets\TOP103MONO8K01A  10.3 inch 黑白屏.pdf" />
     <None Include="Excel GrayToTime\GrayToTime.xlsx" />
-    <None Include="LICENSE" />
+    <None Include="LICENSE">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -44,7 +45,18 @@ namespace DigitalDarkroom
         {
             Version v = Assembly.GetExecutingAssembly().GetName().Version; 
             string about = string.Format(CultureInfo.InvariantCulture, @"Version : {0}.{1}.{2}.{3}", v.Major, v.Minor, v.Build, v.Revision);
-            lbVersion.Text = about;
+            this.lbVersion.Text = about;
+
+            this.lbTitle.Text = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyTitleAttribute>().Title;
+
+            try
+            {
+                this.tbLicense.Text = System.IO.File.ReadAllText(@"LICENSE");
+            }
+            catch 
+            {
+                this.tbLicense.Text = "See LICENSE file.";
+            }
         }
     }
 }
