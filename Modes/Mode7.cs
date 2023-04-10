@@ -17,13 +17,11 @@ namespace DigitalDarkroom.Modes
         [Browsable(false)]
         public string Name => "Gray vs GrayToTime";
 
-        // TODO : bug sur le temps, idem Mode 4 et 7 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         /// <summary>
         /// 
         /// </summary>
         [Browsable(false)]
-        public string Description => "";
+        public string Description => "Compare a grayscale with B&W GrayToTime duration interval.";
 
         /// <summary>
         /// 

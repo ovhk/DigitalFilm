@@ -8,7 +8,7 @@ if trend nedded https://stackoverflow.com/questions/40269793/replicate-excel-pow
 Minor
 [] frmMain manager time
 [] DisplayEngine: better use of engine status
-[] Add Find duration for a gray mode
+[X] Add Find duration for a gray mode
 [] Add in XLS file a minimum duration : 80ms ?
 [] In drawings modes, initialise with a full black screen
 

@@ -20,7 +20,7 @@ namespace DigitalDarkroom.Modes
         /// 
         /// </summary>
         [Browsable(false)]
-        public string Description => "Compare a grayscale with B&W time interval.";
+        public string Description => "Compare a grayscale with B&W linear duration interval.";
 
         /// <summary>
         /// 
@@ -33,14 +33,19 @@ namespace DigitalDarkroom.Modes
         /// <summary>
         /// 
         /// </summary>
+        private int MiniDurationMs = 40;
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         public bool Load()
         {
             DisplayEngine engine = DisplayEngine.GetInstance();
 
-            if (Duration/256 <= 40)
+            if (Duration/256 <= MiniDurationMs)
             {
-                Log.WriteLine("Interval is too short... {0}/256={1} <= 40 ms", Duration, Duration/256);
+                Log.WriteLine("Interval is too short... {0}/256={1} <= {2} ms", Duration, Duration/256, MiniDurationMs);
                 return false;
             }
 
