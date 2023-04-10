@@ -37,7 +37,7 @@ namespace DigitalDarkroom.Panels
 
         public ExternalPanel(Screen screen)
         {
-            this._name = screen.DeviceName;
+            this._name = screen.DeviceName.Replace("\\\\.\\", "");
             this.Screen = screen;
         }
     }

@@ -3,6 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -44,24 +45,52 @@ namespace DigitalDarkroom.Modes
 
             DisplayEngine engine = DisplayEngine.GetInstance();
 
-            Task t = Task.Run(() => {
+            // test cache
 
-                // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
-                using (var bmpTemp = new Bitmap(ImagePath))
+            // if (IsInCache(ImagePath) == true)
+            //{
+            // LoadFromCache()
+            //}
+
+            string md5 = Tools.Checksum.CalculateMD5(ImagePath);
+
+            string cachedir = @"cache\" + md5 + @"\" + engine.Panel.Name; // TODO : Add panel name in the path ?
+
+            //if (Directory.Exists(cachedir) == true)
+            //{
+            //    foreach (string file in Directory.GetFiles(cachedir))
+            //    {
+            //        engine.PushImage(new ImageLayer(file)); // TODO : à tester
+            //    }
+            //}
+            //else
+            {
+                //Directory.CreateDirectory(cachedir);
+
+                // TODO : ou est-ce que l'on passe le md5 ...
+
+                // end test
+
+                Task t = Task.Run(() =>
                 {
-                    Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
-                    Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
 
-                    List<ImageLayer> ils = GrayToTime.GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
-
-                    foreach (ImageLayer il in ils)
+                    // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
+                    using (var bmpTemp = new Bitmap(ImagePath))
                     {
-                        engine.PushImage(il);
-                    }
-                }
-            });
+                        Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
+                        Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
 
-            t.Wait();
+                        List<ImageLayer> ils = GrayToTime.GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
+
+                        foreach (ImageLayer il in ils)
+                        {
+                            engine.PushImage(il);
+                        }
+                    }
+                });
+
+                t.Wait();
+            }
 
             return true;
         }

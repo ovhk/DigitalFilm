@@ -92,7 +92,7 @@ namespace DigitalDarkroom
         /// <param name="bmp"></param>
         /// <param name="expositionDuration"></param>
         /// <param name="index">index of the bitmap to use in ListView</param>
-        public ImageLayer (Bitmap bmp, int expositionDuration, int index)
+        public ImageLayer(Bitmap bmp, int expositionDuration, int index)
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 #if TEST_BUFFERED_FILE
@@ -107,6 +107,27 @@ namespace DigitalDarkroom
 #if TEST_BUFFERED_FILE
             bmp.Dispose();
 #endif
+        }
+
+        public ImageLayer(string cacheImgPath) // TODO à tester
+        {
+            Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+
+            this._imgPath = cacheImgPath;
+
+            FileInfo file = new FileInfo(this._imgPath);
+
+            int index = 0;
+            int expositionDuration = 0;
+
+            ImageLayerFile.GetIndexAndExpositionDuration(file.Name, ref index, ref expositionDuration);
+
+            using (Bitmap bmp = new Bitmap(this._imgPath))
+            {
+                this.Thumbnail = bmp.GetThumbnailImage(ThumbnailSize.Width, ThumbnailSize.Height, callback, new IntPtr()); // 256x256 max
+                this.ExpositionDuration = expositionDuration;
+                this.Index = index;
+            }
         }
 
 #if TEST_BUFFERED_FILE

@@ -90,7 +90,7 @@ namespace DigitalDarkroom.Tools
             computeTimings();
 
 #if TEST_PARALELLE
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            //Stopwatch stopwatch = Stopwatch.StartNew();
 
             Parallel.For(0, timings.Length, i =>
 #else
@@ -99,9 +99,17 @@ namespace DigitalDarkroom.Tools
             {
                 using (DirectBitmap b = new DirectBitmap(width, height))
                 {
+#if TEST_PARALELLE
+                    Parallel.For(0, b.Width, x =>
+#else
                     for (int x = 0; x < b.Width; x++)
+#endif
                     {
+#if TEST_PARALELLE
+                        Parallel.For(0, b.Height, y =>
+#else
                         for (int y = 0; y < b.Height; y++)
+#endif
                         {
                             Color c = bitmap.GetPixel(x, y); ;
 
@@ -115,8 +123,13 @@ namespace DigitalDarkroom.Tools
                                 b.SetPixel(x, y, Color.FromArgb(0, 0, 0));
                             }
                         }
+#if TEST_PARALELLE
+);
+#endif
                     }
-
+#if TEST_PARALELLE
+);
+#endif
                     imageLayers.Add(new ImageLayer(b.Bitmap, timings[i], i));
                 }
             }
@@ -124,10 +137,10 @@ namespace DigitalDarkroom.Tools
 #if TEST_PARALELLE
             );
 
-            stopwatch.Stop();
+        //    stopwatch.Stop();
 
-        //For: 8727,5777
-            Log.WriteLine("For : {0}", stopwatch.Elapsed.TotalMilliseconds);
+        ////For: 8727,5777
+        //    Log.WriteLine("For : {0}", stopwatch.Elapsed.TotalMilliseconds);
 #endif
             return imageLayers;
         }

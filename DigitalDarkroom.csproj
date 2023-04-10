@@ -114,6 +114,7 @@
     <Compile Include="Modes\Mode5.cs" />
     <Compile Include="Modes\Mode6.cs" />
     <Compile Include="ToolsTODO.cs" />
+    <Compile Include="Tools\Checksum.cs" />
     <Compile Include="Tools\DirectBitmap.cs" />
     <Compile Include="Tools\GrayToTime.cs" />
     <Compile Include="Tools\GrayScale.cs" />
