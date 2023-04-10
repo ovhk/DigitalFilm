@@ -69,7 +69,8 @@ namespace DigitalDarkroom.Modes
 
                         gfx.FillRectangle(brush, j * iWidth, 0, iWidth, height);
 
-                        string str = (j + 1).ToString();
+                        // TODO formule compliqué sans doute pour rien...
+                        string str = NbInterval * IntervalDuration - (j) * IntervalDuration + "\r\nsec.";
 
                         SizeF stringSize = new SizeF();
                         stringSize = gfx.MeasureString(str, SystemFonts.DefaultFont);

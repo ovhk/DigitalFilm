@@ -89,7 +89,8 @@ namespace DigitalDarkroom.Modes
 
                         gfx.FillRectangle(brush, j * iWidth, height/2, iWidth, height/2);
 
-                        string str = (j + 1) * IntervalDuration + "\r\nsec.";
+                        // TODO formule compliqué sans doute pour rien...
+                        string str = NbInterval * IntervalDuration - (j) * IntervalDuration + "\r\nsec.";
 
                         SizeF stringSize = new SizeF();
                         stringSize = gfx.MeasureString(str, SystemFonts.DefaultFont);
@@ -97,7 +98,7 @@ namespace DigitalDarkroom.Modes
 
                         gfx.DrawString(str, SystemFonts.DefaultFont, brushTxt, j * iWidth + offset, height - 40);
                     }
-                    engine.PushImage(new Bitmap(b), 500);
+                    engine.PushImage(new Bitmap(b), IntervalDuration * 1000);
                 }
             }
             
