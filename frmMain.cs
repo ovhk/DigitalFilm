@@ -210,7 +210,7 @@ namespace DigitalDarkroom
             if (il != null)
             {
                 this.myPictureBox1.Image = il.Bitmap;
-                this.propertyGrid1.SelectedObject = lv.SelectedItems[0].Tag as ImageLayer;
+                this.pgImageLayer.SelectedObject = lv.SelectedItems[0].Tag as ImageLayer;
             }
         }
 
@@ -368,6 +368,8 @@ namespace DigitalDarkroom
             this.listView1.LargeImageList = engine.GetImageList();
             this.listView1.Items.AddRange(engine.GetListViewItems().ToArray());
 
+            this.pgMode.Enabled = false;
+            this.cbMode.Enabled = false;
             this.btLoadMode.Enabled = false;
             this.btUnloadMode.Enabled = true;
 
@@ -420,6 +422,8 @@ namespace DigitalDarkroom
 
             mode.Unload();
 
+            this.pgMode.Enabled = true;
+            this.cbMode.Enabled = true;
             this.btLoadMode.Enabled = true;
             this.btUnloadMode.Enabled = false;
 

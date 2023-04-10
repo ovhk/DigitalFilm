@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.buttonTest = new System.Windows.Forms.Button();
-            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.pgImageLayer = new System.Windows.Forms.PropertyGrid();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -70,12 +70,12 @@
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid1.Location = new System.Drawing.Point(787, 30);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(193, 331);
-            this.propertyGrid1.TabIndex = 1;
-            this.propertyGrid1.ViewBackColor = System.Drawing.SystemColors.ControlDark;
+            this.pgImageLayer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pgImageLayer.Location = new System.Drawing.Point(787, 30);
+            this.pgImageLayer.Name = "propertyGrid1";
+            this.pgImageLayer.Size = new System.Drawing.Size(193, 331);
+            this.pgImageLayer.TabIndex = 1;
+            this.pgImageLayer.ViewBackColor = System.Drawing.SystemColors.ControlDark;
             // 
             // statusStrip1
             // 
@@ -339,7 +339,7 @@
             this.Controls.Add(this.btPlay);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.propertyGrid1);
+            this.Controls.Add(this.pgImageLayer);
             this.Controls.Add(this.buttonTest);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmMain";
@@ -361,7 +361,7 @@
         #endregion
 
         private System.Windows.Forms.Button buttonTest;
-        private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.PropertyGrid pgImageLayer;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.StatusStrip statusStrip1;
