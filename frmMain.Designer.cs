@@ -71,9 +71,9 @@
             // propertyGrid1
             // 
             this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid1.Location = new System.Drawing.Point(780, 30);
+            this.propertyGrid1.Location = new System.Drawing.Point(787, 30);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(200, 331);
+            this.propertyGrid1.Size = new System.Drawing.Size(193, 331);
             this.propertyGrid1.TabIndex = 1;
             this.propertyGrid1.ViewBackColor = System.Drawing.SystemColors.ControlDark;
             // 
@@ -171,7 +171,7 @@
             this.btPlay.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btPlay.Location = new System.Drawing.Point(12, 326);
             this.btPlay.Name = "btPlay";
-            this.btPlay.Size = new System.Drawing.Size(174, 46);
+            this.btPlay.Size = new System.Drawing.Size(198, 46);
             this.btPlay.TabIndex = 4;
             this.btPlay.Text = "Play";
             this.btPlay.UseVisualStyleBackColor = true;
@@ -183,7 +183,7 @@
             this.btStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btStop.Location = new System.Drawing.Point(12, 378);
             this.btStop.Name = "btStop";
-            this.btStop.Size = new System.Drawing.Size(174, 44);
+            this.btStop.Size = new System.Drawing.Size(198, 44);
             this.btStop.TabIndex = 6;
             this.btStop.Text = "Stop";
             this.btStop.UseVisualStyleBackColor = true;
@@ -208,7 +208,7 @@
             this.cbPanels.FormattingEnabled = true;
             this.cbPanels.Location = new System.Drawing.Point(64, 30);
             this.cbPanels.Name = "cbPanels";
-            this.cbPanels.Size = new System.Drawing.Size(121, 28);
+            this.cbPanels.Size = new System.Drawing.Size(146, 28);
             this.cbPanels.TabIndex = 12;
             this.cbPanels.SelectedIndexChanged += new System.EventHandler(this.cbPanels_SelectedIndexChanged);
             // 
@@ -223,7 +223,7 @@
             this.gbModes.Controls.Add(this.btLoadMode);
             this.gbModes.Location = new System.Drawing.Point(12, 64);
             this.gbModes.Name = "gbModes";
-            this.gbModes.Size = new System.Drawing.Size(174, 256);
+            this.gbModes.Size = new System.Drawing.Size(198, 256);
             this.gbModes.TabIndex = 14;
             this.gbModes.TabStop = false;
             this.gbModes.Text = "Modes";
@@ -234,7 +234,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.pgMode.Location = new System.Drawing.Point(12, 51);
             this.pgMode.Name = "pgMode";
-            this.pgMode.Size = new System.Drawing.Size(151, 79);
+            this.pgMode.Size = new System.Drawing.Size(177, 79);
             this.pgMode.TabIndex = 25;
             // 
             // cbMode
@@ -244,7 +244,7 @@
             this.cbMode.FormattingEnabled = true;
             this.cbMode.Location = new System.Drawing.Point(12, 21);
             this.cbMode.Name = "cbMode";
-            this.cbMode.Size = new System.Drawing.Size(151, 24);
+            this.cbMode.Size = new System.Drawing.Size(177, 24);
             this.cbMode.Sorted = true;
             this.cbMode.TabIndex = 25;
             this.cbMode.SelectedIndexChanged += new System.EventHandler(this.cbMode_SelectedIndexChanged);
@@ -259,15 +259,15 @@
             this.tbModeDescription.Multiline = true;
             this.tbModeDescription.Name = "tbModeDescription";
             this.tbModeDescription.ReadOnly = true;
-            this.tbModeDescription.Size = new System.Drawing.Size(151, 74);
+            this.tbModeDescription.Size = new System.Drawing.Size(177, 74);
             this.tbModeDescription.TabIndex = 25;
             // 
             // btUnloadMode
             // 
             this.btUnloadMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btUnloadMode.Location = new System.Drawing.Point(94, 217);
+            this.btUnloadMode.Location = new System.Drawing.Point(109, 217);
             this.btUnloadMode.Name = "btUnloadMode";
-            this.btUnloadMode.Size = new System.Drawing.Size(69, 32);
+            this.btUnloadMode.Size = new System.Drawing.Size(80, 32);
             this.btUnloadMode.TabIndex = 15;
             this.btUnloadMode.Text = "Unload";
             this.btUnloadMode.UseVisualStyleBackColor = true;
@@ -278,7 +278,7 @@
             this.btLoadMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btLoadMode.Location = new System.Drawing.Point(13, 217);
             this.btLoadMode.Name = "btLoadMode";
-            this.btLoadMode.Size = new System.Drawing.Size(69, 32);
+            this.btLoadMode.Size = new System.Drawing.Size(80, 32);
             this.btLoadMode.TabIndex = 14;
             this.btLoadMode.Text = "Load";
             this.btLoadMode.UseVisualStyleBackColor = true;
@@ -318,9 +318,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.myPictureBox1.BackColor = System.Drawing.Color.Black;
             this.myPictureBox1.Image = null;
-            this.myPictureBox1.Location = new System.Drawing.Point(192, 30);
+            this.myPictureBox1.Location = new System.Drawing.Point(216, 30);
             this.myPictureBox1.Name = "myPictureBox1";
-            this.myPictureBox1.Size = new System.Drawing.Size(582, 392);
+            this.myPictureBox1.Size = new System.Drawing.Size(565, 392);
             this.myPictureBox1.TabIndex = 17;
             // 
             // frmMain
