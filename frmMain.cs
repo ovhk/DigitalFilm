@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.CodeDom;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace DigitalDarkroom
 {
@@ -345,6 +346,8 @@ namespace DigitalDarkroom
                 return;
             }
 
+            Stopwatch sw = Stopwatch.StartNew();
+
             toolStripStatusLabel1.Text = "Loading mode " + mode.Name + "...";
             Log.WriteLine("Loading mode {0}", mode.Name);
 
@@ -385,7 +388,7 @@ namespace DigitalDarkroom
             }
 
             {
-                string s = "Mode loaded";
+                string s = "Mode loaded in " + sw.Elapsed.ToString("mm\\:ss\\.ff");
                 toolStripStatusLabel1.Text = s;
                 Log.WriteLine(s);
             }
