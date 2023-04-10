@@ -47,6 +47,12 @@ namespace DigitalDarkroom.Modes
             {
                 using (Graphics gfx = Graphics.FromImage(b))
                 {
+                    // First, erase all
+                    using (SolidBrush brush = new SolidBrush(Color.Black))
+                    {
+                        gfx.FillRectangle(brush, 0, 0, engine.Panel.Width, engine.Panel.Height);
+                    }
+
                     for (int i = 0; i < gttTimings.Length; i++)
                     {
                         using (SolidBrush brush = new SolidBrush(Color.FromArgb(engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i)))

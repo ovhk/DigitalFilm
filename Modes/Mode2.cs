@@ -65,6 +65,12 @@ namespace DigitalDarkroom.Modes
 
             using (Graphics gfx = Graphics.FromImage(b))
             {
+                // First, erase all
+                using (SolidBrush brush = new SolidBrush(Color.Black))
+                {
+                    gfx.FillRectangle(brush, 0, 0, engine.Panel.Width, engine.Panel.Height);
+                }
+
                 // Generate gray levels
                 using (SolidBrush brush = new SolidBrush(Color.FromArgb(GrayValue, GrayValue, GrayValue)))
                 {

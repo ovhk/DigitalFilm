@@ -48,47 +48,54 @@ namespace DigitalDarkroom.Modes
 
             Bitmap b = new Bitmap(engine.Panel.Width, engine.Panel.Height);
 
-            Graphics g = Graphics.FromImage(b);
-
-            int width = engine.Panel.Width;
-            int height = engine.Panel.Height;
-            
-            SolidBrush brushBlack = new SolidBrush(Color.Black);
-            SolidBrush brushWhite = new SolidBrush(Color.White);
-
-            g.FillRectangle(brushBlack, 0, 0, width, height / 4);
-            g.FillRectangle(brushWhite, 0, height/4, width, height / 4);
-
-            int iter = NbSquare;
-
-            for (int i = 0; i < iter; i++)
+            using (Graphics gfx = Graphics.FromImage(b))
             {
-                g.FillRectangle(brushWhite, (i + 1) * width / iter, height * 1 / 8, (i + 1) * 1, (i + 1) * 1);
-            }
-
-            for (int i = 0; i < iter; i++)
-            {
-                g.FillRectangle(brushBlack, (i + 1) * width / iter, height * 3 / 8, (i + 1) * 1, (i + 1) * 1);
-            }
-
-            for (int a = 0; a < 80 * 3; a += 3)
-            {
-                for (int i = 0; i < width - 3; i += 3)
+                // First, erase all
+                using (SolidBrush brush = new SolidBrush(Color.Black))
                 {
-                    if (i % 2 == 0)
+                    gfx.FillRectangle(brush, 0, 0, engine.Panel.Width, engine.Panel.Height);
+                }
+
+                int width = engine.Panel.Width;
+                int height = engine.Panel.Height;
+
+                SolidBrush brushBlack = new SolidBrush(Color.Black);
+                SolidBrush brushWhite = new SolidBrush(Color.White);
+
+                gfx.FillRectangle(brushBlack, 0, 0, width, height / 4);
+                gfx.FillRectangle(brushWhite, 0, height / 4, width, height / 4);
+
+                int iter = NbSquare;
+
+                for (int i = 0; i < iter; i++)
+                {
+                    gfx.FillRectangle(brushWhite, (i + 1) * width / iter, height * 1 / 8, (i + 1) * 1, (i + 1) * 1);
+                }
+
+                for (int i = 0; i < iter; i++)
+                {
+                    gfx.FillRectangle(brushBlack, (i + 1) * width / iter, height * 3 / 8, (i + 1) * 1, (i + 1) * 1);
+                }
+
+                for (int a = 0; a < 80 * 3; a += 3)
+                {
+                    for (int i = 0; i < width - 3; i += 3)
                     {
-                        g.FillRectangle(brushBlack, i, height - a, 3, 3);
-                        g.FillRectangle(brushWhite, i + 1, height - a + 1, 1, 1);
-                    }
-                    else
-                    {
-                        g.FillRectangle(brushWhite, i, height - a, 3, 3);
-                        g.FillRectangle(brushBlack, i + 1, height - a + 1, 1, 1);
+                        if (i % 2 == 0)
+                        {
+                            gfx.FillRectangle(brushBlack, i, height - a, 3, 3);
+                            gfx.FillRectangle(brushWhite, i + 1, height - a + 1, 1, 1);
+                        }
+                        else
+                        {
+                            gfx.FillRectangle(brushWhite, i, height - a, 3, 3);
+                            gfx.FillRectangle(brushBlack, i + 1, height - a + 1, 1, 1);
+                        }
                     }
                 }
-            }
 
-            engine.PushImage(b, Duration * 1000);
+                engine.PushImage(b, Duration * 1000);
+            }
 
             return true;
         }
