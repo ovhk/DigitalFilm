@@ -28,7 +28,15 @@ namespace DigitalDarkroom.Modes
         [Category("Configuration")]
         [Description("Display duration in second")]
         public int Duration
-        { get; set; } = 10;
+        { get; set; } = 30;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Category("Configuration")]
+        [Description("Number of square to display")]
+        public int NbSquare
+        { get; set; } = 20;
 
         /// <summary>
         /// 
@@ -48,63 +56,37 @@ namespace DigitalDarkroom.Modes
             SolidBrush brushBlack = new SolidBrush(Color.Black);
             SolidBrush brushWhite = new SolidBrush(Color.White);
 
-            g.FillRectangle(brushBlack, 0, 0, width, height / 2);
-            g.FillRectangle(brushWhite, 0, height/2, width, height / 2);
+            g.FillRectangle(brushBlack, 0, 0, width, height / 4);
+            g.FillRectangle(brushWhite, 0, height/4, width, height / 4);
 
-            for (int i = 0; i < 10; i++)
+            int iter = NbSquare;
+
+            for (int i = 0; i < iter; i++)
             {
-                g.FillRectangle(brushWhite, (i + 1) * width / 10, height * 1 / 4, (i + 1) * 1, (i + 1) * 1);
+                g.FillRectangle(brushWhite, (i + 1) * width / iter, height * 1 / 8, (i + 1) * 1, (i + 1) * 1);
             }
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < iter; i++)
             {
-                g.FillRectangle(brushBlack, (i + 1) * width / 10, height * 3 / 4, (i + 1) * 1, (i + 1) * 1);
-            }
-            
-            for (int i = 0; i < width - 3; i += 3)
-            {
-                if (i % 2 != 0)
-                {
-                    g.FillRectangle(brushBlack, i, height - 23, 3, 3);
-                    g.FillRectangle(brushWhite, i + 1, height - 23 + 1, 1, 1);
-                }
-                else
-                {
-                    g.FillRectangle(brushWhite, i, height - 23, 3, 3);
-                    g.FillRectangle(brushBlack, i + 1, height - 23 + 1, 1, 1);
-                }
+                g.FillRectangle(brushBlack, (i + 1) * width / iter, height * 3 / 8, (i + 1) * 1, (i + 1) * 1);
             }
 
-            for (int i = 0; i < width - 3; i += 3)
+            for (int a = 0; a < 80 * 3; a += 3)
             {
-                if (i % 2 == 0)
+                for (int i = 0; i < width - 3; i += 3)
                 {
-                    g.FillRectangle(brushBlack, i, height - 20, 3, 3);
-                    g.FillRectangle(brushWhite, i + 1, height - 20 + 1, 1, 1);
-                }
-                else
-                {
-                    g.FillRectangle(brushWhite, i, height - 20, 3, 3);
-                    g.FillRectangle(brushBlack, i + 1, height - 20 + 1, 1, 1);
+                    if (i % 2 == 0)
+                    {
+                        g.FillRectangle(brushBlack, i, height - a, 3, 3);
+                        g.FillRectangle(brushWhite, i + 1, height - a + 1, 1, 1);
+                    }
+                    else
+                    {
+                        g.FillRectangle(brushWhite, i, height - a, 3, 3);
+                        g.FillRectangle(brushBlack, i + 1, height - a + 1, 1, 1);
+                    }
                 }
             }
-
-            for (int i = 0; i < width - 3; i += 3)
-            {
-                if (i % 2 != 0)
-                {
-                    g.FillRectangle(brushBlack, i, height - 17, 3, 3);
-                    g.FillRectangle(brushWhite, i + 1, height - 17 + 1, 1, 1);
-                }
-                else
-                {
-                    g.FillRectangle(brushWhite, i, height - 17, 3, 3);
-                    g.FillRectangle(brushBlack, i + 1, height - 17 + 1, 1, 1);
-                }
-            }
-
-            // for test only
-            //b.Save(@"C:\Users\sectronic\Desktop\mode3.bmp");
 
             engine.PushImage(b, Duration * 1000);
 
