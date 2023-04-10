@@ -35,9 +35,10 @@
             // 
             // btClose
             // 
-            this.btClose.Location = new System.Drawing.Point(113, 251);
+            this.btClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btClose.Location = new System.Drawing.Point(26, 236);
             this.btClose.Name = "btClose";
-            this.btClose.Size = new System.Drawing.Size(75, 23);
+            this.btClose.Size = new System.Drawing.Size(286, 35);
             this.btClose.TabIndex = 0;
             this.btClose.Text = "Close";
             this.btClose.UseVisualStyleBackColor = true;
@@ -75,6 +76,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.btClose);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmAbout";
             this.Opacity = 0.8D;
             this.ShowIcon = false;
