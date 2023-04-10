@@ -52,6 +52,12 @@ namespace DigitalDarkroom
         /// 
         /// </summary>
         [Browsable(false)]
+        public static Size ThumbnailSize = new Size(128, 128); // max is 256x256 and must match with TileSize
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Browsable(false)]
         public Image Thumbnail
         {
             get;
@@ -95,7 +101,7 @@ namespace DigitalDarkroom
 #else
             this.Bitmap = bmp;
 #endif
-            this.Thumbnail = bmp.GetThumbnailImage(128, 128, callback, new IntPtr()); // 256x256 max
+            this.Thumbnail = bmp.GetThumbnailImage(ThumbnailSize.Width, ThumbnailSize.Height, callback, new IntPtr()); // 256x256 max
             this.ExpositionDuration = expositionDuration;
             this.Index = index;
 #if TEST_BUFFERED_FILE

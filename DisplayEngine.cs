@@ -411,6 +411,8 @@ namespace DigitalDarkroom
 
 #if TEST_BUFFERED_FILE
             // TODO kill _threadFiles 
+
+            // release to unlock waitone and test _stop ?
 #endif
 
             this.EngineStatusNotify?.Invoke(this, EngineStatus.Stopped);
@@ -465,7 +467,7 @@ namespace DigitalDarkroom
         {
             ImageList il = new ImageList();
 
-            il.ImageSize = new Size(128, 128); // TODO must match with ImageLayer 256 max, get value from TileSize ?
+            il.ImageSize = ImageLayer.ThumbnailSize;
 
             ImageLayer[] arr = _imglayers.ToArray();
 
