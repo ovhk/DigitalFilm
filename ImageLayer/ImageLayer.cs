@@ -30,6 +30,7 @@ namespace DigitalDarkroom
         /// <summary>
         /// 
         /// </summary>
+        [Browsable(false)]
         public Bitmap Bitmap
         {
 #if TEST_BUFFERED_FILE
@@ -47,23 +48,10 @@ namespace DigitalDarkroom
 #endif
         }
 
-#if TEST_BUFFERED_FILE
-        public void LoadImage()
-        {
-            if (this._bitmap == null)
-            {
-                // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
-                using (var bmpTemp = new Bitmap(this._imgPath))
-                {
-                    this._bitmap = new Bitmap(bmpTemp);
-                }
-            }
-        }
-#endif
-
         /// <summary>
         /// 
         /// </summary>
+        [Browsable(false)]
         public Image Thumbnail
         {
             get;
@@ -114,6 +102,23 @@ namespace DigitalDarkroom
             bmp.Dispose();
 #endif
         }
+
+#if TEST_BUFFERED_FILE
+        /// <summary>
+        /// 
+        /// </summary>
+        public void LoadImage()
+        {
+            if (this._bitmap == null)
+            {
+                // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
+                using (var bmpTemp = new Bitmap(this._imgPath))
+                {
+                    this._bitmap = new Bitmap(bmpTemp);
+                }
+            }
+        }
+#endif
 
         /// <summary>
         /// This is for GetThumbnailImageAbort call
