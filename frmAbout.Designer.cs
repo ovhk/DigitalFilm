@@ -31,6 +31,7 @@
             this.btClose = new System.Windows.Forms.Button();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.lbVersion = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btClose
@@ -66,13 +67,24 @@
             this.label1.Text = "Digital Darkroom";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // lbVersion
+            // 
+            this.lbVersion.AutoSize = true;
+            this.lbVersion.Location = new System.Drawing.Point(103, 156);
+            this.lbVersion.Name = "lbVersion";
+            this.lbVersion.Size = new System.Drawing.Size(51, 13);
+            this.lbVersion.TabIndex = 3;
+            this.lbVersion.Text = "Version : ";
+            this.lbVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // frmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(335, 296);
+            this.ClientSize = new System.Drawing.Size(327, 288);
             this.ControlBox = false;
+            this.Controls.Add(this.lbVersion);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.btClose);
@@ -83,6 +95,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "About";
+            this.Load += new System.EventHandler(this.frmAbout_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -93,5 +106,6 @@
         private System.Windows.Forms.Button btClose;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbVersion;
     }
 }
