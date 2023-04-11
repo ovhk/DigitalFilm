@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalDarkroom.Engine;
 
 namespace DigitalDarkroom
 {
@@ -21,7 +22,7 @@ namespace DigitalDarkroom
         private const int FLUSH_INTERVAL = 90; // in seconds
         private const string FILE_NAME = "log.txt";
 
-        private static DisplayEngine engine = DisplayEngine.GetInstance();
+        private static readonly DisplayEngine engine = DisplayEngine.GetInstance();
 
         /// <summary>
         /// 

@@ -1,6 +1,4 @@
-﻿using DigitalDarkroom.Panels;
-using DigitalDarkroom.Modes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +15,9 @@ using System.IO;
 using System.CodeDom;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using DigitalDarkroom.Panels;
+using DigitalDarkroom.Modes;
+using DigitalDarkroom.Engine;
 
 namespace DigitalDarkroom
 {
@@ -81,12 +82,12 @@ namespace DigitalDarkroom
             // TODO : this is for test
             if (false)
             {
-                File.FileFormat file = new File.FileFormat();
+                Test.FileFormat file = new Test.FileFormat();
                 // Write the contents of the variable someClass to a file.
-                File.FileManagement.WriteToJsonFile<File.FileFormat>(@"C:\someClass.txt", file);
+                Test.FileManagement.WriteToJsonFile<Test.FileFormat>(@"C:\someClass.txt", file);
 
                 // Read the file contents back into a variable.
-                File.FileFormat object1 = File.FileManagement.ReadFromJsonFile<File.FileFormat>(@"C:\someClass.txt");
+                Test.FileFormat object1 = Test.FileManagement.ReadFromJsonFile<Test.FileFormat>(@"C:\someClass.txt");
             }
         }
 
@@ -141,6 +142,53 @@ namespace DigitalDarkroom
         #endregion
 
         #region ListView Tile Management
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ImageList GetImageList()
+        {
+            ImageList il = new ImageList();
+
+            il.ImageSize = ImageLayer.ThumbnailSize;
+
+            ImageLayer[] arr = engine.Items;
+
+            for (int y = 0; y < arr.Length; y++)
+            {
+                ImageLayer i = arr[y] as ImageLayer;
+                string key = y.ToString();
+                il.Images.Add(key, i.Thumbnail);
+            }
+
+            return il;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ListViewItem[] GetListViewItems()
+        {
+            List<ListViewItem> list = new List<ListViewItem>();
+
+            ImageLayer[] arr = engine.Items;
+
+            for (int y = 0; y < arr.Length; y++)
+            {
+                ImageLayer i = arr[y] as ImageLayer;
+                string key = y.ToString();
+                ListViewItem lvi = new ListViewItem(key);
+
+                lvi.ImageIndex = i.Index;
+                lvi.Tag = i;
+                lvi.ImageKey = key;
+                list.Add(lvi);
+            }
+
+            return list.ToArray();
+        }
 
         /// <summary>
         /// 
@@ -368,8 +416,8 @@ namespace DigitalDarkroom
             }
 
             this.listView1.Items.Clear();
-            this.listView1.LargeImageList = engine.GetImageList();
-            this.listView1.Items.AddRange(engine.GetListViewItems().ToArray());
+            this.listView1.LargeImageList = GetImageList();
+            this.listView1.Items.AddRange(GetListViewItems());
 
             this.pgMode.Enabled = false;
             this.cbMode.Enabled = false;

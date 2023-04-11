@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalDarkroom.Engine;
 
 namespace DigitalDarkroom.Modes
 {
@@ -24,14 +25,17 @@ namespace DigitalDarkroom.Modes
         public string Description => "Compare a grayscale with B&W GrayToTime duration interval.";
 
         /// <summary>
+        /// Access to the Engine
+        /// </summary>
+        private readonly DisplayEngine engine = DisplayEngine.GetInstance();
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public bool Load()
         {
-            DisplayEngine engine = DisplayEngine.GetInstance();
-
-            int[] gttTimings = GrayToTime.GetTimings();
+            int[] gttTimings = GrayToTime.Timings;
 
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;

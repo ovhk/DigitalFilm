@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Forms">
+    <Position X="0.5" Y="1.708" Height="0.323" Width="1.002" />
+  </Comment>
+  <Comment CommentText="EntryPoint with Settings, Ressources and Log tool">
+    <Position X="0.5" Y="0.5" Height="0.635" Width="1.575" />
+  </Comment>
+  <Comment CommentText="Custom Controls">
+    <Position X="0.5" Y="2.542" Height="0.323" Width="1.721" />
+  </Comment>
+  <Comment CommentText="Tools">
+    <Position X="0.5" Y="5.188" Height="0.323" Width="1.721" />
+  </Comment>
+  <Comment CommentText="Tests">
+    <Position X="0.5" Y="6.219" Height="0.323" Width="1.721" />
+  </Comment>
+  <Comment CommentText="Engine">
+    <Position X="0.5" Y="7.281" Height="0.323" Width="1.721" />
+  </Comment>
+  <Class Name="DigitalDarkroom.Engine.DisplayEngine" Collapsed="true">
+    <Position X="2.5" Y="7.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>IEAMAAAkADAAAEAgAEEAiZAAFBgQBAEBIDAQAABAAAA=</HashCode>
+      <FileName>Engine\DisplayEngine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.frmAbout" Collapsed="true">
+    <Position X="6" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAABAAAiAAAIASAASAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>frmAbout.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.frmDisplay" Collapsed="true">
+    <Position X="4.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAgAUACgAAAAIAACAAAACQEAAAIAAACAAAAwBAAA=</HashCode>
+      <FileName>frmDisplay.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.frmMain" Collapsed="true">
+    <Position X="2.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>DQCEDiAjBCAAgFABACCKwAECCAkGARgAgkCgQKQAmAE=</HashCode>
+      <FileName>frmMain.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Log" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAKCAAAAAAAAAAAAEAAAAAAAA2AAAA=</HashCode>
+      <FileName>Log.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Program" Collapsed="true">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Test.FileFormat" Collapsed="true">
+    <Position X="2.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Test\File\FileFormat.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Test.FileManagement" Collapsed="true">
+    <Position X="4.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Test\File\FileManagement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Modes.Mode1" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAiAAAEAAAAAAQAAAAABAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Modes\Mode1.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Modes.Mode2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAACAAAAgAAAEIAAAAAQAAAAABAAAABAAAAQAAAA=</HashCode>
+      <FileName>Modes\Mode2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Modes.Mode3" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAACAAAAiAAAEAAAAAAQAAAAABAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Modes\Mode3.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Modes.Mode4" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgACAAAAiAAAEAAAAAAQAAAAAAAAAAAAAAAUAAAA=</HashCode>
+      <FileName>Modes\Mode4.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Modes.Mode5" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgACAAAAiAAAEAAAAAIQAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Modes\Mode5.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Modes.Mode6" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgACAAAAgAAAEAAAAAIQAgAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Modes\Mode6.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Modes.Mode7" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgACAAAAgAAAEAAAAAAQAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Modes\Mode7.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Modes.Mode8" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAACAAAAgAAAEAAAAAAQAAAAABAAAABAAAAQAAAA=</HashCode>
+      <FileName>Modes\Mode8.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Panels.ExternalPanel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAABAAAAAAAEBAAAAAAAAAIAABAQIAAAAAAAAAA=</HashCode>
+      <FileName>Panels\ExternalPanel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Panels.NoPanel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAABAAAAAAQEQAAAAAAAAAIAABAQIAAAAAAAAAA=</HashCode>
+      <FileName>Panels\NoPanel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Panels.PanelSimulator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAABAAAAAAAEAAAAAAAAAAIAABAQIAAAAAAAAAA=</HashCode>
+      <FileName>Panels\PanelSimulator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Properties.Resources" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Properties.Settings" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEIAAAAAABAABAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Tools.Checksum" Collapsed="true">
+    <Position X="2.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Tools\Checksum.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Tools.DirectBitmap" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABABAABSAAAACAAAgAAEAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Tools\DirectBitmap.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DigitalDarkroom.Tools.GrayScale" Collapsed="true">
+    <Position X="7.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Tools\GrayScale.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Engine.GrayToTime" Collapsed="true">
+    <Position X="4.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>GrayToTime\GrayToTime.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Controls.ImageFileNameEditor" Collapsed="true">
+    <Position X="4.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAgAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\ImageFileNameEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Controls.MyPictureBox" Collapsed="true">
+    <Position X="2.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAACAAAAAAAACAAAACAAAAQBAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\MyPictureBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Tools.AlphanumComparatorFast" Collapsed="true">
+    <Position X="6" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Tools\AlphanumComparatorFast.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="DigitalDarkroom.Modes.IMode" Collapsed="true">
+    <Position X="0.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgACAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modes\IMode.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DigitalDarkroom.Panels.IPanel" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAIAAEQAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Panels\IPanel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="DigitalDarkroom.Engine.EngineStatus" Collapsed="true">
+    <Position X="2.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAEAAAAAAAAAAAIAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\DisplayEngine.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Delegate Name="DigitalDarkroom.Engine.NewImageEvent" Collapsed="true">
+    <Position X="2.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\DisplayEngine.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="DigitalDarkroom.Engine.NewPanelEvent" Collapsed="true">
+    <Position X="2.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Engine\DisplayEngine.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="DigitalDarkroom.Engine.NewProgessEvent" Collapsed="true">
+    <Position X="2.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Engine\DisplayEngine.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

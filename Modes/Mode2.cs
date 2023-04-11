@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalDarkroom.Engine;
 
 namespace DigitalDarkroom.Modes
 {
@@ -47,13 +48,16 @@ namespace DigitalDarkroom.Modes
         { get; set; } = 2;
 
         /// <summary>
+        /// Access to the Engine
+        /// </summary>
+        private readonly DisplayEngine engine = DisplayEngine.GetInstance();
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         bool IMode.Load()
         {
-            DisplayEngine engine = DisplayEngine.GetInstance();
-
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;
             int iWidth = (width / NbInterval);

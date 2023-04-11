@@ -1,4 +1,5 @@
 ﻿using DigitalDarkroom.Panels;
+using DigitalDarkroom.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,13 +10,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DigitalDarkroom
+namespace DigitalDarkroom.Engine
 {
     /// <summary>
     /// 
@@ -149,8 +151,14 @@ namespace DigitalDarkroom
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private EngineStatus _status;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public EngineStatus Status => this._status;
 
         /// <summary>
@@ -326,12 +334,25 @@ namespace DigitalDarkroom
 
 #if TEST_BUFFERED_FILE
 
+        /// <summary>
+        /// 
+        /// </summary>
         private static Semaphore _semaphoreFiles;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly Queue<ImageLayer> _fileLayers = new Queue<ImageLayer>();
 
+        /// <summary>
+        /// 
+        /// </summary>
         private static AutoResetEvent _evStartDisplay = new AutoResetEvent(false);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
         private static void ThreadProcFile(object obj)
         {
             Thread.CurrentThread.IsBackground = true;
@@ -375,6 +396,69 @@ namespace DigitalDarkroom
 #endif
 
         #region Public interface
+
+#if USE_CACHE
+        #region Cache Management
+
+        internal string _cachePath; // TODO : find a way to share this
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
+        private string _formatCachePath(string identifier)
+        {
+            return @"cache\" + identifier + @"\" + this.Panel.Name;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
+        public bool IsInCache(string identifier)
+        {
+            return Directory.Exists(this._formatCachePath(identifier));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
+        public bool LoadCache(string identifier)
+        {
+            string cachedir = this._formatCachePath(identifier);
+
+            if (Directory.Exists(cachedir) == true)
+            {
+                var list = Directory.GetFiles(cachedir, ImageLayerFile.ExtentionSearchFilter);
+
+                Array.Sort(list, new AlphanumComparatorFast());
+
+                foreach (string file in list)
+                {
+                    this.PushImage(new ImageLayer(file));
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="identifier"></param>
+        public void SetCacheIdentifier(string identifier)
+        {
+            this._cachePath = this._formatCachePath(identifier);
+
+            Directory.CreateDirectory(this._cachePath);
+        }
+#endregion
+#endif
 
         /// <summary>
         /// Start Engine
@@ -435,6 +519,10 @@ namespace DigitalDarkroom
 #endif
             this._imglayers.Clear();
 
+#if USE_CACHE
+            this._cachePath = null;
+#endif
+
             GC.Collect();
             System.GC.WaitForPendingFinalizers();
         }
@@ -459,53 +547,19 @@ namespace DigitalDarkroom
             _imglayers.Enqueue(imageLayer);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public ImageList GetImageList()
-        {
-            ImageList il = new ImageList();
-
-            il.ImageSize = ImageLayer.ThumbnailSize;
-
-            ImageLayer[] arr = _imglayers.ToArray();
-
-            for (int y = 0; y < arr.Length; y++)
-            {
-                ImageLayer i = arr[y] as ImageLayer;
-                string key = y.ToString();
-                il.Images.Add(key, i.Thumbnail);
-            }
-
-            return il;
-        }
+#if USE_COLLECTION
+        // TODO : pas sur que cela soit une bonne idée, on perd la notion de queue mais à voir ???
+        ImageLayerCollection Items;
+#endif
 
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        public List<ListViewItem> GetListViewItems()
+        public ImageLayer[] Items
         {
-            List<ListViewItem> list = new List<ListViewItem>();
-
-            ImageLayer[] arr = _imglayers.ToArray();
-
-            for (int y = 0; y < arr.Length; y++)
-            {
-                ImageLayer i = arr[y] as ImageLayer;
-                string key = y.ToString();
-                ListViewItem lvi = new ListViewItem(key);
-
-                lvi.ImageIndex = i.Index;
-                lvi.Tag = i;
-                lvi.ImageKey = key;
-                list.Add(lvi);
-            }
-
-            return list;
+            get { return _imglayers.ToArray(); }
         }
 
-        #endregion
+#endregion
     }
 }

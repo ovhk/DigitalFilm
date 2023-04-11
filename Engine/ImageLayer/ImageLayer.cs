@@ -8,8 +8,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DigitalDarkroom
+namespace DigitalDarkroom.Engine
 {
+
     /// <summary>
     /// 
     /// </summary>
@@ -43,8 +44,8 @@ namespace DigitalDarkroom
                 return this._bitmap;
             }
 #else
-            get;
-            private set;
+        get;
+        private set;
 #endif
         }
 
@@ -80,7 +81,7 @@ namespace DigitalDarkroom
         /// </summary>
         [CategoryAttribute("Index"),
         DescriptionAttribute("Display Index")]
-        public int Index 
+        public int Index
         {
             get;
             set;
@@ -99,7 +100,7 @@ namespace DigitalDarkroom
             this._imgPath = ImageLayerFile.GetImagePath(index, expositionDuration);
             bmp.Save(this._imgPath);
 #else
-            this.Bitmap = bmp;
+        this.Bitmap = bmp;
 #endif
             this.Thumbnail = bmp.GetThumbnailImage(ThumbnailSize.Width, ThumbnailSize.Height, callback, new IntPtr()); // 256x256 max
             this.ExpositionDuration = expositionDuration;
@@ -109,7 +110,8 @@ namespace DigitalDarkroom
 #endif
         }
 
-        public ImageLayer(string cacheImgPath) // TODO à tester
+#if USE_CACHE
+        public ImageLayer(string cacheImgPath)
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 
@@ -120,7 +122,7 @@ namespace DigitalDarkroom
             int index = 0;
             int expositionDuration = 0;
 
-            ImageLayerFile.GetIndexAndExpositionDuration(file.Name, ref index, ref expositionDuration);
+            ImageLayerFile.GetIndexAndExpositionDuration(file.Name, out index, out expositionDuration);
 
             using (Bitmap bmp = new Bitmap(this._imgPath))
             {
@@ -129,6 +131,8 @@ namespace DigitalDarkroom
                 this.Index = index;
             }
         }
+
+#endif
 
 #if TEST_BUFFERED_FILE
         /// <summary>
@@ -166,7 +170,7 @@ namespace DigitalDarkroom
 
 #if TEST_BUFFERED_FILE
             System.GC.Collect(); // Needed to free image memory in time
-            //System.GC.WaitForPendingFinalizers(); // not needed
+                                 //System.GC.WaitForPendingFinalizers(); // not needed
 #endif
         }
     }

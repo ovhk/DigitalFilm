@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DigitalDarkroom.Tools;
 
-namespace DigitalDarkroom.Tools
+namespace DigitalDarkroom.Controls
 {
     /// <summary>
     /// 

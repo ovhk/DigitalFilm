@@ -1,4 +1,6 @@
-﻿namespace DigitalDarkroom
+﻿using DigitalDarkroom.Controls;
+
+namespace DigitalDarkroom
 {
     partial class frmMain
     {
@@ -55,7 +57,7 @@
             this.btLoadMode = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.label3 = new System.Windows.Forms.Label();
-            this.myPictureBox1 = new DigitalDarkroom.MyPictureBox();
+            this.myPictureBox1 = new DigitalDarkroom.Controls.MyPictureBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gbModes.SuspendLayout();
@@ -383,7 +385,7 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.TextBox tbModeDescription;
-        private MyPictureBox myPictureBox1;
+        private DigitalDarkroom.Controls.MyPictureBox myPictureBox1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbMode;

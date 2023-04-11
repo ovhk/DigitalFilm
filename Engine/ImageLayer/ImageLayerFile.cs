@@ -5,8 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalDarkroom.Engine;
 
-namespace DigitalDarkroom
+namespace DigitalDarkroom.Engine
 {
     /// <summary>
     /// 
@@ -36,7 +37,16 @@ namespace DigitalDarkroom
         /// <returns></returns>
         public static string GetImagePath(int index, int expositionDuration)
         {
+#if USE_CACHE
+            DisplayEngine engine = DisplayEngine.GetInstance();
+
+            if (engine._cachePath != null)
+                return engine._cachePath + @"\" + index + "_" + expositionDuration + Extention;
+            
             return FilesPath + @"\" + index + "_" + expositionDuration + Extention;
+#else
+            return FilesPath + @"\" + index + "_" + expositionDuration + Extention;
+#endif
         }
 
         /// <summary>
@@ -45,6 +55,7 @@ namespace DigitalDarkroom
         /// <returns></returns>
         public static string[] GetFiles()
         {
+            // TODO : avec cache, cela ne marche plus
             return Directory.GetFiles(ImageLayerFile.FilesPath, ImageLayerFile.ExtentionSearchFilter);
         }
 
@@ -53,11 +64,12 @@ namespace DigitalDarkroom
         /// </summary>
         public static void ClearFiles()
         {
+            // TODO : avec cache, cela ne marche plus, en même temps, on ne veut pas virer le cache...
             string[] fileEntries = ImageLayerFile.GetFiles();
 
             foreach (string fileName in fileEntries)
             {
-                System.IO.File.Delete(fileName);
+                File.Delete(fileName);
             } 
         }
 
@@ -68,7 +80,7 @@ namespace DigitalDarkroom
         /// <param name="index"></param>
         /// <param name="expositionDuration"></param>
         /// <returns></returns>
-        public static bool GetIndexAndExpositionDuration(string fileName, ref int index, ref int expositionDuration)         // TODO use out instead of ref ?
+        public static bool GetIndexAndExpositionDuration(string fileName, out int index, out int expositionDuration)         // TODO use out instead of ref ?
         {
             try
             {
@@ -81,6 +93,8 @@ namespace DigitalDarkroom
             }
             catch 
             { 
+                index = 0; 
+                expositionDuration = 0;
                 return false;
             }
 
@@ -101,10 +115,7 @@ namespace DigitalDarkroom
             {
                 FileInfo file = new FileInfo(fileName);
 
-                int index = 0;
-                int expositionDuration = 0;
-
-                GetIndexAndExpositionDuration(file.Name, ref index, ref expositionDuration);
+                GetIndexAndExpositionDuration(file.Name, out int index, out int expositionDuration);
 
                 tsTotalDuration += TimeSpan.FromMilliseconds(expositionDuration);
             }

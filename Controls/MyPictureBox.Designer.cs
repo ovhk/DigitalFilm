@@ -1,4 +1,4 @@
-﻿namespace DigitalDarkroom
+﻿namespace DigitalDarkroom.Controls
 {
     partial class MyPictureBox
     {

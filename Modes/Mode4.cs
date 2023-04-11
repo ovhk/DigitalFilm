@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalDarkroom.Engine;
 
 namespace DigitalDarkroom.Modes
 {
@@ -36,13 +37,16 @@ namespace DigitalDarkroom.Modes
         private int MiniDurationMs = 40;
 
         /// <summary>
+        /// Access to the Engine
+        /// </summary>
+        private readonly DisplayEngine engine = DisplayEngine.GetInstance();
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public bool Load()
         {
-            DisplayEngine engine = DisplayEngine.GetInstance();
-
             if (Duration/256 <= MiniDurationMs)
             {
                 Log.WriteLine("Interval is too short... {0}/256={1} <= {2} ms", Duration, Duration/256, MiniDurationMs);

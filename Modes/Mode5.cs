@@ -5,8 +5,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalDarkroom.Controls;
 using DigitalDarkroom.Tools;
 using System.ComponentModel;
+using DigitalDarkroom.Engine;
 
 namespace DigitalDarkroom.Modes
 {
@@ -42,14 +44,17 @@ namespace DigitalDarkroom.Modes
         { get; set; }
 
         /// <summary>
+        /// Access to the Engine
+        /// </summary>
+        private readonly DisplayEngine engine = DisplayEngine.GetInstance();
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public bool Load()
         {
             if (ImagePath == null || ImagePath.Length == 0) return false;
-
-            DisplayEngine engine = DisplayEngine.GetInstance();
 
             Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
 

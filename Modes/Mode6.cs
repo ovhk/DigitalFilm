@@ -8,7 +8,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalDarkroom.Controls;
 using DigitalDarkroom.Tools;
+using DigitalDarkroom.Engine;
 
 namespace DigitalDarkroom.Modes
 {
@@ -36,6 +38,11 @@ namespace DigitalDarkroom.Modes
         { get; set; }
 
         /// <summary>
+        /// Access to the Engine
+        /// </summary>
+        private readonly DisplayEngine engine = DisplayEngine.GetInstance();
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
@@ -43,34 +50,17 @@ namespace DigitalDarkroom.Modes
         {
             if (ImagePath == null || ImagePath.Length == 0) return false;
 
-            DisplayEngine engine = DisplayEngine.GetInstance();
-
-            // test cache
-
-            // if (IsInCache(ImagePath) == true)
-            //{
-            // LoadFromCache()
-            //}
-
+#if USE_CACHE
             string md5 = Tools.Checksum.CalculateMD5(ImagePath);
 
-            string cachedir = @"cache\" + md5 + @"\" + engine.Panel.Name; // TODO : Add panel name in the path ?
-
-            //if (Directory.Exists(cachedir) == true)
-            //{
-            //    foreach (string file in Directory.GetFiles(cachedir))
-            //    {
-            //        engine.PushImage(new ImageLayer(file)); // TODO : à tester
-            //    }
-            //}
-            //else
+            if (engine.IsInCache(md5) == true)
             {
-                //Directory.CreateDirectory(cachedir);
-
-                // TODO : ou est-ce que l'on passe le md5 ...
-
-                // end test
-
+                engine.LoadCache(md5);
+            }
+            else
+            {
+                engine.SetCacheIdentifier(md5);
+#endif
                 Task t = Task.Run(() =>
                 {
 
@@ -80,7 +70,7 @@ namespace DigitalDarkroom.Modes
                         Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
                         Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
 
-                        List<ImageLayer> ils = GrayToTime.GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
+                        List<ImageLayer> ils = GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
 
                         foreach (ImageLayer il in ils)
                         {
@@ -90,8 +80,9 @@ namespace DigitalDarkroom.Modes
                 });
 
                 t.Wait();
+#if USE_CACHE
             }
-
+#endif
             return true;
         }
 
@@ -114,6 +105,75 @@ namespace DigitalDarkroom.Modes
         public override string ToString()
         {
             return this.Name;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static List<ImageLayer> GetImageLayers(Bitmap bitmap, int width, int height)
+        {
+            List<ImageLayer> imageLayers = new List<ImageLayer>(); // TODO : move all this into mode 6 but mode 2 also use timings???
+
+            int[] timings = GrayToTime.Timings;
+
+#if TEST_PARALELLE
+            //Stopwatch stopwatch = Stopwatch.StartNew();
+
+            Parallel.For(0, timings.Length, i =>
+#else
+            for (int i = 0; i < timings.Length; i++)
+#endif
+            {
+                using (DirectBitmap b = new DirectBitmap(width, height))
+                {
+#if TEST_PARALELLE
+                    Parallel.For(0, b.Width, x =>
+#else
+                    for (int x = 0; x < b.Width; x++)
+#endif
+                    {
+#if TEST_PARALELLE
+                        Parallel.For(0, b.Height, y =>
+#else
+                        for (int y = 0; y < b.Height; y++)
+#endif
+                        {
+                            Color c = bitmap.GetPixel(x, y); ;
+
+                            // we use R but G or B are equal
+                            if (c.R < i)
+                            {
+                                b.SetPixel(x, y, Color.FromArgb(255, 255, 255));
+                            }
+                            else
+                            {
+                                b.SetPixel(x, y, Color.FromArgb(0, 0, 0));
+                            }
+                        }
+#if TEST_PARALELLE
+);
+#endif
+                    }
+#if TEST_PARALELLE
+);
+#endif
+                    imageLayers.Add(new ImageLayer(b.Bitmap, timings[i], i));
+                }
+            }
+
+#if TEST_PARALELLE
+            );
+
+        //    stopwatch.Stop();
+
+        ////For: 8727,5777
+        //    Log.WriteLine("For : {0}", stopwatch.Elapsed.TotalMilliseconds);
+#endif
+            return imageLayers;
         }
     }
 }

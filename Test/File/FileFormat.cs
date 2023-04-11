@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DigitalDarkroom.File
+namespace DigitalDarkroom.Test
 {
     public class FileFormat
     {

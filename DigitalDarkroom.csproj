@@ -35,7 +35,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST_BUFFERED_FILE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;TEST_BUFFERED_FILE USE_CACHE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -66,10 +66,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Console.cs" />
-    <Compile Include="DisplayEngine.cs" />
-    <Compile Include="File\FileFormat.cs" />
-    <Compile Include="File\FileManagement.cs" />
+    <Compile Include="Engine\DisplayEngine.cs" />
+    <Compile Include="Test\File\FileFormat.cs" />
+    <Compile Include="Test\File\FileManagement.cs" />
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,16 +87,16 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageFileFilter.cs" />
-    <Compile Include="ImageLayer\ImageLayer.cs" />
-    <Compile Include="ImageLayer\ImageLayerFile.cs" />
+    <Compile Include="Tools\ImageFileFilter.cs" />
+    <Compile Include="Engine\ImageLayer\ImageLayer.cs" />
+    <Compile Include="Engine\ImageLayer\ImageLayerFile.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Modes\Mode7.cs" />
     <Compile Include="Modes\Mode8.cs" />
-    <Compile Include="MyPictureBox.cs">
+    <Compile Include="Controls\MyPictureBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MyPictureBox.Designer.cs">
+    <Compile Include="Controls\MyPictureBox.Designer.cs">
       <DependentUpon>MyPictureBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Panels\IPanel.cs" />
@@ -113,12 +112,12 @@
     <Compile Include="Modes\Mode4.cs" />
     <Compile Include="Modes\Mode5.cs" />
     <Compile Include="Modes\Mode6.cs" />
-    <Compile Include="ToolsTODO.cs" />
+    <Compile Include="Tools\AlphanumComparatorFast.cs" />
     <Compile Include="Tools\Checksum.cs" />
     <Compile Include="Tools\DirectBitmap.cs" />
-    <Compile Include="Tools\GrayToTime.cs" />
+    <Compile Include="GrayToTime\GrayToTime.cs" />
     <Compile Include="Tools\GrayScale.cs" />
-    <Compile Include="Tools\ImageFileNameEditor.cs" />
+    <Compile Include="Controls\ImageFileNameEditor.cs" />
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -131,7 +130,7 @@
       <DependentUpon>frmMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MyPictureBox.resx">
+    <EmbeddedResource Include="Controls\MyPictureBox.resx">
       <DependentUpon>MyPictureBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -143,8 +142,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ClassDiagram.cd" />
     <None Include="DisplayDatasheets\TOP103MONO8K01A  10.3 inch 黑白屏.pdf" />
-    <None Include="Excel GrayToTime\GrayToTime.xlsx">
+    <None Include="GrayToTime\GrayToTime.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LICENSE">
