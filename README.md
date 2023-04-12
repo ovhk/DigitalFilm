@@ -1,6 +1,22 @@
 # Digital Darkroom
 
-Digital Picture to Analog Darkroom print
+How to print a picture from a film nagative.
+
+- put the negative into the enlarger 
+- project the negative into the paper
+
+No! Here is the solution:
+
+- scan the negative, invert colors and save it
+- Find experimentaly the exposition duration to have different value of gray on the paper
+- put gray and duration value in an Excel file, draw the trend curve and get its formula
+- generate 256 bitmap from your scanned picture. One for each gray value, keep black all pixels lower than these value, put all others in white
+- display these bitmaps during the duration calculate with the trend formula onto a transparent black and white 8K panel
+- put the display on the paper and turn on the enlarger light
+
+Tada!
+
+Digital Darkroom helps to transfer digital picture to analog print.
 
 ---
 
