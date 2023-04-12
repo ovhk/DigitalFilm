@@ -145,7 +145,7 @@ namespace DigitalDarkroom.Modes
                             Color c = bitmap.GetPixel(x, y); ;
 
                             // we use R but G or B are equal
-                            if (c.R < i)
+                            if (c.R < i) // TODO : < or <= ?
                             {
                                 b.SetPixel(x, y, Color.FromArgb(255, 255, 255));
                             }
