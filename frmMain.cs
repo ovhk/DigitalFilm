@@ -68,7 +68,6 @@ namespace DigitalDarkroom
                 if (screen.Primary == false)
                 {
                     cbPanels.Items.Add(new Panels.ExternalPanel(screen));
-                    break;
                 }
             }
 
