@@ -42,11 +42,11 @@ namespace DigitalDarkroom
             if (bmp != null)
             {
                 // Need to clone before engine dispose
-                this.imageToDisplay = (Bitmap)bmp.Clone();
+                this._imageToDisplay = (Bitmap)bmp.Clone();
             }
             else
             {
-                this.imageToDisplay = null;
+                this._imageToDisplay = null;
             }
             SafeUpdate(() => this.Refresh());
         }
@@ -65,7 +65,7 @@ namespace DigitalDarkroom
         /// <summary>
         /// 
         /// </summary>
-        private Bitmap imageToDisplay;
+        private Bitmap _imageToDisplay;
 
         /// <summary>
         /// 
@@ -75,10 +75,10 @@ namespace DigitalDarkroom
         {
             //base.OnPaint(e);
 
-            if (this.imageToDisplay != null)
+            if (this._imageToDisplay != null)
             {
                 // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
-                e.Graphics.DrawImage(this.imageToDisplay, this.ClientRectangle);
+                e.Graphics.DrawImage(this._imageToDisplay, this.ClientRectangle);
             }
             else
             {

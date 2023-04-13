@@ -253,6 +253,11 @@ namespace DigitalDarkroom
                 return;
             }
 
+            if (engine.Status == EngineStatus.Running)
+            {
+                return;
+            }
+
             ImageLayer il = lv.SelectedItems[0].Tag as ImageLayer;
             
             if (il != null)

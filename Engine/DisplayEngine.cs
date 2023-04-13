@@ -249,6 +249,7 @@ namespace DigitalDarkroom.Engine
 
                 // Subscribers need to Clone the object to keep it
                 de.OnNewImage?.Invoke(il.Bitmap);
+                Thread.Yield(); // force handler to execute their task
 
                 int duration = il.ExpositionDuration;
 
@@ -268,6 +269,8 @@ namespace DigitalDarkroom.Engine
                 double mesured = (DateTime.Now - dtStart).TotalMilliseconds;
 #if TEST_BUFFERED_FILE
                 Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", il.Index, il.ExpositionDuration, mesured, string.Format("{0:N1}", (mesured - duration)));
+                
+                // TODO à déplacer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 il.Dispose(); // Nedded to free image memory
 #else
                 Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", de.layers.Count, duration, mesured, string.Format("{0:N1}", (mesured - duration)));

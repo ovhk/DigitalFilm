@@ -1,6 +1,6 @@
 # Digital Darkroom
 
-How to print a picture from a film nagative.
+How to print a picture from a film nagative?
 
 - put the negative into the enlarger 
 - project the negative into the paper
