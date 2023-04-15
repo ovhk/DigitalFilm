@@ -25,7 +25,7 @@ Digital Darkroom helps to transfer digital picture to analog print.
 ### Minor
 - [X] Create a cache system : use image checksum to put bmp in a folder and if checksum exists load existing bmp
 - [X] Clean *.bmp when loading mode. usefull if cache management? -> this is a bug when you use diffrent mode in the same session
-- [ ] Add mode to test minimum response time of paper
+- [X] Add mode to test minimum response time of paper
 - [X] Find a way to adapt Drawing Font following resolution
 - [ ] frmMain manager time
 - [ ] DisplayEngine: better use of engine status

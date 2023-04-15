@@ -44,9 +44,9 @@ namespace DigitalDarkroom.Modes
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Display duration in second")]
+        [Description("Display duration in ms")]
         public int IntervalDuration
-        { get; set; } = 2;
+        { get; set; } = 2000;
 
         /// <summary>
         /// Access to the Engine
@@ -103,7 +103,7 @@ namespace DigitalDarkroom.Modes
 
                     DrawTools.DrawLargestString(ref gfx, ref brushTxt, str, new Rectangle(j * iWidth, height/2, iWidth, height / 2));
                 }
-                engine.PushImage(new Bitmap(b), IntervalDuration * 1000);
+                engine.PushImage(new Bitmap(b), IntervalDuration);
             }
 
             gfx.Dispose();
