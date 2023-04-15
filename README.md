@@ -11,25 +11,38 @@ No! Here is the solution:
 - Find experimentaly the exposition duration to have different value of gray on the paper
 - put gray and duration value in an Excel file, draw the trend curve and get its formula
 - generate 256 bitmap from your scanned picture. One for each gray value, keep black all pixels lower than these value, put all others in white
-- display these bitmaps during the duration calculate with the trend formula onto a transparent black and white 8K panel
-- put the display on the paper and turn on the enlarger light
+- put the display panel on the paper and turn on the enlarger light
+- display these bitmaps during the duration calculate with the trend formula onto a transparent black and white 8K display panel
 
 Tada!
 
 Digital Darkroom helps to transfer digital picture to analog print.
+
+## Mode 1 : Back & White
+
+Just a black & White zone to check if the diplay panel is able to block light.
+
+## Mode 2 : Find duration for a specific gray
+
+## Mode 3 :
+
+## Mode 4 :
+
+## Mode 5 :
+
+## Mode 6 :
+
+## Mode 7 :
+
+## Mode 8 : Test band
 
 ---
 
 ## TODO list
 
 ### Minor
-- [X] Create a cache system : use image checksum to put bmp in a folder and if checksum exists load existing bmp
-- [X] Clean *.bmp when loading mode. usefull if cache management? -> this is a bug when you use diffrent mode in the same session
-- [X] Add mode to test minimum response time of paper
-- [X] Find a way to adapt Drawing Font following resolution
 - [ ] frmMain manager time
 - [ ] DisplayEngine: better use of engine status
-- [X] Add in XLS file a minimum duration : 80ms ?
 - [ ] Test parallel Programming
 - [ ] Cleanup code
 - [ ] Remove ImageLayerFile and create an ImageLayerCollection? 
@@ -37,9 +50,6 @@ Digital Darkroom helps to transfer digital picture to analog print.
 ### Major
 - [ ] Add GrayToTime formula in parameter and evaluate it on the fly?
 - [ ] Add mask managment
-
-### Questions
-- [ ] Keep menu or not?
 
 ---
 
