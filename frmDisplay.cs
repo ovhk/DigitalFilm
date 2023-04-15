@@ -33,6 +33,10 @@ namespace DigitalDarkroom
             engine.OnNewPanel += Engine_OnNewPanel;
         }
 
+#if USE_MULTICAST_DELEGATE
+        private Bitmap _OldImage;
+#endif 
+
         /// <summary>
         /// DisplayEngine send us a new image to display
         /// </summary>
@@ -41,8 +45,13 @@ namespace DigitalDarkroom
         {
             if (bmp != null)
             {
+#if USE_MULTICAST_DELEGATE
+                this._OldImage = this._imageToDisplay;
+                this._imageToDisplay = (Bitmap)bmp;
+#else
                 // Need to clone before engine dispose
                 this._imageToDisplay = (Bitmap)bmp.Clone();
+#endif
             }
             else
             {
@@ -79,6 +88,12 @@ namespace DigitalDarkroom
             {
                 // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
                 e.Graphics.DrawImage(this._imageToDisplay, this.ClientRectangle);
+#if USE_MULTICAST_DELEGATE
+                if (this._OldImage != this._imageToDisplay)
+                {
+                    this._OldImage?.Dispose();
+                }
+#endif
             }
             else
             {

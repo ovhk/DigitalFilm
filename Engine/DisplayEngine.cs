@@ -131,7 +131,7 @@ namespace DigitalDarkroom.Engine
         /// </summary>
         public event EventHandler<EngineStatus> EngineStatusNotify;
 
-        #endregion
+#endregion
 
         /// <summary>
         /// 
@@ -247,10 +247,17 @@ namespace DigitalDarkroom.Engine
                     break;
                 }
 
+#if USE_MULTICAST_DELEGATE
+                foreach (NewImageEvent subscriber in de.OnNewImage?.GetInvocationList())
+                {
+                    // Clone image here, each subscriber have to free it.
+                    subscriber((Bitmap)il.Bitmap.Clone());
+                }
+#else
                 // Subscribers need to Clone the object to keep it
                 de.OnNewImage?.Invoke(il.Bitmap);
                 Thread.Yield(); // force handler to execute their task
-
+#endif
                 int duration = il.ExpositionDuration;
 
                 iNotificationInterval += duration;
@@ -269,9 +276,13 @@ namespace DigitalDarkroom.Engine
                 double mesured = (DateTime.Now - dtStart).TotalMilliseconds;
 #if TEST_BUFFERED_FILE
                 Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", il.Index, il.ExpositionDuration, mesured, string.Format("{0:N1}", (mesured - duration)));
-                
-                // TODO à déplacer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#if USE_MULTICAST_DELEGATE
+                // Do not free image memory here
+#else
+                // TODO : problem here if you dispose the data too fast...
                 il.Dispose(); // Nedded to free image memory
+#endif
+
 #else
                 Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", de.layers.Count, duration, mesured, string.Format("{0:N1}", (mesured - duration)));
 #endif
