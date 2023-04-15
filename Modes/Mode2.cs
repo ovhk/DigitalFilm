@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DigitalDarkroom.Engine;
+using DigitalDarkroom.Tools;
 
 namespace DigitalDarkroom.Modes
 {
@@ -67,51 +68,46 @@ namespace DigitalDarkroom.Modes
 
             Bitmap b = new Bitmap(width, height);
 
-            using (Graphics gfx = Graphics.FromImage(b))
+            Graphics gfx = Graphics.FromImage(b);
+
+            // First, erase all
+            using (SolidBrush brush = new SolidBrush(Color.Black))
             {
-                // First, erase all
-                using (SolidBrush brush = new SolidBrush(Color.Black))
-                {
-                    gfx.FillRectangle(brush, 0, 0, engine.Panel.Width, engine.Panel.Height);
-                }
-
-                // Generate gray levels
-                using (SolidBrush brush = new SolidBrush(Color.FromArgb(GrayValue, GrayValue, GrayValue)))
-                {
-                    gfx.FillRectangle(brush, 0, 0, width, height / 2);
-                }
-
-                SolidBrush brushBlack = new SolidBrush(Color.Black);
-                SolidBrush brushWhite = new SolidBrush(Color.White);
-
-                SolidBrush brushTxt = (GrayValue > 256/2) ? brushBlack : brushWhite;
-
-                Font font = new Font("Microsoft Sans Serif", 20F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-
-                gfx.DrawString("GRAY : " + GrayValue, font, brushTxt, width/2, height/4);
-
-                for (int i = 0; i < NbInterval; i++)
-                {
-                    for (int j = 0; j < NbInterval; j++)
-                    {
-                        SolidBrush brush = (j > i) ? brushBlack : brushWhite;
-                        brushTxt = (j > i) ? brushWhite : brushBlack;
-
-                        gfx.FillRectangle(brush, j * iWidth, height/2, iWidth, height/2);
-
-                        // TODO formule compliqué sans doute pour rien...
-                        string str = NbInterval * IntervalDuration - (j) * IntervalDuration + "\r\nsec.";
-
-                        SizeF stringSize = new SizeF();
-                        stringSize = gfx.MeasureString(str, SystemFonts.DefaultFont);
-                        int offset = NbInterval / 2 - (int)stringSize.Width / 2 + 10;
-
-                        gfx.DrawString(str, SystemFonts.DefaultFont, brushTxt, j * iWidth + offset, height - 40);
-                    }
-                    engine.PushImage(new Bitmap(b), IntervalDuration * 1000);
-                }
+                gfx.FillRectangle(brush, 0, 0, engine.Panel.Width, engine.Panel.Height);
             }
-            
+
+            // Generate gray levels
+            using (SolidBrush brush = new SolidBrush(Color.FromArgb(GrayValue, GrayValue, GrayValue)))
+            {
+                gfx.FillRectangle(brush, 0, 0, width, height / 2);
+            }
+
+            SolidBrush brushBlack = new SolidBrush(Color.Black);
+            SolidBrush brushWhite = new SolidBrush(Color.White);
+
+            SolidBrush brushTxt = (GrayValue > 256 / 2) ? brushBlack : brushWhite;
+
+            DrawTools.DrawLargestString(ref gfx, ref brushTxt, "GRAY : " + GrayValue, new Rectangle(0, 0, width, height / 2));
+
+            for (int i = 0; i < NbInterval; i++)
+            {
+                for (int j = 0; j < NbInterval; j++)
+                {
+                    SolidBrush brush = (j > i) ? brushBlack : brushWhite;
+                    brushTxt = (j > i) ? brushWhite : brushBlack;
+
+                    gfx.FillRectangle(brush, j * iWidth, height / 2, iWidth, height / 2);
+
+                    // TODO formule compliqué sans doute pour rien...
+                    string str = (NbInterval * IntervalDuration - (j) * IntervalDuration).ToString();
+
+                    DrawTools.DrawLargestString(ref gfx, ref brushTxt, str, new Rectangle(j * iWidth, height/2, iWidth, height / 2));
+                }
+                engine.PushImage(new Bitmap(b), IntervalDuration * 1000);
+            }
+
+            gfx.Dispose();
+
             return true;
         }
 

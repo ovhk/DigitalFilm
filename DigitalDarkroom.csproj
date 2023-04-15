@@ -87,6 +87,7 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\DrawTools.cs" />
     <Compile Include="Tools\ImageFileFilter.cs" />
     <Compile Include="Engine\ImageLayer\ImageLayer.cs" />
     <Compile Include="Engine\ImageLayer\ImageLayerFile.cs" />
