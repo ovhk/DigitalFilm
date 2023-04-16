@@ -49,9 +49,7 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void frmMain_Load(object sender, EventArgs e)
         {
-#if TEST_BUFFERED_FILE
             ImageLayerFile.ClearFiles();
-#endif
             LoadModes();
             engine = DisplayEngine.GetInstance();
             engine.EngineStatusNotify += Engine_EngineStatusNotify;
@@ -97,9 +95,7 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-#if TEST_BUFFERED_FILE
             ImageLayerFile.ClearFiles();
-#endif
         }
 
         #endregion
@@ -279,18 +275,33 @@ namespace DigitalDarkroom
         /// <param name="totalDuration"></param>
         private void Engine_OnNewProgress(int imageLayerIndex, TimeSpan elapseTime, TimeSpan totalDuration)
         {
+            SafeUpdate(() => this.SuspendLayout());
+
+            // Update Time
             SafeUpdate(() => this.lbTime.Text = String.Format("{0:00}:{1:00}.{2:00}",
                 elapseTime.Minutes, elapseTime.Seconds, elapseTime.Milliseconds / 10));
-            SafeUpdate(() => this.lbTime.ForeColor = Color.White);
+
+            if (totalDuration.Subtract(elapseTime).TotalSeconds <= 3)
+            {
+                SafeUpdate(() => this.lbTime.ForeColor = Color.Yellow);
+            }
+            else
+            {
+                SafeUpdate(() => this.lbTime.ForeColor = Color.White);
+            }
+            
             SafeUpdate(() => this.lbTime.Refresh());
 
+            // Update Tile
             try
             {
-                
                 SafeUpdate(() => { if (listView1.Items?[imageLayerIndex] != null) listView1.Items[imageLayerIndex].Selected = true; }); // Select
                 SafeUpdate(() => listView1.Items?[imageLayerIndex].EnsureVisible()); // Scroll
             }
             catch { } // In case of a stop, Items could be empty so that trow an exception
+
+
+            // Update ProgressBar
 
             // avec les lenteurs de la VM, il arrive que le temps d'éxécution soit plus long que le max théorique, donc on filtre pour ne pas avoir une exception...
             int val = (elapseTime.TotalSeconds > totalDuration.TotalSeconds) ? (int)totalDuration.TotalSeconds : (int)elapseTime.TotalSeconds;
@@ -298,11 +309,7 @@ namespace DigitalDarkroom
             SafeUpdate(() => this.toolStripProgressBar1.Value = val);
             SafeUpdate(() => this.toolStripProgressBar1.Maximum = (int)totalDuration.TotalSeconds);
 
-            if (totalDuration.Subtract(elapseTime).TotalSeconds <= 3)
-            {
-                SafeUpdate(() => this.lbTime.ForeColor = Color.Yellow);
-                //Console.Beep(); // ça prend 200 ms -- NE PAS UTILISER
-            }
+            SafeUpdate(() => this.ResumeLayout());
         }
 
         /// <summary>
@@ -391,7 +398,7 @@ namespace DigitalDarkroom
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btLoadMode_Click(object sender, EventArgs e)
+        private async void btLoadMode_Click(object sender, EventArgs e)
         {
             if (!(cbMode.SelectedItem is IMode mode))
             {
@@ -400,24 +407,30 @@ namespace DigitalDarkroom
 
             Stopwatch sw = Stopwatch.StartNew();
 
-            toolStripStatusLabel1.Text = "Loading mode " + mode.Name + "...";
+            this.toolStripStatusLabel1.Text = "Loading mode " + mode.Name + "...";
             Log.WriteLine("Loading mode {0}", mode.Name);
 
             Cursor.Current = Cursors.WaitCursor;
 
-            this.SuspendLayout();
+            this.toolStripProgressBar1.Style = ProgressBarStyle.Marquee;
+            this.toolStripProgressBar1.MarqueeAnimationSpeed = 100;
 
-            if (mode.Load() == false)
+            await Task.Run(() =>
             {
+                if (mode.Load() == false)
                 {
-                    string s = "Fail to load selected mode!";
-                    toolStripStatusLabel1.Text = s;
-                    Log.WriteLine(s);
-                    MessageBox.Show(s);
+                    {
+                        string s = "Fail to load selected mode!";
+                        toolStripStatusLabel1.Text = s;
+                        Log.WriteLine(s);
+                        MessageBox.Show(s);
+                    }
+                    this.btUnloadMode_Click(null, null);
+                    return;
                 }
-                this.btUnloadMode_Click(null, null);
-                return;
-            }
+            });
+
+            this.SuspendLayout();
 
             this.listView1.Items.Clear();
             this.listView1.LargeImageList = GetImageList();
@@ -428,6 +441,8 @@ namespace DigitalDarkroom
             this.btLoadMode.Enabled = false;
             this.btUnloadMode.Enabled = true;
 
+            this.toolStripProgressBar1.MarqueeAnimationSpeed = 0;
+            this.toolStripProgressBar1.Style = ProgressBarStyle.Blocks;
             this.toolStripProgressBar1.Value = 0;
             this.btPlay.Enabled = true;
 
@@ -461,7 +476,7 @@ namespace DigitalDarkroom
             }
 
             {
-                string s = "Unloaded current mode";
+                string s = "Unloading current mode";
                 toolStripStatusLabel1.Text = s;
                 Log.WriteLine(s);
             }
@@ -481,6 +496,7 @@ namespace DigitalDarkroom
             this.cbMode.Enabled = true;
             this.btLoadMode.Enabled = true;
             this.btUnloadMode.Enabled = false;
+            this.toolStripProgressBar1.Value = 0;
 
             this.listView1.Items.Clear();
 

@@ -2,6 +2,7 @@
 using DigitalDarkroom.Tools;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -52,7 +53,7 @@ namespace DigitalDarkroom.Engine
     /// </summary>
     public class DisplayEngine
     {
-        #region Singleton
+        #region Singleton & Constructor
 
         /// <summary>
         /// Singleton instance
@@ -83,24 +84,6 @@ namespace DigitalDarkroom.Engine
             return _instance;
         }
 
-        #endregion
-
-        #region Threads
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private Thread _threadDisplay;
-
-#if TEST_BUFFERED_FILE
-        /// <summary>
-        /// 
-        /// </summary>
-        private Thread _threadFiles;
-#endif
-
-        #endregion
-
         /// <summary>
         /// Display Engine private constructor, use only the GetInstance
         /// </summary>
@@ -108,6 +91,8 @@ namespace DigitalDarkroom.Engine
         {
             this.EngineStatusNotify += DisplayEngine_EngineStatusNotify;
         }
+
+        #endregion
 
         #region Events
 
@@ -131,15 +116,17 @@ namespace DigitalDarkroom.Engine
         /// </summary>
         public event EventHandler<EngineStatus> EngineStatusNotify;
 
-#endregion
+        #endregion
+
+        #region Panel
 
         /// <summary>
-        /// 
+        /// Current panel
         /// </summary>
         private IPanel _panel;
 
         /// <summary>
-        /// 
+        /// Current panel accessor
         /// </summary>
         public IPanel Panel
         {
@@ -150,6 +137,10 @@ namespace DigitalDarkroom.Engine
                 this.OnNewPanel?.Invoke(this._panel);
             }
         }
+
+        #endregion
+
+        #region Engine Status
 
         /// <summary>
         /// 
@@ -173,29 +164,45 @@ namespace DigitalDarkroom.Engine
             { 
                 case EngineStatus.Stopped:
                 case EngineStatus.Ended:
-#if TEST_BUFFERED_FILE
-                    this._fileLayers.Clear();
-#endif
-                    this._imglayers.Clear();
                     this.OnNewImage?.Invoke(null); // Force black screen (because Background controls color are set to black)
+                    this.Clear();
                     break; 
             }
         }
 
-        /// <summary>
-        /// ImageLayer queue 
-        /// </summary>
-        private readonly Queue<ImageLayer> _imglayers = new Queue<ImageLayer>();
+        #endregion
+
+        #region Threads
 
         /// <summary>
         /// Thread stop flag
         /// </summary>
-        private bool _stop = false;
+        private bool _threadStop = false;
+
+        #region Thread Display
 
         /// <summary>
-        /// Thread Engine
+        /// ImageLayer queue 
         /// </summary>
-        /// <param name="obj"></param>
+        private readonly Queue<ImageLayer> _qToDisplay = new Queue<ImageLayer>();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ImageLayer[] Items
+        {
+            get { return _qToDisplay.ToArray(); }
+        }
+
+        /// <summary>
+        /// Thread Display instance
+        /// </summary>
+        private Thread _threadDisplay;
+
+        /// <summary>
+        /// Thread Display Worker
+        /// </summary>
+        /// <param name="obj">DisplayEngine object</param>
         private static void ThreadProcDisplay(object obj)
         {
             Thread.CurrentThread.IsBackground = true;
@@ -207,7 +214,7 @@ namespace DigitalDarkroom.Engine
             TimeSpan tsTotalDuration = TimeSpan.Zero;
             int iNotificationInterval = 0;
 
-            foreach (ImageLayer i in de._imglayers)
+            foreach (ImageLayer i in de._qToDisplay)
             {
                 tsTotalDuration += TimeSpan.FromMilliseconds(i.ExpositionDuration);
             }
@@ -216,53 +223,37 @@ namespace DigitalDarkroom.Engine
 
             de.OnNewProgress?.Invoke(0, TimeSpan.Zero, tsTotalDuration);
 
-#if TEST_BUFFERED_FILE
-            // We"re waiing to start
+            // We're waiing to start
             _evStartDisplay.WaitOne();
 
-            while (!de._stop)
-#else
-            while (de.layers.Count > 0)
-#endif
+            while (!de._threadStop)
             {
                 // Please do as fast as possible here !
                 DateTime dtStart = DateTime.Now;
 
-#if TEST_BUFFERED_FILE
-
-                if (de._fileLayers.Count == 0) 
+                if (de._qToPreload.Count == 0) 
                 {
                     Thread.Yield();
                     continue;
                 }
 
-                ImageLayer il = de._fileLayers.Dequeue();
-                _semaphoreFiles.Release();
-#else
-                ImageLayer il = de.layers.Dequeue();
-#endif
+                ImageLayer il = de._qToPreload.Dequeue();
+                _semaphorePreload.Release();
 
-                if (de._stop)
+                if (de._threadStop)
                 {
                     break;
                 }
 
-#if USE_MULTICAST_DELEGATE
-                foreach (NewImageEvent subscriber in de.OnNewImage?.GetInvocationList())
-                {
-                    // Clone image here, each subscriber have to free it.
-                    subscriber((Bitmap)il.Bitmap.Clone());
-                }
-#else
-                // Subscribers need to Clone the object to keep it
                 de.OnNewImage?.Invoke(il.Bitmap);
-                Thread.Yield(); // force handler to execute their task
-#endif
-                int duration = il.ExpositionDuration;
+                //Thread.Yield(); // force handler to execute their task
+                Application.DoEvents(); 
+
+                int duration = il.ExpositionDuration; // TODO : on ajoute le temps d'affichage au lieu du filtre ? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Pb le temps que l'on va déterminer intégre déja ce temps...
 
                 iNotificationInterval += duration;
 
-                if (de.SleepMsWithBreak(duration, ref de._stop) == false)
+                if (de.SleepMsWithBreak(duration, ref de._threadStop) == false)
                 {
                     break;
                 }
@@ -274,18 +265,9 @@ namespace DigitalDarkroom.Engine
                 }
 
                 double mesured = (DateTime.Now - dtStart).TotalMilliseconds;
-#if TEST_BUFFERED_FILE
                 Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", il.Index, il.ExpositionDuration, mesured, string.Format("{0:N1}", (mesured - duration)));
-#if USE_MULTICAST_DELEGATE
-                // Do not free image memory here
-#else
-                // TODO : problem here if you dispose the data too fast...
-                il.Dispose(); // Nedded to free image memory
-#endif
 
-#else
-                Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", de.layers.Count, duration, mesured, string.Format("{0:N1}", (mesured - duration)));
-#endif
+                de._qToDispose.Enqueue(il);
             }
 
             stopwatch.Stop();
@@ -295,6 +277,133 @@ namespace DigitalDarkroom.Engine
 
             de.EngineStatusNotify?.Invoke(de, EngineStatus.Ended);
         }
+
+        #endregion
+
+        #region Thread Dispose
+
+        /// <summary>
+        /// Queue of ImageLayer to dispose. We use a ConcurrentQueue because multiple thread use it at the same time
+        /// </summary>
+        private readonly ConcurrentQueue<ImageLayer> _qToDispose = new ConcurrentQueue<ImageLayer>();
+
+        /// <summary>
+        /// Thread Dispose instance
+        /// </summary>
+        private Thread _threadDispose;
+
+        /// <summary>
+        /// Thread Dispose Worker
+        /// </summary>
+        /// <param name="obj">DisplayEngine object</param>
+        private static void ThreadProcDispose(object obj)
+        {
+            Thread.CurrentThread.IsBackground = true;
+
+            DisplayEngine de = (DisplayEngine)obj;
+
+            while (!de._threadStop)
+            {
+                // Do not Dequeue immediatly because last image may be still displayed
+                // so delayed the dispose, but it's not magic, if you stack to much image to display and the OnPaint isn't fast enough, you will crash.
+                if (de._qToDispose.Count < Properties.Settings.Default.FileBufferSize)
+                {
+                    Thread.Yield();
+                    continue;
+                }
+
+                ImageLayer il;
+                if (de._qToDispose.TryDequeue(out il) == true)
+                {
+                    il.Dispose();
+                }
+            }
+
+            // if stop, dispose all
+            foreach (ImageLayer il in de._qToDispose)
+            {
+                //Log.WriteLine("STOP Dispose : " + il.Index);
+                il.Dispose();
+            }
+        }
+
+        #endregion
+
+        #region Thread Preload
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static Semaphore _semaphorePreload;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly Queue<ImageLayer> _qToPreload = new Queue<ImageLayer>();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static AutoResetEvent _evStartDisplay = new AutoResetEvent(false);
+
+        /// <summary>
+        /// Thread Preload instance
+        /// </summary>
+        private Thread _threadPreload;
+
+        /// <summary>
+        /// Thread Preload Worker
+        /// </summary>
+        /// <param name="obj">DisplayEngine object</param>
+        private static void ThreadProcPreload(object obj)
+        {
+            Thread.CurrentThread.IsBackground = true;
+
+            int fbSize = Properties.Settings.Default.FileBufferSize;
+
+            DisplayEngine de = (DisplayEngine)obj;
+
+            _semaphorePreload = new Semaphore(initialCount: fbSize, maximumCount: fbSize);
+
+            int lastSleep = 0;
+
+            foreach (ImageLayer i in de._qToDisplay)
+            {
+                lastSleep = i.ExpositionDuration;
+
+                _semaphorePreload.WaitOne();
+
+                if (de._threadStop)
+                {
+                    break;
+                }
+
+                // Force loading image
+                i.LoadImage();
+
+                // Enqueue image
+                de._qToPreload.Enqueue(i);
+
+                if (de._qToDisplay.Count <= fbSize || de._qToPreload.Count >= fbSize)
+                {
+                    _evStartDisplay.Set(); // Start ThreadProcDisplay
+                }
+            }
+
+            // leave ThreadProcDisplay dequeue
+            while (de._qToPreload.Count > 0)
+            {
+                Thread.Sleep(100);
+            }
+
+            Thread.Sleep(lastSleep + 500); // To be sure last one is done...
+
+            de._threadStop = true; // end ThreadProcDisplay
+        }
+
+        #endregion
+
+        #region Sleep
 
         /// <summary>
         /// 
@@ -326,7 +435,7 @@ namespace DigitalDarkroom.Engine
 
                     if (stop)
                     {
-                        return false; 
+                        return false;
                     }
                 }
 
@@ -346,68 +455,9 @@ namespace DigitalDarkroom.Engine
             return true;
         }
 
-#if TEST_BUFFERED_FILE
+        #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private static Semaphore _semaphoreFiles;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly Queue<ImageLayer> _fileLayers = new Queue<ImageLayer>();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private static AutoResetEvent _evStartDisplay = new AutoResetEvent(false);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        private static void ThreadProcFile(object obj)
-        {
-            Thread.CurrentThread.IsBackground = true;
-
-            int fbSize = Properties.Settings.Default.FileBufferSize;
-
-            DisplayEngine de = (DisplayEngine)obj;
-
-            _semaphoreFiles = new Semaphore(initialCount: fbSize, maximumCount: fbSize);
-
-            int lastSleep = 0;
-
-            foreach (ImageLayer i in de._imglayers)
-            {
-                lastSleep = i.ExpositionDuration;
-
-                _semaphoreFiles.WaitOne();
-
-                // Force loading image
-                i.LoadImage();
-
-                // Enqueue image
-                de._fileLayers.Enqueue(i);
-
-                if (de._imglayers.Count <= fbSize || de._fileLayers.Count >= fbSize)
-                {
-                    _evStartDisplay.Set(); // Start ThreadProcDisplay
-                }
-            }
-
-            // leave ThreadProcDisplay dequeue
-            while (de._fileLayers.Count > 0)
-            {
-                Thread.Sleep(100);
-            }
-
-            Thread.Sleep(lastSleep + 100); // To be sure last one is done...
-
-            de._stop = true; // end ThreadProcDisplay
-        }
-#endif
+        #endregion
 
         #region Public interface
 
@@ -479,17 +529,18 @@ namespace DigitalDarkroom.Engine
         /// </summary>
         public void Start() 
         {
-            _stop = false;
+            this._threadStop = false;
 
-#if TEST_BUFFERED_FILE
+            // One thread to preload images
+            this._threadPreload = new Thread(ThreadProcPreload);
+            this._threadPreload.Start((object)this);
 
-            this._threadFiles = new Thread(ThreadProcFile);
+            // One thread to unload images
+            this._threadDispose = new Thread(ThreadProcDispose);
+            this._threadDispose.Start((object)this);
 
-            this._threadFiles.Start((object)this);
-#endif
-
+            // One thread to display images
             this._threadDisplay = new Thread(ThreadProcDisplay);
-
             this._threadDisplay.Start((object)this);
 
             this.EngineStatusNotify?.Invoke(this, EngineStatus.Started);
@@ -500,22 +551,25 @@ namespace DigitalDarkroom.Engine
         /// </summary>
         public void Stop() 
         {
-            this._stop = true;
-
-            if (this._threadDisplay != null && this._threadDisplay.ThreadState == System.Threading.ThreadState.Running)
+            if (this.Status == EngineStatus.Stopped)
             {
-                this._threadDisplay.Join(); // Wait for the end of the thread excecution
+                return;
             }
 
-#if TEST_BUFFERED_FILE
-            // TODO kill _threadFiles 
+            this._threadStop = true;
+            _evStartDisplay.Set();
 
-            // release to unlock waitone and test _stop ?
-#endif
+            try
+            {
+                _semaphorePreload?.Release();
+            } catch { }
+
+            // Wait for the end of threads excecution
+            this._threadPreload?.Join(); 
+            this._threadDisplay?.Join();
+            this._threadDispose?.Join();
 
             this.EngineStatusNotify?.Invoke(this, EngineStatus.Stopped);
-
-            this._threadDisplay = null;
         }
 
         /// <summary>
@@ -523,15 +577,23 @@ namespace DigitalDarkroom.Engine
         /// </summary>
         public void Clear()
         {
-            foreach(ImageLayer il in this._imglayers)
+            foreach(ImageLayer il in this._qToDisplay) // useful only if there's a stop before the end
             {
                 il.Dispose();
             }
 
-#if TEST_BUFFERED_FILE
-            this._fileLayers.Clear();
-#endif
-            this._imglayers.Clear();
+            foreach (ImageLayer il in this._qToPreload) // useful only if there's a stop before the end
+            {
+                il.Dispose();
+            }
+
+            foreach (ImageLayer il in this._qToDispose) // useful only if there's a stop before the end
+            {
+                il.Dispose();
+            }
+
+            this._qToPreload.Clear(); // useful only if there's a stop before the end
+            this._qToDisplay.Clear(); // useful only if there's a stop before the end
 
 #if USE_CACHE
             this._cachePath = null;
@@ -548,7 +610,12 @@ namespace DigitalDarkroom.Engine
         /// <param name="expositionDuration"></param>
         public void PushImage(Bitmap bitmap, int expositionDuration)
         {
-            _imglayers.Enqueue(new ImageLayer(bitmap, expositionDuration, _imglayers.Count));
+            if (expositionDuration < this.Panel.ResponseTime)
+            {
+                Log.WriteLine("expositionDuration has been filtered from {0} to {1} on index {2}.", expositionDuration, this.Panel.ResponseTime, _qToDisplay.Count);
+                expositionDuration = this.Panel.ResponseTime;
+            }
+            _qToDisplay.Enqueue(new ImageLayer(bitmap, expositionDuration, _qToDisplay.Count));
         }
 
         /// <summary>
@@ -557,23 +624,14 @@ namespace DigitalDarkroom.Engine
         /// <param name="imageLayer"></param>
         public void PushImage(ImageLayer imageLayer)
         {
-            imageLayer.Index = _imglayers.Count;
-            _imglayers.Enqueue(imageLayer);
+            imageLayer.Index = _qToDisplay.Count;
+            if (imageLayer.ExpositionDuration < this.Panel.ResponseTime)
+            {
+                Log.WriteLine("expositionDuration has been filtered from {0} to {1} on index {2}.", imageLayer.ExpositionDuration, this.Panel.ResponseTime, imageLayer.Index);
+                imageLayer.ExpositionDuration = this.Panel.ResponseTime;
+            }
+            _qToDisplay.Enqueue(imageLayer);
         }
-
-#if USE_COLLECTION
-        // TODO : pas sur que cela soit une bonne idée, on perd la notion de queue mais à voir ???
-        ImageLayerCollection Items;
-#endif
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public ImageLayer[] Items
-        {
-            get { return _imglayers.ToArray(); }
-        }
-
 #endregion
     }
 }

@@ -43,7 +43,7 @@ namespace DigitalDarkroom.Engine
             if (engine._cachePath != null)
                 return engine._cachePath + @"\" + index + "_" + expositionDuration + Extention;
             
-            return FilesPath + @"\" + index + "_" + expositionDuration + Extention;
+            return FilesPath + @"\" + index + "_" + expositionDuration + Extention; // TODO : change cache location ... in cache dit
 #else
             return FilesPath + @"\" + index + "_" + expositionDuration + Extention;
 #endif
@@ -64,7 +64,6 @@ namespace DigitalDarkroom.Engine
         /// </summary>
         public static void ClearFiles()
         {
-            // TODO : avec cache, cela ne marche plus, en même temps, on ne veut pas virer le cache...
             string[] fileEntries = ImageLayerFile.GetFiles();
 
             foreach (string fileName in fileEntries)

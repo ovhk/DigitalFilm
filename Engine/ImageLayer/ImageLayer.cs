@@ -16,25 +16,22 @@ namespace DigitalDarkroom.Engine
     /// </summary>
     public class ImageLayer : IDisposable
     {
-#if TEST_BUFFERED_FILE
         /// <summary>
-        /// 
+        /// the path of the image
+        /// </summary>
+        private string _imgPath;
+
+        /// <summary>
+        ///  The image
         /// </summary>
         private Bitmap _bitmap;
 
         /// <summary>
-        /// 
-        /// </summary>
-        private string _imgPath;
-#endif
-
-        /// <summary>
-        /// 
+        /// The image getter
         /// </summary>
         [Browsable(false)]
         public Bitmap Bitmap
         {
-#if TEST_BUFFERED_FILE
             get
             {
                 if (this._bitmap == null)
@@ -43,20 +40,16 @@ namespace DigitalDarkroom.Engine
                 }
                 return this._bitmap;
             }
-#else
-        get;
-        private set;
-#endif
         }
 
         /// <summary>
-        /// 
+        /// Default thumbnail size
         /// </summary>
         [Browsable(false)]
         public static Size ThumbnailSize = new Size(128, 128); // max is 256x256 and must match with TileSize
 
         /// <summary>
-        /// 
+        /// Thumbnail image
         /// </summary>
         [Browsable(false)]
         public Image Thumbnail
@@ -66,18 +59,18 @@ namespace DigitalDarkroom.Engine
         }
 
         /// <summary>
-        /// 
+        /// Exposition duration
         /// </summary>
         [CategoryAttribute("Duration"),
         DescriptionAttribute("Exposition duration")]
         public int ExpositionDuration
         {
             get;
-            private set;
+            set; // Not private to able to filter it if needed following panel specs.
         }
 
         /// <summary>
-        /// 
+        /// Index
         /// </summary>
         [CategoryAttribute("Index"),
         DescriptionAttribute("Display Index")]
@@ -96,21 +89,21 @@ namespace DigitalDarkroom.Engine
         public ImageLayer(Bitmap bmp, int expositionDuration, int index)
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
-#if TEST_BUFFERED_FILE
+
             this._imgPath = ImageLayerFile.GetImagePath(index, expositionDuration);
             bmp.Save(this._imgPath);
-#else
-        this.Bitmap = bmp;
-#endif
+
             this.Thumbnail = bmp.GetThumbnailImage(ThumbnailSize.Width, ThumbnailSize.Height, callback, new IntPtr()); // 256x256 max
             this.ExpositionDuration = expositionDuration;
             this.Index = index;
-#if TEST_BUFFERED_FILE
             bmp.Dispose();
-#endif
         }
 
 #if USE_CACHE
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cacheImgPath"></param>
         public ImageLayer(string cacheImgPath)
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
@@ -134,9 +127,8 @@ namespace DigitalDarkroom.Engine
 
 #endif
 
-#if TEST_BUFFERED_FILE
         /// <summary>
-        /// 
+        /// Load Image in memory
         /// </summary>
         public void LoadImage()
         {
@@ -149,7 +141,6 @@ namespace DigitalDarkroom.Engine
                 }
             }
         }
-#endif
 
         /// <summary>
         /// This is for GetThumbnailImageAbort call
@@ -161,17 +152,12 @@ namespace DigitalDarkroom.Engine
         }
 
         /// <summary>
-        /// 
+        /// Free memory
         /// </summary>
         public void Dispose()
         {
-            this.Bitmap.Dispose();
-            this.Thumbnail.Dispose();
-
-#if TEST_BUFFERED_FILE
-            System.GC.Collect(); // Needed to free image memory in time
-                                 //System.GC.WaitForPendingFinalizers(); // not needed
-#endif
+            this._bitmap?.Dispose();
+            this.Thumbnail?.Dispose();
         }
     }
 }

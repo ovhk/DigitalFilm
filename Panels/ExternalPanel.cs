@@ -23,6 +23,8 @@ namespace DigitalDarkroom.Panels
 
         int IPanel.NumberOfColors => 256;
 
+        int IPanel.ResponseTime => 120;
+
         bool IPanel.IsFullScreen => true;
 
         public override string ToString()

@@ -61,25 +61,19 @@ namespace DigitalDarkroom.Modes
             {
                 engine.SetCacheIdentifier(md5);
 #endif
-                Task t = Task.Run(() =>
+                // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
+                using (var bmpTemp = new Bitmap(ImagePath))
                 {
+                    Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
+                    Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
 
-                    // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
-                    using (var bmpTemp = new Bitmap(ImagePath))
+                    List<ImageLayer> ils = GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
+
+                    foreach (ImageLayer il in ils)
                     {
-                        Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
-                        Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
-
-                        List<ImageLayer> ils = GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
-
-                        foreach (ImageLayer il in ils)
-                        {
-                            engine.PushImage(il);
-                        }
+                        engine.PushImage(il);
                     }
-                });
-
-                t.Wait();
+                }
 #if USE_CACHE
             }
 #endif

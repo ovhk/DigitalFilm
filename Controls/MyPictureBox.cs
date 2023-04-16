@@ -33,18 +33,7 @@ namespace DigitalDarkroom.Controls
             }
             set
             {
-                if (value != null)
-                {
-#if USE_MULTICAST_DELEGATE
-                    this._OldImage = this._image;
-                    this._image = value;
-                    //this._OldImage?.Dispose();
-#else
-                    // Need to clone before engine dispose
-                    this._image = (Bitmap)value.Clone();
-#endif
-                }
-                else { this._image = null; }
+                this._image = value;
                 this.Refresh();
             }
         }
@@ -54,10 +43,6 @@ namespace DigitalDarkroom.Controls
         /// </summary>
         private Bitmap _image;
 
-#if USE_MULTICAST_DELEGATE
-        private Bitmap _OldImage;
-#endif 
-
         /// <summary>
         /// 
         /// </summary>
@@ -66,14 +51,15 @@ namespace DigitalDarkroom.Controls
         {
             if (this._image != null)
             {
-                // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
-                e.Graphics.DrawImage(this._image, this.ClientRectangle);
-#if USE_MULTICAST_DELEGATE
-                if (this._OldImage != this._image)
+                try
                 {
-                    this._OldImage?.Dispose();
+                    // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
+                    e.Graphics.DrawImage(this._image, this.ClientRectangle);
                 }
-#endif
+                catch 
+                {
+                    Log.WriteLine("MyPictureBox:Fail to display one image");
+                }
             }
             else
             {

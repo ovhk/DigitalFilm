@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Collections;
 using DigitalDarkroom.Panels;
 using DigitalDarkroom.Engine;
+using System.Diagnostics;
 
 namespace DigitalDarkroom
 {
@@ -33,9 +34,7 @@ namespace DigitalDarkroom
             engine.OnNewPanel += Engine_OnNewPanel;
         }
 
-#if USE_MULTICAST_DELEGATE
-        private Bitmap _OldImage;
-#endif 
+        private Stopwatch _sw = new Stopwatch();
 
         /// <summary>
         /// DisplayEngine send us a new image to display
@@ -43,20 +42,8 @@ namespace DigitalDarkroom
         /// <param name="bmp"></param>
         private void Engine_OnNewImage(Bitmap bmp)
         {
-            if (bmp != null)
-            {
-#if USE_MULTICAST_DELEGATE
-                this._OldImage = this._imageToDisplay;
-                this._imageToDisplay = (Bitmap)bmp;
-#else
-                // Need to clone before engine dispose
-                this._imageToDisplay = (Bitmap)bmp.Clone();
-#endif
-            }
-            else
-            {
-                this._imageToDisplay = null;
-            }
+            this._imageToDisplay = bmp;
+            //_sw.Restart();
             SafeUpdate(() => this.Refresh());
         }
 
@@ -86,14 +73,16 @@ namespace DigitalDarkroom
 
             if (this._imageToDisplay != null)
             {
-                // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
-                e.Graphics.DrawImage(this._imageToDisplay, this.ClientRectangle);
-#if USE_MULTICAST_DELEGATE
-                if (this._OldImage != this._imageToDisplay)
+                try
                 {
-                    this._OldImage?.Dispose();
+                    // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
+                    e.Graphics.DrawImage(this._imageToDisplay, this.ClientRectangle);
+                    //Log.WriteLine("frmFisplay:OnPaint=" + this._sw.ElapsedMilliseconds.ToString());
                 }
-#endif
+                catch
+                {
+                    Log.WriteLine("frmDisplay:Fail to display on image");
+                }
             }
             else
             {
