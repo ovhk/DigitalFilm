@@ -18,37 +18,39 @@ Tada!
 
 Digital Darkroom helps to transfer digital picture to analog print.
 
-## Mode 1 : Back & White
+## Modes
+
+### Mode 1 : Back & White
 
 Just a black & White zone to check if the diplay panel is able to block light.
 
 <img src="/img/mode1.png" width="300">
 
-## Mode 2 : Find duration for a specific gray
+### Mode 2 : Find duration for a specific gray
 
 <img src="/img/mode2.gif" width="300">
 
-## Mode 3 : Test contrast
+### Mode 3 : Test contrast
 
 <img src="/img/mode3.bmp" width="300">
 
-## Mode 4 : Gray vs B&W Linear"
+### Mode 4 : Gray vs B&W Linear"
 
 <img src="/img/mode4.gif" width="300">
 
-## Mode 5 : Convert a colored picture in grayscale and diplay it
+### Mode 5 : Convert a colored picture in grayscale and diplay it
 
 <img src="/img/mode5.jpg" width="300">
 
-## Mode 6 : Display a picture with GrayToTime algorythm
+### Mode 6 : Display a picture with GrayToTime algorythm
 
 <img src="/img/mode6.gif" width="300">
 
-## Mode 7 : Gray vs GrayToTime
+### Mode 7 : Gray vs GrayToTime
 
 <img src="/img/mode7.gif" width="300">
 
-## Mode 8 : Test band
+### Mode 8 : Test band
 
 <img src="/img/mode8.gif" width="300">
 
