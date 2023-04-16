@@ -22,36 +22,35 @@ Digital Darkroom helps to transfer digital picture to analog print.
 
 Just a black & White zone to check if the diplay panel is able to block light.
 
-![Alt text](/img/mode1.png?raw=true|width=300px)
 <img src="/img/mode1.png" width="300">
 
 ## Mode 2 : Find duration for a specific gray
 
-![Alt text](/img/mode2.gif?raw=true|width=300px)
+<img src="/img/mode2.gif" width="300">
 
 ## Mode 3 : Test contrast
 
-![Alt text](/img/mode3.bmp?raw=true|width=300px)
+<img src="/img/mode3.bmp" width="300">
 
 ## Mode 4 : Gray vs B&W Linear"
 
-![Alt text](/img/mode4.gif?raw=true|width=300px)
+<img src="/img/mode4.gif" width="300">
 
 ## Mode 5 : Convert a colored picture in grayscale and diplay it
 
-![Alt text](/img/mode5.jpg?raw=true|width=300px)
+<img src="/img/mode5.jpg" width="300">
 
 ## Mode 6 : Display a picture with GrayToTime algorythm
 
-![Alt text](/img/mode6.gif?raw=true|width=300px)
+<img src="/img/mode6.gif" width="300">
 
 ## Mode 7 : Gray vs GrayToTime
 
-![Alt text](/img/mode7.gif?raw=true|width=300px)
+<img src="/img/mode7.gif" width="300">
 
 ## Mode 8 : Test band
 
-![Alt text](/img/mode8.gif?raw=true|width=300px)
+<img src="/img/mode8.gif" width="300">
 
 (Thanks to https://ezgif.com/maker for GIFs)
 
