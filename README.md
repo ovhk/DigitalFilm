@@ -22,19 +22,37 @@ Digital Darkroom helps to transfer digital picture to analog print.
 
 Just a black & White zone to check if the diplay panel is able to block light.
 
+![Alt text](/img/mode1.png?raw=true|width=300px)
+
 ## Mode 2 : Find duration for a specific gray
+
+![Alt text](/img/mode2.gif?raw=true|width=300px)
 
 ## Mode 3 :
 
+![Alt text](/img/mode3.bmp?raw=true|width=300px)
+
 ## Mode 4 :
 
-## Mode 5 :
+![Alt text](/img/mode4.gif?raw=true|width=300px)
+
+## Mode 5 : Convert a colored picture in grayscale and diplay it
+
+![Alt text](/img/mode5.jpg?raw=true|width=300px)
 
 ## Mode 6 :
 
+![Alt text](/img/mode6.gif?raw=true|width=300px)
+
 ## Mode 7 :
 
+![Alt text](/img/mode7.gif?raw=true|width=300px)
+
 ## Mode 8 : Test band
+
+![Alt text](/img/mode8.gif?raw=true|width=300px)
+
+(Thanks to https://ezgif.com/maker for GIFs)
 
 ---
 
