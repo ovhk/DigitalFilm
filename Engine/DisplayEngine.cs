@@ -89,8 +89,16 @@ namespace DigitalDarkroom.Engine
         /// </summary>
         private DisplayEngine()
         {
+            this.Cache = new CacheManager(this);
             this.EngineStatusNotify += DisplayEngine_EngineStatusNotify;
         }
+
+        #endregion
+
+        #region Cache Management
+
+        public CacheManager Cache
+        { get; private set; }
 
         #endregion
 
@@ -249,10 +257,13 @@ namespace DigitalDarkroom.Engine
                 //Thread.Yield(); // force handler to execute their task
                 Application.DoEvents(); 
 
-                int duration = il.ExpositionDuration; // TODO : on ajoute le temps d'affichage au lieu du filtre ? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Pb le temps que l'on va déterminer intégre déja ce temps...
+                int duration = il.ExpositionDuration;
 
                 iNotificationInterval += duration;
 
+                // This timing is important!
+                // Thats why we have a thread to preload and another to dispose
+                // We consider that subscriber's OnPaint (from Refresh to OnPaint) have a fix execution duration, so this timing must be directly the needed exposition duration
                 if (de.SleepMsWithBreak(duration, ref de._threadStop) == false)
                 {
                     break;
@@ -396,6 +407,7 @@ namespace DigitalDarkroom.Engine
                 Thread.Sleep(100);
             }
 
+            // TODO : this is bof no?
             Thread.Sleep(lastSleep + 500); // To be sure last one is done...
 
             de._threadStop = true; // end ThreadProcDisplay
@@ -460,69 +472,6 @@ namespace DigitalDarkroom.Engine
         #endregion
 
         #region Public interface
-
-#if USE_CACHE
-        #region Cache Management
-
-        internal string _cachePath; // TODO : find a way to share this
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="identifier"></param>
-        /// <returns></returns>
-        private string _formatCachePath(string identifier)
-        {
-            return @"cache\" + identifier + @"\" + this.Panel.Name;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="identifier"></param>
-        /// <returns></returns>
-        public bool IsInCache(string identifier)
-        {
-            return Directory.Exists(this._formatCachePath(identifier));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="identifier"></param>
-        /// <returns></returns>
-        public bool LoadCache(string identifier)
-        {
-            string cachedir = this._formatCachePath(identifier);
-
-            if (Directory.Exists(cachedir) == true)
-            {
-                var list = Directory.GetFiles(cachedir, ImageLayerFile.ExtentionSearchFilter);
-
-                Array.Sort(list, new AlphanumComparatorFast());
-
-                foreach (string file in list)
-                {
-                    this.PushImage(new ImageLayer(file));
-                }
-
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="identifier"></param>
-        public void SetCacheIdentifier(string identifier)
-        {
-            this._cachePath = this._formatCachePath(identifier);
-
-            Directory.CreateDirectory(this._cachePath);
-        }
-#endregion
-#endif
 
         /// <summary>
         /// Start Engine
@@ -595,9 +544,7 @@ namespace DigitalDarkroom.Engine
             this._qToPreload.Clear(); // useful only if there's a stop before the end
             this._qToDisplay.Clear(); // useful only if there's a stop before the end
 
-#if USE_CACHE
-            this._cachePath = null;
-#endif
+            this.Cache.ClearTmpCache();
 
             GC.Collect();
             System.GC.WaitForPendingFinalizers();

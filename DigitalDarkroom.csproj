@@ -35,7 +35,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;USE_CACHE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\CacheManager.cs" />
     <Compile Include="Engine\DisplayEngine.cs" />
     <Compile Include="Test\File\FileFormat.cs" />
     <Compile Include="Test\File\FileManagement.cs" />
@@ -90,7 +91,6 @@
     <Compile Include="Tools\DrawTools.cs" />
     <Compile Include="Tools\ImageFileFilter.cs" />
     <Compile Include="Engine\ImageLayer\ImageLayer.cs" />
-    <Compile Include="Engine\ImageLayer\ImageLayerFile.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Modes\Mode7.cs" />
     <Compile Include="Modes\Mode8.cs" />

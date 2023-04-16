@@ -41,12 +41,10 @@ Just a black & White zone to check if the diplay panel is able to block light.
 ## TODO list
 
 ### Minor
-- [ ] evaluate and understand display timings better
 - [ ] frmMain manager time
 - [ ] DisplayEngine: better use of engine status
 - [ ] Test parallel Programming
 - [ ] Cleanup code
-- [ ] Remove ImageLayerFile and create an ImageLayerCollection? 
 
 ### Major
 - [ ] Add GrayToTime formula in parameter and evaluate it on the fly?

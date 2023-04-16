@@ -49,12 +49,12 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void frmMain_Load(object sender, EventArgs e)
         {
-            ImageLayerFile.ClearFiles();
             LoadModes();
             engine = DisplayEngine.GetInstance();
             engine.EngineStatusNotify += Engine_EngineStatusNotify;
             engine.OnNewImage += Engine_OnNewImage;
             engine.OnNewProgress += Engine_OnNewProgress;
+            engine.Clear();
             engine.Stop(); // Call engine notification to enable/disable controls
 
             cbPanels.Items.Add(new Panels.NoPanel(this.myPictureBox1));
@@ -95,7 +95,7 @@ namespace DigitalDarkroom
         /// <param name="e"></param>
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ImageLayerFile.ClearFiles();
+            engine.Clear();
         }
 
         #endregion
@@ -410,25 +410,33 @@ namespace DigitalDarkroom
             this.toolStripStatusLabel1.Text = "Loading mode " + mode.Name + "...";
             Log.WriteLine("Loading mode {0}", mode.Name);
 
-            Cursor.Current = Cursors.WaitCursor;
+            this.UseWaitCursor = true;
 
             this.toolStripProgressBar1.Style = ProgressBarStyle.Marquee;
             this.toolStripProgressBar1.MarqueeAnimationSpeed = 100;
 
+            bool bLoaded = false;
+
             await Task.Run(() =>
             {
-                if (mode.Load() == false)
-                {
-                    {
-                        string s = "Fail to load selected mode!";
-                        toolStripStatusLabel1.Text = s;
-                        Log.WriteLine(s);
-                        MessageBox.Show(s);
-                    }
-                    this.btUnloadMode_Click(null, null);
-                    return;
-                }
+                bLoaded = mode.Load();
             });
+
+            this.toolStripProgressBar1.MarqueeAnimationSpeed = 0;
+            this.toolStripProgressBar1.Style = ProgressBarStyle.Blocks;
+            this.toolStripProgressBar1.Value = 0;
+
+            if (bLoaded == false)
+            {
+                {
+                    string s = "Fail to load selected mode!";
+                    this.toolStripStatusLabel1.Text = s;
+                    Log.WriteLine(s);
+                    MessageBox.Show(s);
+                }
+                this.btUnloadMode_Click(null, null);
+                return;
+            }
 
             this.SuspendLayout();
 
@@ -441,9 +449,6 @@ namespace DigitalDarkroom
             this.btLoadMode.Enabled = false;
             this.btUnloadMode.Enabled = true;
 
-            this.toolStripProgressBar1.MarqueeAnimationSpeed = 0;
-            this.toolStripProgressBar1.Style = ProgressBarStyle.Blocks;
-            this.toolStripProgressBar1.Value = 0;
             this.btPlay.Enabled = true;
 
             this.ResumeLayout(true);
@@ -460,7 +465,7 @@ namespace DigitalDarkroom
                 Log.WriteLine(s);
             }
 
-            Cursor.Current = Cursors.Default;
+            this.UseWaitCursor = false;
         }
 
         /// <summary>
@@ -481,7 +486,7 @@ namespace DigitalDarkroom
                 Log.WriteLine(s);
             }
 
-            Cursor.Current = Cursors.WaitCursor;
+            this.UseWaitCursor = true;
 
             if (!(engine.Panel is ExternalPanel))
             {
@@ -508,7 +513,7 @@ namespace DigitalDarkroom
                 Log.WriteLine(s);
             }
 
-            Cursor.Current = Cursors.Default;
+            this.UseWaitCursor = false;
         }
 
         #endregion

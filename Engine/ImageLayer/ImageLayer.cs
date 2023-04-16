@@ -90,7 +90,7 @@ namespace DigitalDarkroom.Engine
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 
-            this._imgPath = ImageLayerFile.GetImagePath(index, expositionDuration);
+            this._imgPath = DisplayEngine.GetInstance().Cache.GetTmpCachePath(index, expositionDuration);
             bmp.Save(this._imgPath);
 
             this.Thumbnail = bmp.GetThumbnailImage(ThumbnailSize.Width, ThumbnailSize.Height, callback, new IntPtr()); // 256x256 max
@@ -99,7 +99,6 @@ namespace DigitalDarkroom.Engine
             bmp.Dispose();
         }
 
-#if USE_CACHE
         /// <summary>
         /// 
         /// </summary>
@@ -115,7 +114,7 @@ namespace DigitalDarkroom.Engine
             int index = 0;
             int expositionDuration = 0;
 
-            ImageLayerFile.GetIndexAndExpositionDuration(file.Name, out index, out expositionDuration);
+            DisplayEngine.GetInstance().Cache.GetIndexAndExpositionDuration(file.Name, out index, out expositionDuration);
 
             using (Bitmap bmp = new Bitmap(this._imgPath))
             {
@@ -124,8 +123,6 @@ namespace DigitalDarkroom.Engine
                 this.Index = index;
             }
         }
-
-#endif
 
         /// <summary>
         /// Load Image in memory

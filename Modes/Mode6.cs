@@ -50,17 +50,16 @@ namespace DigitalDarkroom.Modes
         {
             if (ImagePath == null || ImagePath.Length == 0) return false;
 
-#if USE_CACHE
             string md5 = Tools.Checksum.CalculateMD5(ImagePath);
 
-            if (engine.IsInCache(md5) == true)
+            if (engine.Cache.IsInCache(md5) == true)
             {
-                engine.LoadCache(md5);
+                engine.Cache.LoadFromCache(md5);
             }
             else
             {
-                engine.SetCacheIdentifier(md5);
-#endif
+                engine.Cache.SetCacheIdentifier(md5);
+
                 // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
                 using (var bmpTemp = new Bitmap(ImagePath))
                 {
@@ -74,9 +73,8 @@ namespace DigitalDarkroom.Modes
                         engine.PushImage(il);
                     }
                 }
-#if USE_CACHE
             }
-#endif
+
             return true;
         }
 
