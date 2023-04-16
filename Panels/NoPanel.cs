@@ -39,7 +39,7 @@ namespace DigitalDarkroom.Panels
         {
             this.height = pb.Height;
             this.width = pb.Width;
-            this._name = "No Panel";
+            this._name = "Inside app";
         }
     }
 }

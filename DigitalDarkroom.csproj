@@ -119,6 +119,7 @@
     <Compile Include="GrayToTime\GrayToTime.cs" />
     <Compile Include="Tools\GrayScale.cs" />
     <Compile Include="Controls\ImageFileNameEditor.cs" />
+    <Compile Include="Tools\ScreenInterrogatory.cs" />
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
       <SubType>Designer</SubType>

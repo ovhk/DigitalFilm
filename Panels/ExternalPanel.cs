@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DigitalDarkroom.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,7 +40,8 @@ namespace DigitalDarkroom.Panels
 
         public ExternalPanel(Screen screen)
         {
-            this._name = screen.DeviceName.Replace("\\\\.\\", "");
+            this._name = ScreenInterrogatory.DeviceFriendlyName(screen);
+            //this._name = screen.DeviceName.Replace("\\\\.\\", "");
             this.Screen = screen;
         }
     }
