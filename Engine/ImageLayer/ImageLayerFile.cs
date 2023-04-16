@@ -79,7 +79,7 @@ namespace DigitalDarkroom.Engine
         /// <param name="index"></param>
         /// <param name="expositionDuration"></param>
         /// <returns></returns>
-        public static bool GetIndexAndExpositionDuration(string fileName, out int index, out int expositionDuration)         // TODO use out instead of ref ?
+        public static bool GetIndexAndExpositionDuration(string fileName, out int index, out int expositionDuration)
         {
             try
             {

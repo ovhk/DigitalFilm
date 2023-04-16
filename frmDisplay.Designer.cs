@@ -43,7 +43,6 @@
             this.MinimizeBox = false;
             this.Name = "frmDisplay";
             this.ShowIcon = false;
-            this.Activated += new System.EventHandler(this.frmDisplay_Activated);
             this.VisibleChanged += new System.EventHandler(this.frmDisplay_VisibleChanged);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frmDisplay_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frmDisplay_MouseMove);

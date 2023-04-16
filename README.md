@@ -41,6 +41,7 @@ Just a black & White zone to check if the diplay panel is able to block light.
 ## TODO list
 
 ### Minor
+- [ ] evaluate and understand display timings better
 - [ ] frmMain manager time
 - [ ] DisplayEngine: better use of engine status
 - [ ] Test parallel Programming

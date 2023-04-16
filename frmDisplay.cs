@@ -174,44 +174,36 @@ namespace DigitalDarkroom
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void frmDisplay_Activated(object sender, EventArgs e)
-        {
-            // TODO test it into frmDisplay_VisibleChanged ?
-            if (engine.Panel.IsFullScreen)
-            {
-                ExternalPanel ep = engine.Panel as ExternalPanel;
-
-                Point p = new Point
-                {
-                    X = ep.Screen.WorkingArea.Left,
-                    Y = ep.Screen.WorkingArea.Top
-                };
-
-                this.Location = p;
-            }
-            if (engine.Panel is PanelSimulator)
-            {
-                Point p = new Point
-                {
-                    X = Screen.PrimaryScreen.WorkingArea.Left,
-                    Y = Screen.PrimaryScreen.WorkingArea.Top
-                };
-
-                this.Location = p;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void frmDisplay_VisibleChanged(object sender, EventArgs e)
         {
-            // Subscribe to NewImage only if Form is Visible
             if (this.Visible)
             {
+                // Subscribe to NewImage only if Form is Visible
                 engine.OnNewImage += Engine_OnNewImage;
+                
+                // Adapte to panel size
+                if (engine.Panel.IsFullScreen)
+                {
+                    ExternalPanel ep = engine.Panel as ExternalPanel;
+
+                    Point p = new Point
+                    {
+                        X = ep.Screen.WorkingArea.Left,
+                        Y = ep.Screen.WorkingArea.Top
+                    };
+
+                    this.Location = p;
+                }
+                if (engine.Panel is PanelSimulator)
+                {
+                    Point p = new Point
+                    {
+                        X = Screen.PrimaryScreen.WorkingArea.Left,
+                        Y = Screen.PrimaryScreen.WorkingArea.Top
+                    };
+
+                    this.Location = p;
+                }
             }
             else
             {
