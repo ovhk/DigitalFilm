@@ -73,7 +73,7 @@ Draw test band.
 
 Generate a gray palette with gamma parameter.
 
-<img src="/img/mode9.bpm" width="300">
+<img src="/img/mode9.bmp" width="300">
 
 (Thanks to https://ezgif.com/maker for GIFs)
 
