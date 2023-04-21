@@ -25,7 +25,7 @@ namespace DigitalDarkroom.Engine
     /// </summary>
     public enum EngineStatus
     {
-        Started, Running, Stopped, Ended // TODO determine engine status
+        Started, Running, Stopped
     }
 
     /// <summary>
@@ -169,10 +169,12 @@ namespace DigitalDarkroom.Engine
         {
             this._status = e;
             switch (e) 
-            { 
+            {
+                case EngineStatus.Started:
+                    break;
+                case EngineStatus.Running:
+                    break;
                 case EngineStatus.Stopped:
-                case EngineStatus.Ended:
-                    this.OnNewImage?.Invoke(null); // Force black screen (because Background controls color are set to black)
                     this.Clear();
                     break; 
             }
@@ -286,7 +288,7 @@ namespace DigitalDarkroom.Engine
             // Last black image
             de.OnNewImage?.Invoke(null);
 
-            de.EngineStatusNotify?.Invoke(de, EngineStatus.Ended);
+            de.EngineStatusNotify?.Invoke(de, EngineStatus.Stopped);
         }
 
         #endregion
@@ -511,6 +513,8 @@ namespace DigitalDarkroom.Engine
             {
                 _semaphorePreload?.Release();
             } catch { }
+
+            this._qToPreload.Clear(); // free _threadPreload from work and go to end
 
             // Wait for the end of threads excecution
             this._threadPreload?.Join(); 

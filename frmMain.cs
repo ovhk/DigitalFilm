@@ -277,9 +277,12 @@ namespace DigitalDarkroom
         {
             SafeUpdate(() => this.SuspendLayout());
 
+            string s = String.Format("{0:00}:{1:00}.{2:00}", elapseTime.Minutes, elapseTime.Seconds, elapseTime.Milliseconds / 10);
+            s += "\n";
+            s += String.Format("{0:00}:{1:00}.{2:00}", totalDuration.Minutes, totalDuration.Seconds, totalDuration.Milliseconds / 10);
+
             // Update Time
-            SafeUpdate(() => this.lbTime.Text = String.Format("{0:00}:{1:00}.{2:00}",
-                elapseTime.Minutes, elapseTime.Seconds, elapseTime.Milliseconds / 10));
+            SafeUpdate(() => this.lbTime.Text = s);
 
             if (totalDuration.Subtract(elapseTime).TotalSeconds <= 3)
             {
@@ -337,10 +340,9 @@ namespace DigitalDarkroom
                     this.SafeUpdate(() => this.cbPanels.Enabled = false);
                     break;
                 case EngineStatus.Running:
-                    // TODO récupérer le temps écoulé pour l'afficher
+                    // TODO : Start local timer here?
                     break;
                 case EngineStatus.Stopped:
-                case EngineStatus.Ended:
                     this.SafeUpdate(() => this.btPlay.Enabled = false);
                     this.SafeUpdate(() => this.btStop.Enabled = false);
                     this.SafeUpdate(() => this.gbModes.Enabled = true);
