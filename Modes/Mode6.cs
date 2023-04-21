@@ -65,7 +65,7 @@ namespace DigitalDarkroom.Modes
             {
                 if (engine.Cache.IsInCache(md5) == true)
                 {
-                    engine.Cache.LoadFromCache(md5);
+                    return engine.Cache.LoadFromCache(md5);
                 }
                 else
                 {
