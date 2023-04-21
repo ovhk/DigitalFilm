@@ -38,6 +38,8 @@ Just a black & White zone to check if the diplay panel is able to block light.
 
 <img src="/img/mode4.gif" width="300">
 
+Gamma parameter is available.
+
 ### Mode 5 : Convert a colored picture in grayscale and diplay it
 
 <img src="/img/mode5.jpg" width="300">
@@ -53,6 +55,12 @@ Just a black & White zone to check if the diplay panel is able to block light.
 ### Mode 8 : Test band
 
 <img src="/img/mode8.gif" width="300">
+
+### Mode 9 : Gray palette
+
+Generate a gray palette with gamma parameter.
+
+<img src="/img/mode9.bpm" width="300">
 
 (Thanks to https://ezgif.com/maker for GIFs)
 
