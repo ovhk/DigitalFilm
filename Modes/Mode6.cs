@@ -37,6 +37,15 @@ namespace DigitalDarkroom.Modes
         public string ImagePath
         { get; set; }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Category("Configuration")]
+        [Description("Use cache to load faster?")]
+        public bool UseCache
+        { get; set; } = true;
+
         /// <summary>
         /// Access to the Engine
         /// </summary>
@@ -52,26 +61,33 @@ namespace DigitalDarkroom.Modes
 
             string md5 = Tools.Checksum.CalculateMD5(ImagePath);
 
-            if (engine.Cache.IsInCache(md5) == true)
+            if (this.UseCache)
             {
-                engine.Cache.LoadFromCache(md5);
-            }
+                if (engine.Cache.IsInCache(md5) == true)
+                {
+                    engine.Cache.LoadFromCache(md5);
+                }
+                else
+                {
+                    engine.Cache.SetCacheIdentifier(md5);
+                }
+            } 
             else
             {
-                engine.Cache.SetCacheIdentifier(md5);
+                engine.Cache.ClearCacheFromIdentifier(md5);
+            }
 
-                // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
-                using (var bmpTemp = new Bitmap(ImagePath))
+            // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
+            using (var bmpTemp = new Bitmap(ImagePath))
+            {
+                Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
+                Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
+
+                List<ImageLayer> ils = GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
+
+                foreach (ImageLayer il in ils)
                 {
-                    Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
-                    Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
-
-                    List<ImageLayer> ils = GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
-
-                    foreach (ImageLayer il in ils)
-                    {
-                        engine.PushImage(il);
-                    }
+                    engine.PushImage(il);
                 }
             }
 

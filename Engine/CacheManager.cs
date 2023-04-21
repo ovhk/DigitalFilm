@@ -115,6 +115,23 @@ namespace DigitalDarkroom.Engine
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="identifier"></param>
+        public void ClearCacheFromIdentifier(string identifier)
+        {
+            this._cachePath = this._formatCachePath(identifier);
+
+            try
+            {
+                Directory.Delete(this._cachePath, true);
+            }
+            catch { }
+
+            this._cachePath = null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="index"></param>
         /// <param name="expositionDuration"></param>
         /// <returns></returns>
