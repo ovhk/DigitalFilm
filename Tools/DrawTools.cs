@@ -21,7 +21,7 @@ namespace DigitalDarkroom.Tools
         /// <param name="brush"></param>
         /// <param name="txt"></param>
         /// <param name="rectangle"></param>
-        public static void DrawLargestString(ref Graphics graphics, ref SolidBrush brush, string txt, Rectangle rectangle)
+        public static void DrawLargestString(ref Graphics graphics, ref SolidBrush brush, string txt, Rectangle rectangle, double factor)
         {
             SizeF stringSize = new SizeF();
 
@@ -31,7 +31,7 @@ namespace DigitalDarkroom.Tools
                 {
                     stringSize = graphics.MeasureString(txt, font);
 
-                    if (stringSize.Width < rectangle.Width * 0.8)
+                    if (stringSize.Width < rectangle.Width * factor)
                     {
                         StringFormat stringFormat = new StringFormat();
                         stringFormat.Alignment = StringAlignment.Center;
@@ -43,6 +43,18 @@ namespace DigitalDarkroom.Tools
 
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="graphics"></param>
+        /// <param name="brush"></param>
+        /// <param name="txt"></param>
+        /// <param name="rectangle"></param>
+        public static void DrawLargestString(ref Graphics graphics, ref SolidBrush brush, string txt, Rectangle rectangle)
+        {
+            DrawLargestString(ref graphics, ref brush, txt, rectangle, 0.8);
         }
     }
 }

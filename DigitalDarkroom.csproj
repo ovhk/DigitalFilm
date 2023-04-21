@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Engine\CacheManager.cs" />
     <Compile Include="Engine\DisplayEngine.cs" />
+    <Compile Include="Modes\Mode9.cs" />
     <Compile Include="Test\File\FileFormat.cs" />
     <Compile Include="Test\File\FileManagement.cs" />
     <Compile Include="frmAbout.cs">

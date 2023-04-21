@@ -24,7 +24,7 @@ namespace DigitalDarkroom.Panels
 
         int IPanel.NumberOfColors => 256;
 
-        int IPanel.ResponseTime => 120;  // TODO : 60 Hz so consider x2 = 80 ms ????
+        int IPanel.ResponseTime => 120;  // TODO : 30 Hz so consider x2 = 80 ms ????
 
         bool IPanel.IsFullScreen => true;
 

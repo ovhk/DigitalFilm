@@ -367,6 +367,7 @@ namespace DigitalDarkroom
             this.cbMode.Items.Add(new Modes.Mode6());
             this.cbMode.Items.Add(new Modes.Mode7());
             this.cbMode.Items.Add(new Modes.Mode8());
+            this.cbMode.Items.Add(new Modes.Mode9());
 
             this.btUnloadMode.Enabled = false;
         }

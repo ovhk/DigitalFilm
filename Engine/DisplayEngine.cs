@@ -407,8 +407,7 @@ namespace DigitalDarkroom.Engine
                 Thread.Sleep(100);
             }
 
-            // TODO : this is bof no?
-            Thread.Sleep(lastSleep + 500); // To be sure last one is done...
+            de.SleepMsWithBreak(lastSleep, ref de._threadStop); // To be sure last one is done...
 
             de._threadStop = true; // end ThreadProcDisplay
         }

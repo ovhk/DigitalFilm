@@ -21,10 +21,10 @@ namespace DigitalDarkroom.Tools
             //create the grayscale ColorMatrix
             ColorMatrix colorMatrix = new ColorMatrix(
                new float[][]
-               {
-                 new float[] {.3f, .3f, .3f, 0, 0},
-                 new float[] {.59f, .59f, .59f, 0, 0},
-                 new float[] {.11f, .11f, .11f, 0, 0},
+               { // Values from https://en.wikipedia.org/wiki/Grayscale
+                 new float[] {.299f, .299f, .299f, 0, 0},
+                 new float[] {.587f, .587f, .587f, 0, 0},
+                 new float[] {.114f, .114f, .114f, 0, 0},
                  new float[] {0, 0, 0, 1, 0},
                  new float[] {0, 0, 0, 0, 1}
                });
