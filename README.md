@@ -3,13 +3,13 @@
 How to print a picture from a film negative?
 
 - put the negative into the enlarger 
-- project the negative into the paper
+- project the negative on the paper
 
 No! Here is the solution:
 
 - scan the negative, invert colors and save it
-- Find experimentaly the exposition duration to have different value of gray on the paper
-- put gray value and duration in an Excel file, draw the trend curve and get its formula
+- Find experimentaly the exposition duration to have different values of gray on the paper
+- put gray values and duration in an Excel file, draw the trend curve and get its formula
 - generate 256 bitmaps from your scanned picture. One for each gray value, keep black all pixels lower than this value, put all others in white
 - put the display on the paper and turn on the enlarger light
 - display these bitmaps during the duration calculate with the trend formula onto a transparent black and white display panel
