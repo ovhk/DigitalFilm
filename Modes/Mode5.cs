@@ -64,9 +64,23 @@ namespace DigitalDarkroom.Modes
             using (var bmpTemp = new Bitmap(ImagePath))
             {
                 b = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
-            }
 
-            engine.PushImage(b, Duration);
+                // invert B&W !!!!
+                using (DirectBitmap bbw = new DirectBitmap(sz.Width, sz.Height))
+                {
+                    for (int x = 0; x < b.Width; x++)
+                    {
+                        for (int y = 0; y < b.Height; y++)
+                        {
+                            Color c = b.GetPixel(x, y); ;
+
+                            // invert
+                            bbw.SetPixel(x, y, Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B));
+                        }
+                    }
+                    engine.PushImage(bbw.Bitmap, Duration);
+                }
+            }
 
             return true;
         }
