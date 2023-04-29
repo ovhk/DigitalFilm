@@ -17,19 +17,19 @@ namespace DigitalDarkroom.Modes
     internal class Mode6 : IMode
     {
         /// <summary>
-        /// 
+        /// Name
         /// </summary>
         [Browsable(false)]
         public string Name => "GrayToTime picture";
 
         /// <summary>
-        /// 
+        /// Description
         /// </summary>
         [Browsable(false)]
         public string Description => "Display the selected picture in 256 B&W pictures with GrayToTime algorithm.";
 
         /// <summary>
-        /// 
+        /// Source file to display
         /// </summary>
         [Category("Configuration")]
         [Description("Source file to display")]
@@ -37,14 +37,58 @@ namespace DigitalDarkroom.Modes
         public string ImagePath
         { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Category("Cache")]
+        [Description("Use cache to load faster?")]
+        public bool UseCache
+        { get; set; } = true;
 
         /// <summary>
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Use cache to load faster?")]
-        public bool UseCache
-        { get; set; } = true;
+        [Description("Display mode")]
+        public SizeMode DisplayMode
+        { get; set; } = SizeMode.StretchImage;
+
+        #region Margins
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Category("Margin")]
+        [Description("Margin color?")]
+        public MarginColor MarginColor
+        { get; set; } = MarginColor.White; // remember to invert color somewhere
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Category("Margin")]
+        [Description("Top and bottom margin size.")]
+        public int MarginTopBottom
+        { get; set; } = 10;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Category("Margin")]
+        [Description("Left and right margin size.")]
+        public int MarginLeftRight
+        { get; set; } = 10;
+
+        #endregion
+
+        /// <summary>
+        /// Rotation
+        /// </summary>
+        [Category("Configuration")]
+        [Description("Rotation")]
+        public RotateFlipType Rotation
+        { get; set; } = RotateFlipType.RotateNoneFlipNone;
 
         /// <summary>
         /// Access to the Engine
@@ -78,10 +122,26 @@ namespace DigitalDarkroom.Modes
             }
 
             // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
-            using (var bmpTemp = new Bitmap(ImagePath))
+            using (var bmpPicture = new Bitmap(ImagePath))
             {
-                Size sz = new Size(engine.Panel.Width, engine.Panel.Height);
-                Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpTemp, sz));
+                bmpPicture.RotateFlip(Rotation);
+
+                Size sz = new Size();
+
+                switch (DisplayMode)
+                {
+                    case SizeMode.CenterImage:
+                        // TODO
+                        break;
+
+                    case SizeMode.StretchImage:
+                    default:
+                        sz.Width = engine.Panel.Width;
+                        sz.Height = engine.Panel.Height;
+                        break;
+                }
+
+                Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpPicture, sz));
 
                 List<ImageLayer> ils = GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
 
@@ -89,6 +149,8 @@ namespace DigitalDarkroom.Modes
                 {
                     engine.PushImage(il);
                 }
+
+
             }
 
             return true;
@@ -122,13 +184,15 @@ namespace DigitalDarkroom.Modes
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static List<ImageLayer> GetImageLayers(Bitmap bitmap, int width, int height)
+        public List<ImageLayer> GetImageLayers(Bitmap bitmap, int width, int height)
         {
-            List<ImageLayer> imageLayers = new List<ImageLayer>(); // TODO : move all this into mode 6 but mode 2 also use timings???
+            List<ImageLayer> imageLayers = new List<ImageLayer>();
 
             int[] timings = GrayToTime.Timings;
 
-#if TEST_PARALELLE
+            SolidBrush marginBrush = (MarginColor == MarginColor.Back) ? new SolidBrush(Color.White) : new SolidBrush(Color.Black); // invert color for film
+
+#if TEST_PARALLEL
             //Stopwatch stopwatch = Stopwatch.StartNew();
 
             Parallel.For(0, timings.Length, i =>
@@ -138,13 +202,13 @@ namespace DigitalDarkroom.Modes
             {
                 using (DirectBitmap b = new DirectBitmap(width, height))
                 {
-#if TEST_PARALELLE
+#if TEST_PARALLEL
                     Parallel.For(0, b.Width, x =>
 #else
                     for (int x = 0; x < b.Width; x++)
 #endif
                     {
-#if TEST_PARALELLE
+#if TEST_PARALLEL
                         Parallel.For(0, b.Height, y =>
 #else
                         for (int y = 0; y < b.Height; y++)
@@ -162,18 +226,34 @@ namespace DigitalDarkroom.Modes
                                 b.SetPixel(x, y, Color.FromArgb(0, 0, 0));
                             }
                         }
-#if TEST_PARALELLE
+#if TEST_PARALLEL
 );
 #endif
                     }
-#if TEST_PARALELLE
+#if TEST_PARALLEL
 );
 #endif
+                    Graphics gfx = Graphics.FromImage(b.Bitmap);
+
+                    if (MarginLeftRight > 0)
+                    {
+                        gfx.FillRectangle(marginBrush, 0, 0, MarginLeftRight, engine.Panel.Height); // LEFT
+
+                        gfx.FillRectangle(marginBrush, engine.Panel.Width - MarginLeftRight, 0, MarginLeftRight, engine.Panel.Height); // RIGHT
+                    }
+
+                    if (MarginTopBottom > 0)
+                    {
+                        gfx.FillRectangle(marginBrush, 0, 0, engine.Panel.Width, MarginTopBottom); // TOP
+
+                        gfx.FillRectangle(marginBrush, 0, engine.Panel.Height - MarginTopBottom, engine.Panel.Width, MarginTopBottom); // BOTTOM
+                    }
+
                     imageLayers.Add(new ImageLayer(b.Bitmap, timings[i], i));
                 }
             }
 
-#if TEST_PARALELLE
+#if TEST_PARALLEL
             );
 
         //    stopwatch.Stop();
@@ -181,6 +261,9 @@ namespace DigitalDarkroom.Modes
         ////For: 8727,5777
         //    Log.WriteLine("For : {0}", stopwatch.Elapsed.TotalMilliseconds);
 #endif
+
+            marginBrush.Dispose();
+
             return imageLayers;
         }
     }

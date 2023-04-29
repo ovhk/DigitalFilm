@@ -10,5 +10,5 @@ namespace DigitalDarkroom.Modes
 
     internal enum SizeMode { StretchImage, CenterImage };
 
-    internal enum DisplateMode { Direct, GrayToTime }; // TODO : merge mode 5 and 6
+    internal enum DisplayMode { Direct, GrayToTime };
 }

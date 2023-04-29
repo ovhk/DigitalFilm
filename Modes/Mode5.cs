@@ -18,18 +18,18 @@ namespace DigitalDarkroom.Modes
         /// Name
         /// </summary>
         [Browsable(false)]
-        public string Name => "Grayscale picture";
+        public string Name => "Display picture";
 
         /// <summary>
         /// Description
         /// </summary>
         [Browsable(false)]
-        public string Description => "Display the selected picture in grayscale.";
+        public string Description => "Display the selected picture following parameters.";
 
         /// <summary>
         /// Display duration in ms
         /// </summary>
-        [Category("Configuration")]
+        [Category("Mode Direct")]
         [Description("Display duration in ms")]
         public int Duration
         { get; set; } = 5000;
@@ -88,6 +88,22 @@ namespace DigitalDarkroom.Modes
         { get; set; } = RotateFlipType.RotateNoneFlipNone;
 
         /// <summary>
+        /// 
+        /// </summary>
+        [Category("Display Mode")]
+        [Description("Define algo used to diplay the picture.")]
+        public DisplayMode DisplayMode
+        { get; set; } = DisplayMode.GrayToTime;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Category("Mode GrayToTime")]
+        [Description("Use cache to load faster? (only in GrayToTime mode)")]
+        public bool UseCache
+        { get; set; } = true;
+
+        /// <summary>
         /// Access to the Engine
         /// </summary>
         private readonly DisplayEngine engine = DisplayEngine.GetInstance();
@@ -99,6 +115,28 @@ namespace DigitalDarkroom.Modes
         public bool Load()
         {
             if (ImagePath == null || ImagePath.Length == 0) return false;
+
+            string md5 = Tools.Checksum.CalculateMD5(ImagePath); // TODO : integrate config to md5
+
+            if (DisplayMode == DisplayMode.GrayToTime)
+            {
+                // Use Cache ?
+                if (this.UseCache)
+                {
+                    if (engine.Cache.IsInCache(md5) == true)
+                    {
+                        return engine.Cache.LoadFromCache(md5);
+                    }
+                    else
+                    {
+                        engine.Cache.SetCacheIdentifier(md5);
+                    }
+                }
+                else
+                {
+                    engine.Cache.ClearCacheFromIdentifier(md5);
+                }
+            }
 
             // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
             using (var bmpPicture = new Bitmap(ImagePath))
@@ -161,7 +199,7 @@ namespace DigitalDarkroom.Modes
                 // 4. convert picture to grayscale
                 Bitmap grayscalePicture = GrayScale.MakeGrayscale3(bmpPicture);
 
-                // 5. draw image
+                // 5. size image
                 Rectangle imgRect = new Rectangle
                 {
                     X = MarginLeftRight,
@@ -177,14 +215,32 @@ namespace DigitalDarkroom.Modes
                     imgRect.Y += Convert.ToInt32(((double)engine.Panel.Height - (2 * (double)MarginTopBottom)) / 2 - (double)sz.Height / 2.0);
                 }
 
-                gfx.DrawImage(grayscalePicture, imgRect);
-
                 //System.Windows.Forms.MessageBox.Show("Ratio=" + (double)imgRect.Width / (double)imgRect.Height);
 
-                // 6. invert image and push image to engine
-                Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
-                
-                engine.PushImage(invertedImage, Duration);
+                // 6. draw image
+                gfx.DrawImage(grayscalePicture, imgRect);
+
+                switch (DisplayMode)
+                {
+                    case DisplayMode.Direct:
+                        // 7.1. invert image
+                        Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
+
+                        // 8.1. push image to engine
+                        engine.PushImage(invertedImage, Duration);
+                        break;
+
+                    case DisplayMode.GrayToTime:
+                        // 7.2. get image layers
+                        List<ImageLayer> ils = GetImageLayers(bmpPanel);
+
+                        foreach (ImageLayer il in ils)
+                        {
+                            // 8.2. push image to engine
+                            engine.PushImage(il);
+                        }
+                        break;
+                }
 
                 gfx.Dispose();
             }
@@ -211,6 +267,80 @@ namespace DigitalDarkroom.Modes
         public override string ToString()
         {
             return this.Name;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public List<ImageLayer> GetImageLayers(Bitmap bitmap)
+        {
+            List<ImageLayer> imageLayers = new List<ImageLayer>();
+
+            int[] timings = GrayToTime.Timings;
+
+#if TEST_PARALLEL2
+            //Stopwatch stopwatch = Stopwatch.StartNew();
+
+            Parallel.For(0, timings.Length, i =>
+            { 
+                Bitmap bitmap2 = (Bitmap) bitmap.Clone();
+#else
+            for (int i = 0; i < timings.Length; i++)
+            {
+#endif
+                using (DirectBitmap b = new DirectBitmap(bitmap.Width, bitmap.Height))
+                {
+#if TEST_PARALLEL
+                    Parallel.For(0, b.Width, x =>
+#else
+                    for (int x = 0; x < b.Width; x++)
+#endif
+                    {
+#if TEST_PARALLEL
+                        Parallel.For(0, b.Height, y =>
+#else
+                        for (int y = 0; y < b.Height; y++)
+#endif
+                        {
+#if TEST_PARALLEL2
+                            Color c = bitmap2.GetPixel(x, y);
+#else
+                            Color c = bitmap.GetPixel(x, y);
+#endif
+                            // we use R but G or B are equal
+                            if (c.R < i) // TODO : < or <= ?
+                            {
+                                b.SetPixel(x, y, Color.FromArgb(255, 255, 255));
+                            }
+                            else
+                            {
+                                b.SetPixel(x, y, Color.FromArgb(0, 0, 0));
+                            }
+                        }
+#if TEST_PARALLEL
+);
+#endif
+                    }
+#if TEST_PARALLEL
+);
+#endif
+                    imageLayers.Add(new ImageLayer(b.Bitmap, timings[i], i));
+                }
+            }
+
+#if TEST_PARALLEL2
+            );
+
+        //    stopwatch.Stop();
+
+        //    Log.WriteLine("For : {0}", stopwatch.Elapsed.TotalMilliseconds);
+#endif
+
+            return imageLayers;
         }
     }
 }
