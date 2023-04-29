@@ -33,12 +33,9 @@ namespace DigitalDarkroom
         {
             InitializeComponent();
             this.DoubleBuffered = true; // Needed to eliminate display flickering
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += Timer1_Tick;
         }
-        
-        /// <summary>
-        /// Display Engine
-        /// </summary>
-        private DisplayEngine engine;
 
         #region frmMain event callbacks
 
@@ -265,54 +262,68 @@ namespace DigitalDarkroom
 
         #endregion
 
-        #region Display Engine notifications
+        #region Timer management
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private Stopwatch timer2 = new Stopwatch();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            string s = String.Format("{0:00}:{1:00}.{2:00}", timer2.Elapsed.Minutes, timer2.Elapsed.Seconds, timer2.Elapsed.Milliseconds / 10);
+
+            this.SafeUpdate(() => this.lbTimer.Text = s);
+        }
+
+        #endregion
+
+        #region Display Engine management
+
+        /// <summary>
+        /// Display Engine
+        /// </summary>
+        private DisplayEngine engine;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="imageLayerIndex"></param>
         /// <param name="elapseTime"></param>
-        /// <param name="totalDuration"></param>
-        private void Engine_OnNewProgress(int imageLayerIndex, TimeSpan elapseTime, TimeSpan totalDuration)
+        private void Engine_OnNewProgress(int imageLayerIndex, TimeSpan elapseTime)
         {
-            SafeUpdate(() => this.SuspendLayout());
-
-            string s = String.Format("{0:00}:{1:00}.{2:00}", elapseTime.Minutes, elapseTime.Seconds, elapseTime.Milliseconds / 10);
-            s += "\n";
-            s += String.Format("{0:00}:{1:00}.{2:00}", totalDuration.Minutes, totalDuration.Seconds, totalDuration.Milliseconds / 10);
+            this.SafeUpdate(() => this.SuspendLayout());
 
             // Update Time
-            SafeUpdate(() => this.lbTime.Text = s);
-
-            if (totalDuration.Subtract(elapseTime).TotalSeconds <= 3)
-            {
-                SafeUpdate(() => this.lbTime.ForeColor = Color.Yellow);
-            }
-            else
-            {
-                SafeUpdate(() => this.lbTime.ForeColor = Color.White);
-            }
-            
-            SafeUpdate(() => this.lbTime.Refresh());
+            string s = String.Format("{0:00}:{1:00}.{2:00}", elapseTime.Minutes, elapseTime.Seconds, elapseTime.Milliseconds / 10);
+            this.SafeUpdate(() => this.lbTime.Text = s);
 
             // Update Tile
             try
             {
-                SafeUpdate(() => { if (listView1.Items?[imageLayerIndex] != null) listView1.Items[imageLayerIndex].Selected = true; }); // Select
-                SafeUpdate(() => listView1.Items?[imageLayerIndex].EnsureVisible()); // Scroll
+                this.SafeUpdate(() => { if (listView1.Items?[imageLayerIndex] != null) listView1.Items[imageLayerIndex].Selected = true; }); // Select
+                this.SafeUpdate(() => listView1.Items?[imageLayerIndex].EnsureVisible()); // Scroll
             }
             catch { } // In case of a stop, Items could be empty so that trow an exception
-
 
             // Update ProgressBar
 
             // avec les lenteurs de la VM, il arrive que le temps d'éxécution soit plus long que le max théorique, donc on filtre pour ne pas avoir une exception...
-            int val = (elapseTime.TotalSeconds > totalDuration.TotalSeconds) ? (int)totalDuration.TotalSeconds : (int)elapseTime.TotalSeconds;
+            int val = (elapseTime.TotalSeconds > this.toolStripProgressBar1.Maximum) ? (int)this.toolStripProgressBar1.Maximum : (int)elapseTime.TotalSeconds;
 
-            SafeUpdate(() => this.toolStripProgressBar1.Value = val);
-            SafeUpdate(() => this.toolStripProgressBar1.Maximum = (int)totalDuration.TotalSeconds);
+            this.SafeUpdate(() => this.toolStripProgressBar1.Value = val);
 
-            SafeUpdate(() => this.ResumeLayout());
+            this.SafeUpdate(() => this.ResumeLayout());
         }
 
         /// <summary>
@@ -321,7 +332,7 @@ namespace DigitalDarkroom
         /// <param name="bmp"></param>
         private void Engine_OnNewImage(Bitmap bmp)
         {
-            SafeUpdate(() => this.myPictureBox1.Image = bmp);
+            this.SafeUpdate(() => this.myPictureBox1.Image = bmp);
         }
 
         /// <summary>
@@ -329,25 +340,40 @@ namespace DigitalDarkroom
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Engine_EngineStatusNotify(object sender, EngineStatus e)
+        //private void Engine_EngineStatusNotify(object sender, EngineStatus e)
+        private void Engine_EngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalDuration)
         {
-            switch (e)
+            switch (engineStatus)
             {
                 case EngineStatus.Started:
                     this.SafeUpdate(() => this.btPlay.Enabled = false);
                     this.SafeUpdate(() => this.btStop.Enabled = true);
                     this.SafeUpdate(() => this.gbModes.Enabled = false);
                     this.SafeUpdate(() => this.cbPanels.Enabled = false);
+                    this.SafeUpdate(() => this.lbTotalBuration.Text = "00:00.00");
                     break;
+
                 case EngineStatus.Running:
-                    // TODO : Start local timer here?
+                    // Init max duration
+                    this.SafeUpdate(() => this.toolStripProgressBar1.Maximum = (int)totalDuration?.TotalSeconds);
+                    string s = String.Format("{0:00}:{1:00}.{2:00}", totalDuration?.Minutes, totalDuration?.Seconds, totalDuration?.Milliseconds / 10);
+                    this.SafeUpdate(() => this.lbTotalBuration.Text = s);
+
+                    // Start timers
+                    this.SafeUpdate(() => this.timer1.Start());
+                    this.SafeUpdate(() => this.timer2.Restart());
                     break;
+
                 case EngineStatus.Stopped:
                     this.SafeUpdate(() => this.btPlay.Enabled = false);
                     this.SafeUpdate(() => this.btStop.Enabled = false);
                     this.SafeUpdate(() => this.gbModes.Enabled = true);
                     this.SafeUpdate(() => this.cbPanels.Enabled = true);
                     this.SafeUpdate(() => this.btUnloadMode_Click(null, null));
+
+                    // Stop timers
+                    this.SafeUpdate(() => this.timer1.Stop());
+                    this.SafeUpdate(() => this.timer2.Stop());
                     break;
             }
         }

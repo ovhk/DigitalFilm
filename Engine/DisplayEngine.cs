@@ -46,7 +46,14 @@ namespace DigitalDarkroom.Engine
     /// <param name="imageLayerIndex"></param>
     /// <param name="elapseTime"></param>
     /// <param name="totalDuration"></param>
-    public delegate void NewProgessEvent(int imageLayerIndex, TimeSpan elapseTime, TimeSpan totalDuration);
+    public delegate void NewProgessEvent(int imageLayerIndex, TimeSpan elapseTime);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="engineStatus"></param>
+    /// <param name="totalDuration"></param>
+    public delegate void NewEngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalDuration = null);
 
     /// <summary>
     /// This is this Display engine. It manage the scheduling of displaying the list of image
@@ -122,7 +129,7 @@ namespace DigitalDarkroom.Engine
         /// <summary>
         /// 
         /// </summary>
-        public event EventHandler<EngineStatus> EngineStatusNotify;
+        public event NewEngineStatusNotify EngineStatusNotify;
 
         #endregion
 
@@ -165,10 +172,10 @@ namespace DigitalDarkroom.Engine
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DisplayEngine_EngineStatusNotify(object sender, EngineStatus e)
+        private void DisplayEngine_EngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalDuration)
         {
-            this._status = e;
-            switch (e) 
+            this._status = engineStatus;
+            switch (engineStatus) 
             {
                 case EngineStatus.Started:
                     break;
@@ -219,8 +226,6 @@ namespace DigitalDarkroom.Engine
 
             DisplayEngine de = (DisplayEngine)obj;
 
-            de.EngineStatusNotify?.Invoke(de, EngineStatus.Running);
-
             TimeSpan tsTotalDuration = TimeSpan.Zero;
             int iNotificationInterval = 0;
 
@@ -229,9 +234,9 @@ namespace DigitalDarkroom.Engine
                 tsTotalDuration += TimeSpan.FromMilliseconds(i.ExpositionDuration);
             }
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            de.EngineStatusNotify?.Invoke(EngineStatus.Running, tsTotalDuration);
 
-            de.OnNewProgress?.Invoke(0, TimeSpan.Zero, tsTotalDuration);
+            Stopwatch stopwatch = Stopwatch.StartNew();
 
             // We're waiing to start
             _evStartDisplay.WaitOne();
@@ -274,7 +279,7 @@ namespace DigitalDarkroom.Engine
                 if (iNotificationInterval >= 500) // Do not send progress event too much...
                 {
                     iNotificationInterval = 0;
-                    de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed, tsTotalDuration);
+                    de.OnNewProgress?.Invoke(il.Index, stopwatch.Elapsed);
                 }
 
                 double mesured = (DateTime.Now - dtStart).TotalMilliseconds;
@@ -288,7 +293,7 @@ namespace DigitalDarkroom.Engine
             // Last black image
             de.OnNewImage?.Invoke(null);
 
-            de.EngineStatusNotify?.Invoke(de, EngineStatus.Stopped);
+            de.EngineStatusNotify?.Invoke(EngineStatus.Stopped);
         }
 
         #endregion
@@ -321,7 +326,8 @@ namespace DigitalDarkroom.Engine
                 // so delayed the dispose, but it's not magic, if you stack to much image to display and the OnPaint isn't fast enough, you will crash.
                 if (de._qToDispose.Count < Properties.Settings.Default.FileBufferSize)
                 {
-                    Thread.Yield();
+                    //Thread.Yield(); // remove, this cause CPU high run
+                    Thread.Sleep(100);
                     continue;
                 }
 
@@ -493,7 +499,7 @@ namespace DigitalDarkroom.Engine
             this._threadDisplay = new Thread(ThreadProcDisplay);
             this._threadDisplay.Start((object)this);
 
-            this.EngineStatusNotify?.Invoke(this, EngineStatus.Started);
+            this.EngineStatusNotify?.Invoke(EngineStatus.Started);
         }
 
         /// <summary>
@@ -521,7 +527,7 @@ namespace DigitalDarkroom.Engine
             this._threadDisplay?.Join();
             this._threadDispose?.Join();
 
-            this.EngineStatusNotify?.Invoke(this, EngineStatus.Stopped);
+            this.EngineStatusNotify?.Invoke(EngineStatus.Stopped);
         }
 
         /// <summary>
