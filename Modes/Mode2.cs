@@ -49,6 +49,14 @@ namespace DigitalDarkroom.Modes
         { get; set; } = 2000;
 
         /// <summary>
+        /// 
+        /// </summary>
+        [Category("Configuration")]
+        [Description("Initial duration in ms")]
+        public int InitialDuration
+        { get; set; } = 0;
+
+        /// <summary>
         /// Access to the Engine
         /// </summary>
         private readonly DisplayEngine engine = DisplayEngine.GetInstance();
@@ -77,7 +85,7 @@ namespace DigitalDarkroom.Modes
             }
 
             // Generate gray levels
-            using (SolidBrush brush = new SolidBrush(Color.FromArgb(GrayValue, GrayValue, GrayValue)))
+            using (SolidBrush brush = new SolidBrush(ColorTools.GetInvertedColor(GrayValue)))
             {
                 gfx.FillRectangle(brush, 0, 0, width, height / 2);
             }
@@ -85,9 +93,24 @@ namespace DigitalDarkroom.Modes
             SolidBrush brushBlack = new SolidBrush(Color.Black);
             SolidBrush brushWhite = new SolidBrush(Color.White);
 
-            SolidBrush brushTxt = (GrayValue > 256 / 2) ? brushBlack : brushWhite;
+            SolidBrush brushTxt = (GrayValue < 256 / 2) ? brushBlack : brushWhite;
 
             DrawTools.DrawLargestString(ref gfx, ref brushTxt, "GRAY : " + GrayValue, new Rectangle(0, 0, width, height / 2));
+
+            if (InitialDuration > 0)
+            {
+                using (SolidBrush brush = new SolidBrush(Color.White))
+                {
+                    gfx.FillRectangle(brush, 0, height / 2, width, height / 2);
+                }
+
+                engine.PushImage(new Bitmap(b), InitialDuration);
+
+                using (SolidBrush brush = new SolidBrush(Color.Black))
+                {
+                    gfx.FillRectangle(brush, 0, height / 2, width, height / 2);
+                }
+            }
 
             for (int i = 0; i < NbInterval; i++)
             {
