@@ -69,6 +69,7 @@
     <Compile Include="Engine\CacheManager.cs" />
     <Compile Include="Engine\DisplayEngine.cs" />
     <Compile Include="Modes\Mode9.cs" />
+    <Compile Include="Modes\ModeParameters.cs" />
     <Compile Include="Test\File\FileFormat.cs" />
     <Compile Include="Test\File\FileManagement.cs" />
     <Compile Include="frmAbout.cs">
@@ -89,6 +90,8 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\BitmapTools.cs" />
+    <Compile Include="Tools\ColorTools.cs" />
     <Compile Include="Tools\DrawTools.cs" />
     <Compile Include="Tools\ImageFileFilter.cs" />
     <Compile Include="Engine\ImageLayer\ImageLayer.cs" />
