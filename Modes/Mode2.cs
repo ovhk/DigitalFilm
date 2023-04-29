@@ -122,7 +122,7 @@ namespace DigitalDarkroom.Modes
                     gfx.FillRectangle(brush, j * iWidth, height / 2, iWidth, height / 2);
 
                     // TODO formule compliqué sans doute pour rien...
-                    string str = (NbInterval * IntervalDuration - (j) * IntervalDuration).ToString();
+                    string str = (InitialDuration + NbInterval * IntervalDuration - j * IntervalDuration).ToString();
 
                     DrawTools.DrawLargestString(ref gfx, ref brushTxt, str, new Rectangle(j * iWidth, height/2, iWidth, height / 2));
                 }

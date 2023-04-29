@@ -374,6 +374,7 @@ namespace DigitalDarkroom
                     // Stop timers
                     this.SafeUpdate(() => this.timer1.Stop());
                     this.SafeUpdate(() => this.timer2.Stop());
+                    Console.Beep(); // 200ms
                     break;
             }
         }

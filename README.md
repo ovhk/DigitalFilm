@@ -47,9 +47,9 @@ Gamma parameter is available.
 
 ### Mode 5 : Convert a colored picture in grayscale and diplay it
 
-Display a picture.
+Convert the picture to graysclale and display it with inverted colors (like films). 
 
-<img src="/img/mode5.jpg" width="300">
+<img src="/img/mode5.jpg" width="300"> <img src="/img/mode5inverted.jpg" width="300">
 
 ### Mode 6 : Display a picture with GrayToTime algorythm
 
@@ -75,16 +75,39 @@ Generate a gray palette with gamma parameter.
 
 <img src="/img/mode9.bmp" width="300">
 
-(Thanks to https://ezgif.com/maker for GIFs)
+## Thanks
+
+- Many thanks to http://ateliersuper8.com!
+- Thanks to https://ezgif.com/maker for animated GIFs
 
 ---
 
 ## TODO list
 
 ### Minor
-- [ ] Test parallel Programming
+- [/] README : corriger le mode 5 -> image inverser
+- [ ] intégrer photo du labo
+- [/] Algo graytotime OVH
+- [ ] Renomer en DigitalFilm 
+- [ ] Manage parameter with cache : error if useCache=true with different parameter 
+- [ ] Mode 2 : Find duration for a gray : manque l'initial value dans le texte
+
+- [X] corriger les inversions de couleur N&B dans gray palette
+- [X] Mode 5 : paramétrage de la mise à l'échelle (voir PictureBox : Stretch, Centered ?)
+- [X] Mode 6 : paramétrage de la mise à l'échelle (voir PictureBox : Stretch, Centered ?)
+- [X] Mode 5 : Ajouter des marges noir ou blanches paramétrables
+- [X] Mode 6 : Ajouter des marges noir ou blanches paramétrables
+- [X] Mode 5 : Ajouter rotation d'image
+- [X] Mode 6 : Ajouter rotation d'image
+- [X] Fusionner mode 5 et 6 avec un paramètre ?
+- [X] Mode 2 : ajouter offset de temps
+- [X] ajouter timer dans frmMain
 
 ### Major
+- [ ] Test parallel Programming
+- [ ] Racadrer les images ?
+- [ ] Add GrayToTime configuration system
+      can show the impact on picture on real time
 - [ ] Add GrayToTime formula in parameter and evaluate it on the fly?
       if trend nedded https://stackoverflow.com/questions/40269793/replicate-excel-power-trendline-values-with-c-sharp
 - [ ] Add mask managment
