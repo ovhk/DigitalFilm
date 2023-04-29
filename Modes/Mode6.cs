@@ -188,7 +188,7 @@ namespace DigitalDarkroom.Modes
         {
             List<ImageLayer> imageLayers = new List<ImageLayer>();
 
-            int[] timings = GrayToTime.Timings;
+            int[] timings = GrayToTime.TimingsPMUTH;
 
             SolidBrush marginBrush = (MarginColor == MarginColor.Back) ? new SolidBrush(Color.White) : new SolidBrush(Color.Black); // invert color for film
 

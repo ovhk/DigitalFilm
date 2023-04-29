@@ -87,11 +87,12 @@ Generate a gray palette with gamma parameter.
 ### Minor
 - [/] README : corriger le mode 5 -> image inverser
 - [ ] intégrer photo du labo
-- [/] Algo graytotime OVH
 - [ ] Renomer en DigitalFilm 
 - [ ] Manage parameter with cache : error if useCache=true with different parameter 
-- [ ] Mode 2 : Find duration for a gray : manque l'initial value dans le texte
 
+- [X] manage multiple GrayToTime algo
+- [X] Algo graytotime OVH
+- [X] Mode 2 : Find duration for a gray : manque l'initial value dans le texte
 - [X] corriger les inversions de couleur N&B dans gray palette
 - [X] Mode 5 : paramétrage de la mise à l'échelle (voir PictureBox : Stretch, Centered ?)
 - [X] Mode 6 : paramétrage de la mise à l'échelle (voir PictureBox : Stretch, Centered ?)

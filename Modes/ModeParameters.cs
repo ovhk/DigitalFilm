@@ -11,4 +11,6 @@ namespace DigitalDarkroom.Modes
     internal enum SizeMode { StretchImage, CenterImage };
 
     internal enum DisplayMode { Direct, GrayToTime };
+
+    internal enum GrayToTimeCurve { PMuth, Ovh };
 }

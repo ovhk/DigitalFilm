@@ -104,6 +104,14 @@ namespace DigitalDarkroom.Modes
         { get; set; } = true;
 
         /// <summary>
+        /// 
+        /// </summary>
+        [Category("Mode GrayToTime")]
+        [Description("Select GrayToTime curve")]
+        public GrayToTimeCurve Curve
+        { get; set; } = GrayToTimeCurve.PMuth;
+
+        /// <summary>
         /// Access to the Engine
         /// </summary>
         private readonly DisplayEngine engine = DisplayEngine.GetInstance();
@@ -117,6 +125,13 @@ namespace DigitalDarkroom.Modes
             if (ImagePath == null || ImagePath.Length == 0) return false;
 
             string md5 = Tools.Checksum.CalculateMD5(ImagePath); // TODO : integrate config to md5
+
+            // TODO manque dans le cache les infos suivantes :
+            // Rotation
+            // SizeMode
+            // MarginColor
+            // MarginTopBottom
+            // MarginLeftRight
 
             if (DisplayMode == DisplayMode.GrayToTime)
             {
@@ -280,7 +295,7 @@ namespace DigitalDarkroom.Modes
         {
             List<ImageLayer> imageLayers = new List<ImageLayer>();
 
-            int[] timings = GrayToTime.Timings;
+            int[] timings = (Curve == GrayToTimeCurve.PMuth) ? GrayToTime.TimingsPMUTH : GrayToTime.TimingsOVH;
 
 #if TEST_PARALLEL2
             //Stopwatch stopwatch = Stopwatch.StartNew();

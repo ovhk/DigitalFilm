@@ -10,37 +10,39 @@ using System.Threading.Tasks;
 namespace DigitalDarkroom.Engine
 {
     /// <summary>
-    /// // This is Pierre MUTH algo : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/ 
+    /// 
     /// </summary>
     internal class GrayToTime
     {
+        #region OVH Curve
+
         /// <summary>
         /// 
         /// </summary>
-        private static int[] _timings;
+        private static int[] _timingsOVH;
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public static int[] Timings
+        public static int[] TimingsOVH
         {
             get
             {
-                if (_timings == null)
+                if (_timingsOVH == null)
                 {
-                    int[] timingsPMUTH = computeTimings();
+                    int[] timingsPMUTH = computeTimingsPMUTH();
                     int[] timingsOVH = computeTimingsOVH();
 
-                    //for (int i = 0; i < timingsPMUTH.Length; i++)
-                    //{
-                    //    Log.WriteLine("[" + i + "] " + timingsPMUTH[i] + ", " + timingsOVH[i]);
-                    //}
+                    for (int i = 0; i < timingsPMUTH.Length; i++)
+                    {
+                        Log.WriteLine("[" + i + "] " + timingsPMUTH[i] + ", " + timingsOVH[i]);
+                    }
 
-                    _timings = timingsPMUTH;
+                    _timingsOVH = timingsOVH;
                 }
 
-                return _timings;
+                return _timingsOVH;
             }
         }
         
@@ -84,11 +86,37 @@ namespace DigitalDarkroom.Engine
             return timings;
         }
 
+        #endregion
+
+        #region PMUTH Curve
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static int[] _timingsPMUTH;
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        private static int[] computeTimings()
+        public static int[] TimingsPMUTH
+        {
+            get
+            {
+                if (_timingsPMUTH == null)
+                {
+                    _timingsPMUTH = computeTimingsPMUTH();
+                }
+
+                return _timingsPMUTH;
+            }
+        }
+
+        /// <summary>
+        /// This is Pierre MUTH algo : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/ 
+        /// </summary>
+        /// <returns></returns>
+        private static int[] computeTimingsPMUTH()
         {
             int[] timings = new int[256];
 
@@ -137,5 +165,7 @@ namespace DigitalDarkroom.Engine
 
             return timings;
         }
+
+        #endregion
     }
 }

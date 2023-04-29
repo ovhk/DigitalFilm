@@ -25,6 +25,14 @@ namespace DigitalDarkroom.Modes
         public string Description => "Compare a grayscale with B&W GrayToTime duration interval.";
 
         /// <summary>
+        /// 
+        /// </summary>
+        [Category("Mode GrayToTime")]
+        [Description("Select GrayToTime curve")]
+        public GrayToTimeCurve Curve
+        { get; set; } = GrayToTimeCurve.PMuth;
+
+        /// <summary>
         /// Access to the Engine
         /// </summary>
         private readonly DisplayEngine engine = DisplayEngine.GetInstance();
@@ -35,14 +43,14 @@ namespace DigitalDarkroom.Modes
         /// <returns></returns>
         public bool Load()
         {
-            int[] gttTimings = GrayToTime.Timings;
+            int[] timings = (Curve == GrayToTimeCurve.PMuth) ? GrayToTime.TimingsPMUTH : GrayToTime.TimingsOVH;
 
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;
-            int iWidth = (width / gttTimings.Length);
+            int iWidth = (width / timings.Length);
 
-            // width / gttTimings.Length not round so we adjust...
-            width = iWidth * gttTimings.Length;
+            // width / timings.Length not round so we adjust...
+            width = iWidth * timings.Length;
 
             SolidBrush brushBlack = new SolidBrush(Color.Black);
             SolidBrush brushWhite = new SolidBrush(Color.White);
@@ -57,7 +65,7 @@ namespace DigitalDarkroom.Modes
                         gfx.FillRectangle(brush, 0, 0, engine.Panel.Width, engine.Panel.Height);
                     }
 
-                    for (int i = 0; i < gttTimings.Length; i++)
+                    for (int i = 0; i < timings.Length; i++)
                     {
                         using (SolidBrush brush = new SolidBrush(Color.FromArgb(engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i, engine.Panel.NumberOfColors - 1 - i)))
                         {
@@ -65,7 +73,7 @@ namespace DigitalDarkroom.Modes
                         }
                     }
 
-                    for (int i = 0; i < gttTimings.Length; i++)
+                    for (int i = 0; i < timings.Length; i++)
                     {
                         if (i == 1)
                         {
@@ -77,7 +85,7 @@ namespace DigitalDarkroom.Modes
                         gfx.FillRectangle(brushWhite, i * iWidth, height / 2, iWidth, height / 2);
 
                         // new Bitmap because we need a copy, next iteration b will be changed
-                        engine.PushImage(new Bitmap(b), gttTimings[i]);
+                        engine.PushImage(new Bitmap(b), timings[i]);
                     }
                 }
             }
