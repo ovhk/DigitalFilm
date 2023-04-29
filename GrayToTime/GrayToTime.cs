@@ -29,11 +29,59 @@ namespace DigitalDarkroom.Engine
             {
                 if (_timings == null)
                 {
-                    _timings = computeTimings();
+                    int[] timingsPMUTH = computeTimings();
+                    int[] timingsOVH = computeTimingsOVH();
+
+                    //for (int i = 0; i < timingsPMUTH.Length; i++)
+                    //{
+                    //    Log.WriteLine("[" + i + "] " + timingsPMUTH[i] + ", " + timingsOVH[i]);
+                    //}
+
+                    _timings = timingsPMUTH;
                 }
 
                 return _timings;
             }
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static int[] computeTimingsOVH()
+        {
+            int[] timings = new int[256];
+
+            for (int i = 0; i < timings.Length; i++)
+            {
+                //y = 0,0001x4 - 0,0722x3 + 17,586x2 - 1890,5x + 89686
+                double ii = i;
+                timings[i] = (int)(
+                    0.0001 * Math.Pow(ii, 4) - 
+                    0.0722 * Math.Pow(ii, 3) + 
+                    17.586 * Math.Pow(ii, 2) - 
+                    1890.5 * ii + 
+                    89686.0);
+            }
+
+            for (int i = 0; i < timings.Length - 1; i++)
+            {
+                timings[i] = timings[i] - timings[i + 1];
+            }
+
+            // on fixe le dernier à 800 ms
+            timings[255] = 800;
+
+            int cumulatedTimeMs = 0;
+
+            for (int i = 0; i < timings.Length; i++)
+            {
+                cumulatedTimeMs += timings[i];
+                //    Log.WriteLine("for gray " + i + ", time " + timings[i]);
+            }
+            Log.WriteLine("[GrayToTime] OVH : cumulatedTimeMs = " + cumulatedTimeMs);
+
+            return timings;
         }
 
         /// <summary>
@@ -48,36 +96,44 @@ namespace DigitalDarkroom.Engine
              * Then it is very sensible for the first 15 seconds, then it gradually looses reactivity, 
              * so it takes longer to have a slightly darker black.
              * */
-            int cumulatedTimeMs = 0;
-
             for (int i = 5; i < 256; i++)
             {
-                // y=17.06*ln(x)+96.417
-                cumulatedTimeMs = (int)((-17.06 * Math.Log((double)i) + 96.417) * 1000);
-                //System.out.println("for gray " + i + ", exposure " + cumulatedTimeMs);
-                timings[i] = cumulatedTimeMs;
+                // y = 17.06 * ln(x) + 96.417
+
+                timings[i] = (int)((-17.06 * Math.Log((double)i) + 96.417) * 1000);
             }
 
             for (int i = 5; i < timings.Length - 1; i++)
             {
                 timings[i] = timings[i] - timings[i + 1];
-
-                // on fixe le mini à 80 ms
-                if (timings[i] < 80)
-                {
-                    timings[i] = 80;
-                }
-                //System.out.println("for gray " + i + ", time " + timings[i]);
             }
 
-            // on fixe les 5 premiers
+            // on réhausse les 5 premiers
             for (int i = 0; i < 5; i++)
             {
                 timings[i] = timings[5] + 100;
             }
 
+            // on filtre les valeurs trop basses à 80 ms
+            for (int i = 0; i < 256; i++)
+            {
+                if (timings[i] < 80)
+                {
+                    timings[i] = 80;
+                }
+            }
+
             // on fixe le dernier à 800 ms
             timings[255] = 800;
+
+            int cumulatedTimeMs = 0;
+
+            for (int i = 0; i < timings.Length; i++)
+            {
+                cumulatedTimeMs += timings[i];
+                //    Log.WriteLine("for gray " + i + ", time " + timings[i]);
+            }
+            Log.WriteLine("[GrayToTime] PMUTH : cumulatedTimeMs = " + cumulatedTimeMs);
 
             return timings;
         }
