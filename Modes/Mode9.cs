@@ -84,7 +84,7 @@ namespace DigitalDarkroom.Modes
                         double correction = 1d * Math.Pow(range, this.Gamma);
                         int filteredColor = (int)(correction * 255);
 
-                        Color newColor = Color.FromArgb(filteredColor, filteredColor, filteredColor);
+                        Color newColor = ColorTools.GetInvertedColor(filteredColor);
 
                         using (SolidBrush brush = new SolidBrush(newColor))
                         {
@@ -92,7 +92,7 @@ namespace DigitalDarkroom.Modes
 
                             gfx.FillRectangle(brush, r);
 
-                            SolidBrush brushTxt = new SolidBrush(Color.FromArgb(255 - color, 255 - color, 255 - color));
+                            SolidBrush brushTxt = new SolidBrush(Color.FromArgb(color, color, color));
 
                             DrawTools.DrawLargestString(ref gfx, ref brushTxt, color.ToString(), r, 0.3);
                         }

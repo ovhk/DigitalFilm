@@ -83,7 +83,7 @@ namespace DigitalDarkroom.Modes
                     double correction = 1d * Math.Pow(range, this.Gamma);
                     int filteredColor = (int)(correction * 255);
 
-                    Color newColor = Color.FromArgb(filteredColor, filteredColor, filteredColor);
+                    Color newColor = ColorTools.GetInvertedColor(filteredColor);
 
                     using (SolidBrush brush = new SolidBrush(newColor))
                     {
