@@ -52,12 +52,12 @@ namespace DigitalDarkroom.Modes
                     gfx.FillRectangle(brush, 0, 0, engine.Panel.Width, engine.Panel.Height);
                 }
 
-                using (SolidBrush brush = new SolidBrush(Color.White))
+                using (SolidBrush brush = new SolidBrush(Color.White)) // will be black on the paper
                 {
                     gfx.FillRectangle(brush, 0, 0, engine.Panel.Width / 2, engine.Panel.Height);
                 }
 
-                using (SolidBrush brush = new SolidBrush(Color.Black))
+                using (SolidBrush brush = new SolidBrush(Color.Black)) // will be white on the paper
                 {
                     gfx.FillRectangle(brush, engine.Panel.Width / 2, 0, engine.Panel.Width / 2, engine.Panel.Height);
                 }
