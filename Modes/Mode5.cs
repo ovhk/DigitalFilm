@@ -205,9 +205,11 @@ namespace DigitalDarkroom.Modes
                         break;
 
                     case SizeMode.StretchImage:
+                        sz.Width = engine.Panel.Width - (2 * MarginLeftRight);
+                        sz.Height = engine.Panel.Height - (2 * MarginTopBottom);
+                        break;
+
                     default:
-                        sz.Width = engine.Panel.Width;
-                        sz.Height = engine.Panel.Height;
                         break;
                 }
 
