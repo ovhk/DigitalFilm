@@ -72,6 +72,8 @@ namespace DigitalFilm
             listView1.OwnerDraw = true;
             listView1.DrawItem += listView1_DrawItem;
 
+            this.btPreview.Enabled = false;
+
             toolStripStatusLabel1.Text = "Welcome to DigitalFilm!";
 
             // TODO : this is for test
@@ -352,6 +354,7 @@ namespace DigitalFilm
                     this.SafeUpdate(() => this.gbModes.Enabled = false);
                     this.SafeUpdate(() => this.cbPanels.Enabled = false);
                     this.SafeUpdate(() => this.lbTotalBuration.Text = "00:00.00");
+                    this.SafeUpdate(() => this.btPreview.Enabled = false);
                     break;
 
                 case EngineStatus.Running:
@@ -370,6 +373,7 @@ namespace DigitalFilm
                     this.SafeUpdate(() => this.btStop.Enabled = false);
                     this.SafeUpdate(() => this.gbModes.Enabled = true);
                     this.SafeUpdate(() => this.cbPanels.Enabled = true);
+                    this.SafeUpdate(() => this.btPreview.Enabled = true);
                     this.SafeUpdate(() => this.btUnloadMode_Click(null, null));
 
                     // Stop timers
@@ -481,6 +485,7 @@ namespace DigitalFilm
             this.btUnloadMode.Enabled = true;
 
             this.btPlay.Enabled = true;
+            this.btPreview.Enabled = true;
 
             this.ResumeLayout(true);
 
@@ -532,6 +537,7 @@ namespace DigitalFilm
             this.cbMode.Enabled = true;
             this.btLoadMode.Enabled = true;
             this.btUnloadMode.Enabled = false;
+            this.btPreview.Enabled = false;
             this.toolStripProgressBar1.Value = 0;
 
             this.listView1.Items.Clear();
