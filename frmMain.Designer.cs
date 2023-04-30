@@ -50,11 +50,12 @@ namespace DigitalDarkroom
             this.listView1 = new System.Windows.Forms.ListView();
             this.label3 = new System.Windows.Forms.Label();
             this.lbTotalBuration = new System.Windows.Forms.Label();
-            this.myPictureBox1 = new DigitalDarkroom.Controls.MyPictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lbTimer = new System.Windows.Forms.Label();
+            this.btPreview = new System.Windows.Forms.Button();
+            this.myPictureBox1 = new DigitalDarkroom.Controls.MyPictureBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gbModes.SuspendLayout();
@@ -70,9 +71,9 @@ namespace DigitalDarkroom
             // pgImageLayer
             // 
             this.pgImageLayer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgImageLayer.Location = new System.Drawing.Point(787, 30);
+            this.pgImageLayer.Location = new System.Drawing.Point(787, 115);
             this.pgImageLayer.Name = "pgImageLayer";
-            this.pgImageLayer.Size = new System.Drawing.Size(193, 331);
+            this.pgImageLayer.Size = new System.Drawing.Size(193, 307);
             this.pgImageLayer.TabIndex = 1;
             this.pgImageLayer.ViewBackColor = System.Drawing.SystemColors.ControlDark;
             // 
@@ -274,18 +275,6 @@ namespace DigitalDarkroom
             this.lbTotalBuration.Text = "00:00.00";
             this.lbTotalBuration.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // myPictureBox1
-            // 
-            this.myPictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.myPictureBox1.BackColor = System.Drawing.Color.Black;
-            this.myPictureBox1.Image = null;
-            this.myPictureBox1.Location = new System.Drawing.Point(216, 30);
-            this.myPictureBox1.Name = "myPictureBox1";
-            this.myPictureBox1.Size = new System.Drawing.Size(565, 392);
-            this.myPictureBox1.TabIndex = 17;
-            // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -334,12 +323,38 @@ namespace DigitalDarkroom
             this.lbTimer.Text = "00:00.00";
             this.lbTimer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // btPreview
+            // 
+            this.btPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btPreview.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btPreview.Location = new System.Drawing.Point(787, 63);
+            this.btPreview.Name = "btPreview";
+            this.btPreview.Size = new System.Drawing.Size(193, 46);
+            this.btPreview.TabIndex = 30;
+            this.btPreview.Text = "Preview";
+            this.btPreview.UseVisualStyleBackColor = true;
+            this.btPreview.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btPreview_MouseDown);
+            this.btPreview.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btPreview_MouseUp);
+            // 
+            // myPictureBox1
+            // 
+            this.myPictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.myPictureBox1.BackColor = System.Drawing.Color.Black;
+            this.myPictureBox1.Image = null;
+            this.myPictureBox1.Location = new System.Drawing.Point(216, 30);
+            this.myPictureBox1.Name = "myPictureBox1";
+            this.myPictureBox1.Size = new System.Drawing.Size(565, 392);
+            this.myPictureBox1.TabIndex = 17;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(988, 619);
+            this.Controls.Add(this.btPreview);
             this.Controls.Add(this.lbTimer);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
@@ -401,6 +416,7 @@ namespace DigitalDarkroom
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lbTimer;
+        private System.Windows.Forms.Button btPreview;
     }
 }
 

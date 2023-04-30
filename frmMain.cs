@@ -18,6 +18,7 @@ using System.Diagnostics;
 using DigitalDarkroom.Panels;
 using DigitalDarkroom.Modes;
 using DigitalDarkroom.Engine;
+using DigitalDarkroom.Tools;
 
 namespace DigitalDarkroom
 {
@@ -548,6 +549,41 @@ namespace DigitalDarkroom
 
         #endregion
 
+        #region Preview Management
+
+        private Bitmap _savedImage = null;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btPreview_MouseDown(object sender, MouseEventArgs e)
+        {
+            this._savedImage = this.myPictureBox1.Image;
+
+            // invert pixel
+            Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
+
+            // Apply paper gamma
+            Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 1.4);
+
+            this.myPictureBox1.Image = gammaImage;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btPreview_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.myPictureBox1.Image = this._savedImage;
+            this._savedImage = null;
+        }
+
+        #endregion
+
         #region Engine Play/Stop buttons
 
         /// <summary>
@@ -626,6 +662,5 @@ namespace DigitalDarkroom
         }
 
         #endregion
-
     }
 }
