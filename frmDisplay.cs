@@ -192,6 +192,7 @@ namespace DigitalDarkroom
                         Y = ep.Screen.WorkingArea.Top
                     };
 
+                    this.TopMost = true; // TODO : A tester
                     this.Location = p;
                 }
                 if (engine.Panel is PanelSimulator)
@@ -202,6 +203,7 @@ namespace DigitalDarkroom
                         Y = Screen.PrimaryScreen.WorkingArea.Top
                     };
 
+                    this.TopMost = false; // TODO : A tester
                     this.Location = p;
                 }
             }
