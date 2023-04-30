@@ -241,8 +241,13 @@ namespace DigitalDarkroom.Modes
                         // 7.1. invert image
                         Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
 
+                        // TODO : apply here Film filter (standard gamma for film is 0.7)
+                        Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 0.7);
+
+                        Bitmap gradeImage = gammaImage;
+
                         // 8.1. push image to engine
-                        engine.PushImage(invertedImage, Duration);
+                        engine.PushImage(gradeImage, Duration);
                         break;
 
                     case DisplayMode.GrayToTime:
