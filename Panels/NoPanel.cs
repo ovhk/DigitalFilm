@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DigitalDarkroom.Controls;
+using DigitalFilm.Controls;
 
-namespace DigitalDarkroom.Panels
+namespace DigitalFilm.Panels
 {
     internal class NoPanel : IPanel
     {

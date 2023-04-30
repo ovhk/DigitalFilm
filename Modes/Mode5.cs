@@ -5,12 +5,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DigitalDarkroom.Controls;
-using DigitalDarkroom.Tools;
+using DigitalFilm.Controls;
+using DigitalFilm.Tools;
 using System.ComponentModel;
-using DigitalDarkroom.Engine;
+using DigitalFilm.Engine;
 
-namespace DigitalDarkroom.Modes
+namespace DigitalFilm.Modes
 {
     internal class Mode5 : IMode
     {

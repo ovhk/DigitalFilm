@@ -1,4 +1,4 @@
-﻿namespace DigitalDarkroom
+﻿namespace DigitalFilm
 {
     partial class frmAbout
     {
@@ -65,7 +65,7 @@
             this.lbTitle.Name = "lbTitle";
             this.lbTitle.Size = new System.Drawing.Size(171, 25);
             this.lbTitle.TabIndex = 2;
-            this.lbTitle.Text = "Digital Darkroom";
+            this.lbTitle.Text = "Digital Film";
             this.lbTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbVersion

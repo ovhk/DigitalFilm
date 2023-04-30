@@ -1,4 +1,4 @@
-﻿namespace DigitalDarkroom
+﻿namespace DigitalFilm
 {
     partial class frmDisplay
     {

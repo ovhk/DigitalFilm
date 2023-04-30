@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DigitalDarkroom.Tools
+namespace DigitalFilm.Tools
 {
     /// <summary>
     /// Thanks to https://stackoverflow.com/questions/4958683/how-do-i-get-the-actual-monitor-name-as-seen-in-the-resolution-dialog

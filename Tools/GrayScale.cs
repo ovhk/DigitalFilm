@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DigitalDarkroom.Tools
+namespace DigitalFilm.Tools
 {
     internal class GrayScale
     {

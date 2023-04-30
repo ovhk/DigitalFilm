@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8C302E44-F998-4392-BA6F-104AF5583F06}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>DigitalDarkroom</RootNamespace>
-    <AssemblyName>DigitalDarkroom</AssemblyName>
+    <RootNamespace>DigitalFilm</RootNamespace>
+    <AssemblyName>DigitalFilm</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -147,6 +147,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="ClassDiagram.cd" />
     <None Include="DisplayDatasheets\TOP103MONO8K01A  10.3 inch 黑白屏.pdf" />

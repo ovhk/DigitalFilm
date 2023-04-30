@@ -3,7 +3,7 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace DigitalDarkroom.Tools
+namespace DigitalFilm.Tools
 {
     public class DirectBitmap : IDisposable
     {

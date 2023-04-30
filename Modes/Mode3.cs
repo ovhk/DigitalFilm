@@ -5,9 +5,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DigitalDarkroom.Engine;
+using DigitalFilm.Engine;
 
-namespace DigitalDarkroom.Modes
+namespace DigitalFilm.Modes
 {
     internal class Mode3 : IMode
     {

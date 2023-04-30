@@ -1,6 +1,6 @@
-﻿using DigitalDarkroom.Controls;
+﻿using DigitalFilm.Controls;
 
-namespace DigitalDarkroom
+namespace DigitalFilm
 {
     partial class frmMain
     {
@@ -55,7 +55,7 @@ namespace DigitalDarkroom
             this.label4 = new System.Windows.Forms.Label();
             this.lbTimer = new System.Windows.Forms.Label();
             this.btPreview = new System.Windows.Forms.Button();
-            this.myPictureBox1 = new DigitalDarkroom.Controls.MyPictureBox();
+            this.myPictureBox1 = new DigitalFilm.Controls.MyPictureBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gbModes.SuspendLayout();
@@ -374,7 +374,7 @@ namespace DigitalDarkroom
             this.Controls.Add(this.buttonTest);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmMain";
-            this.Text = "DigitalDarkroom";
+            this.Text = "DigitalFilm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
@@ -406,7 +406,7 @@ namespace DigitalDarkroom
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.TextBox tbModeDescription;
-        private DigitalDarkroom.Controls.MyPictureBox myPictureBox1;
+        private DigitalFilm.Controls.MyPictureBox myPictureBox1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbMode;

@@ -15,12 +15,12 @@ using System.IO;
 using System.CodeDom;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using DigitalDarkroom.Panels;
-using DigitalDarkroom.Modes;
-using DigitalDarkroom.Engine;
-using DigitalDarkroom.Tools;
+using DigitalFilm.Panels;
+using DigitalFilm.Modes;
+using DigitalFilm.Engine;
+using DigitalFilm.Tools;
 
-namespace DigitalDarkroom
+namespace DigitalFilm
 {
     /// <summary>
     /// Main Form
@@ -72,7 +72,7 @@ namespace DigitalDarkroom
             listView1.OwnerDraw = true;
             listView1.DrawItem += listView1_DrawItem;
 
-            toolStripStatusLabel1.Text = "Welcome to DigitalDarkroom!";
+            toolStripStatusLabel1.Text = "Welcome to DigitalFilm!";
 
             // TODO : this is for test
             if (false)
@@ -566,6 +566,7 @@ namespace DigitalDarkroom
             Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
 
             // Apply paper gamma
+            // 1.4 is standard for paper
             Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 1.4);
 
             this.myPictureBox1.Image = gammaImage;

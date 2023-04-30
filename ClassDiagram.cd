@@ -21,7 +21,7 @@
   <Class Name="DigitalDarkroom.Engine.DisplayEngine" Collapsed="true">
     <Position X="2.5" Y="7.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>IEAEAAAkACAACEAgBEEACRAAFBgQBAABIBAMgABEABg=</HashCode>
+      <HashCode>IEAEAAAkACAACEAgBEEAARAAFBAQBAABIAAMgABEABg=</HashCode>
       <FileName>Engine\DisplayEngine.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -42,7 +42,7 @@
   <Class Name="DigitalDarkroom.frmMain" Collapsed="true">
     <Position X="2.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAADiAjBCAAgFABAACKAIACCAkGARgAgECwQIQAmAE=</HashCode>
+      <HashCode>AQQADiAjBCAAoFABAACKAIACCAkWARgAgECwQIQAmAE=</HashCode>
       <FileName>frmMain.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -85,7 +85,7 @@
   <Class Name="DigitalDarkroom.Modes.Mode2" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="4.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAIAACAAAAgAAAEIAAAAAQAAAAABAAAABAAAAQAAAA=</HashCode>
+      <HashCode>AAAIAACAAAAgAAAEIACAAAQAAAAABAAAABAAAAQAAAA=</HashCode>
       <FileName>Modes\Mode2.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -101,7 +101,7 @@
   <Class Name="DigitalDarkroom.Modes.Mode4" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="7.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgACAAAAiAAAEAAAAAAQAAAAAAAAAAAAAAAUAAAA=</HashCode>
+      <HashCode>AAAAgACAAAAiAAAEAAAAAAQAAAAAAAAAAAAAAAUBAAA=</HashCode>
       <FileName>Modes\Mode4.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -109,7 +109,7 @@
   <Class Name="DigitalDarkroom.Modes.Mode5" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="9.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgACAAAAiAAAEAAAAAIQAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <HashCode>AAAAgACIAAAiAIAEABAAAIQAiAAAACAAAAAAAAQAQAA=</HashCode>
       <FileName>Modes\Mode5.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -117,7 +117,7 @@
   <Class Name="DigitalDarkroom.Modes.Mode6" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="11.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgACAAAAgAAAEAAAAAIQAgAAAAAAAAAAAAAQAAAA=</HashCode>
+      <HashCode>AAAAgACAAAAgAIAEABAAAIQAiAAAACAAAAAAAAQAQAA=</HashCode>
       <FileName>Modes\Mode6.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -199,7 +199,7 @@
   <Class Name="DigitalDarkroom.Engine.GrayToTime" Collapsed="true">
     <Position X="4.5" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <HashCode>gAAAAAAAAAAAAAAAAAAgAAAAAAAAEAAAAEAAAAAAAAA=</HashCode>
       <FileName>GrayToTime\GrayToTime.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -239,6 +239,43 @@
       <FileName>Tools\DrawTools.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="DigitalDarkroom.Modes.Mode9" Collapsed="true">
+    <Position X="16.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAiAAAEAAAAAAQAAAAABAAAAAAAAAQBAAA=</HashCode>
+      <FileName>Modes\Mode9.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DigitalDarkroom.Engine.CacheManager" Collapsed="true">
+    <Position X="6.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAABAAAAQAAAEAAAGAACAAAgAgAAQAAAhIIAAwAAAA=</HashCode>
+      <FileName>Engine\CacheManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Engine.ImageLayer" Collapsed="true">
+    <Position X="8" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAASAAAIAAAAgACAAAAAAAAAIAASFAAAAAAAA=</HashCode>
+      <FileName>Engine\ImageLayer\ImageLayer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DigitalDarkroom.Tools.BitmapTools" Collapsed="true">
+    <Position X="13" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Tools\BitmapTools.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalDarkroom.Tools.ColorTools" Collapsed="true">
+    <Position X="14.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Tools\ColorTools.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="DigitalDarkroom.Modes.IMode" Collapsed="true">
     <Position X="0.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
@@ -256,7 +293,7 @@
   <Enum Name="DigitalDarkroom.Engine.EngineStatus" Collapsed="true">
     <Position X="2.5" Y="8" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIAAAEAAAAAAAAAAAIAAAAIAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAIAAAAIAAAAAAAAAAA=</HashCode>
       <FileName>Engine\DisplayEngine.cs</FileName>
     </TypeIdentifier>
   </Enum>
@@ -277,7 +314,7 @@
   <Delegate Name="DigitalDarkroom.Engine.NewProgessEvent" Collapsed="true">
     <Position X="2.5" Y="10.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAgAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Engine\DisplayEngine.cs</FileName>
     </TypeIdentifier>
   </Delegate>

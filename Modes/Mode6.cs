@@ -8,11 +8,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using DigitalDarkroom.Controls;
-using DigitalDarkroom.Tools;
-using DigitalDarkroom.Engine;
+using DigitalFilm.Controls;
+using DigitalFilm.Tools;
+using DigitalFilm.Engine;
 
-namespace DigitalDarkroom.Modes
+namespace DigitalFilm.Modes
 {
     internal class Mode6 : IMode
     {

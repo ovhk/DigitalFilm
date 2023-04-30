@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DigitalDarkroom.Modes
+namespace DigitalFilm.Modes
 {
     internal enum MarginColor { Back, White };
 

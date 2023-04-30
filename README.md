@@ -1,4 +1,4 @@
-# Digital Darkroom
+# Digital Film
 
 How to print a picture from a film negative?
 
@@ -16,7 +16,7 @@ No! Here is the solution:
 
 Tada!
 
-Digital Darkroom helps to transfer digital picture to analog print.
+DigitalFilm helps to transfer digital picture to analog print.
 
 ## Modes
 
@@ -86,10 +86,21 @@ Generate a gray palette with gamma parameter.
 
 ### Minor
 - [/] README : corriger le mode 5 -> image inverser
+- [ ] README : fusionner Mode 5 et 6
+- [ ] README : faire des pages spécifiques pour les filtres, films et papier ?
 - [ ] intégrer photo du labo
-- [ ] Renomer en DigitalFilm 
 - [ ] Manage parameter with cache : error if useCache=true with different parameter 
+- [ ] Add IFilter ou IGradeFilter ?
+- [ ] Add IFilm ---> NO, we want to render our picture as is on the selected paper
+- [ ] Add IPaper
+- [/] frmMain : Add Preview button
+- [/] frmMain : Add combo pour selectionner les papiers
+- [/] Tester TopMost
+- [ ] Renommer github et le lien dans frmAbout
 
+- [X] Renomer en DigitalFilm 
+- [X] Bug sur les marges en mode stretched
+- [X] BitmapTools add gamma
 - [X] manage multiple GrayToTime algo
 - [X] Algo graytotime OVH
 - [X] Mode 2 : Find duration for a gray : manque l'initial value dans le texte
@@ -107,6 +118,7 @@ Generate a gray palette with gamma parameter.
 ### Major
 - [ ] Test parallel Programming
 - [ ] Racadrer les images ?
+- [ ] Add Images configuration system : add, remove with custom params on each steps
 - [ ] Add GrayToTime configuration system
       can show the impact on picture on real time
 - [ ] Add GrayToTime formula in parameter and evaluate it on the fly?

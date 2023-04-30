@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace DigitalDarkroom.Panels
+namespace DigitalFilm.Panels
 {
     public class PanelSimulator : IPanel
     {

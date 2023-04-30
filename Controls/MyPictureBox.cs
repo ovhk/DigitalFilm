@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DigitalDarkroom.Controls
+namespace DigitalFilm.Controls
 {
     public partial class MyPictureBox : UserControl
     {

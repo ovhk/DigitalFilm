@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
-using DigitalDarkroom.Panels;
-using DigitalDarkroom.Engine;
+using DigitalFilm.Panels;
+using DigitalFilm.Engine;
 using System.Diagnostics;
 
-namespace DigitalDarkroom
+namespace DigitalFilm
 {
     /// <summary>
     /// Display Form

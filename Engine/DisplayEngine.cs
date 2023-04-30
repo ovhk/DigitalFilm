@@ -1,5 +1,5 @@
-﻿using DigitalDarkroom.Panels;
-using DigitalDarkroom.Tools;
+﻿using DigitalFilm.Panels;
+using DigitalFilm.Tools;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -18,7 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DigitalDarkroom.Engine
+namespace DigitalFilm.Engine
 {
     /// <summary>
     /// 

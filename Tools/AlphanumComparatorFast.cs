@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DigitalDarkroom.Tools
+namespace DigitalFilm.Tools
 {
     /// <summary>
     /// Thanks to https://www.dotnetperls.com/alphanumeric-sorting
