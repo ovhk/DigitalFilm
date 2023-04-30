@@ -141,7 +141,7 @@ namespace DigitalFilm.Modes
                         break;
                 }
 
-                Bitmap origin = GrayScale.MakeGrayscale3(new Bitmap(bmpPicture, sz));
+                Bitmap origin = BitmapTools.MakeGrayscale3(new Bitmap(bmpPicture, sz));
 
                 List<ImageLayer> ils = GetImageLayers(origin, engine.Panel.Width, engine.Panel.Height);
 

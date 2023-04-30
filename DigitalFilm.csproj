@@ -68,8 +68,10 @@
   <ItemGroup>
     <Compile Include="Engine\CacheManager.cs" />
     <Compile Include="Engine\DisplayEngine.cs" />
+    <Compile Include="Filters\IMultiGradeFilter.cs" />
     <Compile Include="Modes\Mode9.cs" />
     <Compile Include="Modes\ModeParameters.cs" />
+    <Compile Include="Papers\IPaper.cs" />
     <Compile Include="Test\File\FileFormat.cs" />
     <Compile Include="Test\File\FileManagement.cs" />
     <Compile Include="frmAbout.cs">
@@ -121,7 +123,6 @@
     <Compile Include="Tools\Checksum.cs" />
     <Compile Include="Tools\DirectBitmap.cs" />
     <Compile Include="GrayToTime\GrayToTime.cs" />
-    <Compile Include="Tools\GrayScale.cs" />
     <Compile Include="Controls\ImageFileNameEditor.cs" />
     <Compile Include="Tools\ScreenInterrogatory.cs" />
     <EmbeddedResource Include="frmAbout.resx">

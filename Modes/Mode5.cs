@@ -214,7 +214,7 @@ namespace DigitalFilm.Modes
                 }
 
                 // 4. convert picture to grayscale
-                Bitmap grayscalePicture = GrayScale.MakeGrayscale3(bmpPicture);
+                Bitmap grayscalePicture = BitmapTools.MakeGrayscale3(bmpPicture);
 
                 // 5. size image
                 Rectangle imgRect = new Rectangle
