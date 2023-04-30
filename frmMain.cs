@@ -560,6 +560,11 @@ namespace DigitalFilm
         /// <param name="e"></param>
         private void btPreview_MouseDown(object sender, MouseEventArgs e)
         {
+            if (this.myPictureBox1.Image == null)
+            {
+                return;
+            }
+                
             this._savedImage = this.myPictureBox1.Image;
 
             // invert pixel
@@ -579,6 +584,11 @@ namespace DigitalFilm
         /// <param name="e"></param>
         private void btPreview_MouseUp(object sender, MouseEventArgs e)
         {
+            if (this.myPictureBox1.Image == null)
+            {
+                return;
+            }
+
             this.myPictureBox1.Image = this._savedImage;
             this._savedImage = null;
         }
