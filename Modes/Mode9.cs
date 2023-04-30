@@ -80,9 +80,7 @@ namespace DigitalDarkroom.Modes
                     for (int row = 0; row < squareH; row++, color++)
                     {
                         // Gamma correction
-                        double range = (double)color / 255;
-                        double correction = 1d * Math.Pow(range, this.Gamma);
-                        int filteredColor = (int)(correction * 255);
+                        int filteredColor = ColorTools.GetColorWithGamma(color, this.Gamma);
 
                         Color newColor = ColorTools.GetInvertedColor(filteredColor);
 

@@ -78,10 +78,9 @@ namespace DigitalDarkroom.Modes
                 for (int i = 0; i < engine.Panel.NumberOfColors; i++)
                 {
                     int color = engine.Panel.NumberOfColors - 1 - i;
+
                     // Gamma correction
-                    double range = (double)color / 255;
-                    double correction = 1d * Math.Pow(range, this.Gamma);
-                    int filteredColor = (int)(correction * 255);
+                    int filteredColor = ColorTools.GetColorWithGamma(color, this.Gamma);
 
                     Color newColor = ColorTools.GetInvertedColor(filteredColor);
 

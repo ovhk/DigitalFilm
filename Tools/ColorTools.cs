@@ -31,5 +31,37 @@ namespace DigitalDarkroom.Tools
         {
             return Color.FromArgb(255 - gray, 255 - gray, 255 - gray);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="gamma"></param>
+        /// <returns></returns>
+        public static int GetColorWithGamma(int color, double gamma)
+        {
+            // Gamma correction
+            double range = (double)color / 255;
+            double correction = 1d * Math.Pow(range, gamma);
+            int filteredColor = (int)(correction * 255);
+
+            return filteredColor;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="gamma"></param>
+        /// <returns></returns>
+        public static Color GetColorWithGamma(Color color, double gamma) 
+        {
+            // Gamma correction
+            double range = (double)color.R / 255;
+            double correction = 1d * Math.Pow(range, gamma);
+            int filteredColor = (int)(correction * 255);
+
+            return Color.FromArgb(filteredColor, filteredColor, filteredColor);
+        }
     }
 }
