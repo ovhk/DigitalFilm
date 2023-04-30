@@ -124,14 +124,14 @@ namespace DigitalFilm.Modes
         {
             if (ImagePath == null || ImagePath.Length == 0) return false;
 
-            string md5 = Tools.Checksum.CalculateMD5(ImagePath); // TODO : integrate config to md5
+            string md5 = Tools.Checksum.CalculateMD5(ImagePath);
 
-            // TODO manque dans le cache les infos suivantes :
-            // Rotation
-            // SizeMode
-            // MarginColor
-            // MarginTopBottom
-            // MarginLeftRight
+            md5 += "-" + (Rotation.GetHashCode() 
+                + 22 * SizeMode.GetHashCode() 
+                + 333 * MarginColor.GetHashCode()
+                + 4444 * MarginTopBottom.GetHashCode()
+                + 55555 * MarginLeftRight.GetHashCode()
+                ).ToString(); // Just a way to have an unique value with parameters, not perfect but seems enought!
 
             if (DisplayMode == DisplayMode.GrayToTime)
             {
