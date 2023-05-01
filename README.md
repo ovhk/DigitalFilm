@@ -45,13 +45,14 @@ Gamma parameter is available.
 
 <img src="/img/mode4.gif" width="300">
 
-### Mode 5 : Convert a colored picture in grayscale and diplay it
+### Mode 5 : Display a picture following parameters
 
+#### Display mode : Direct, convert a colored picture in grayscale and diplay it
 Convert the picture to graysclale and display it with inverted colors (like films). 
 
 <img src="/img/mode5.jpg" width="300"> <img src="/img/mode5inverted.jpg" width="300">
 
-### Mode 6 : Display a picture with GrayToTime algorythm
+#### Display mode : Display a picture with GrayToTime algorythm
 
 Display a picture with GrayToTime algorythm.
 
@@ -86,18 +87,21 @@ Generate a gray palette with gamma parameter.
 
 ### Minor
 - [/] README : corriger le mode 5 -> image inverser
-- [ ] README : fusionner Mode 5 et 6
-- [ ] README : faire des pages spécifiques pour les filtres, films et papier ?
+- [ ] README : faire des pages spécifiques pour les filtres, films (non?) et papier ?
 - [ ] intégrer photo du labo
-- [ ] Manage parameter with cache : error if useCache=true with different parameter 
-- [ ] Add IFilter ou IGradeFilter ?
 - [ ] Add IFilm ---> NO, we want to render our picture as is on the selected paper
-- [ ] Add IPaper
-- [/] frmMain : Add Preview button
-- [/] frmMain : Add combo pour selectionner les papiers
 - [/] Tester TopMost
 - [ ] Renommer github et le lien dans frmAbout
+- [ ] Supprimer Mode6.cs ?
+- [ ] frmMain : Supprimer Current time ?
 
+- [X] Move GrayScale to BitmapTools
+- [X] Add IFilter ou IMultiGradeFilter ?
+- [X] Gérer le bouton Preview avec le load/unload/play/stop 
+- [X] frmMain : Add Preview button
+- [X] Manage parameter with cache : error if useCache=true with different parameter 
+- [X] Add IPaper
+- [X] README : fusionner Mode 5 et 6
 - [X] Renomer en DigitalFilm 
 - [X] Bug sur les marges en mode stretched
 - [X] BitmapTools add gamma
