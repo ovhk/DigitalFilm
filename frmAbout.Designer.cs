@@ -50,20 +50,20 @@
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.Location = new System.Drawing.Point(65, 54);
+            this.linkLabel1.Location = new System.Drawing.Point(73, 54);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(290, 20);
+            this.linkLabel1.Size = new System.Drawing.Size(249, 20);
             this.linkLabel1.TabIndex = 1;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "https://github.com/ovhk/DigitalDarkroom";
+            this.linkLabel1.Text = "https://github.com/ovhk/DigitalFilm";
             // 
             // lbTitle
             // 
             this.lbTitle.AutoSize = true;
             this.lbTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTitle.Location = new System.Drawing.Point(119, 17);
+            this.lbTitle.Location = new System.Drawing.Point(139, 17);
             this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(171, 25);
+            this.lbTitle.Size = new System.Drawing.Size(118, 25);
             this.lbTitle.TabIndex = 2;
             this.lbTitle.Text = "Digital Film";
             this.lbTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -94,7 +94,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(436, 282);
+            this.ClientSize = new System.Drawing.Size(432, 278);
             this.ControlBox = false;
             this.Controls.Add(this.tbLicense);
             this.Controls.Add(this.lbVersion);
