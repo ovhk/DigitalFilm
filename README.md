@@ -85,39 +85,19 @@ Generate a gray palette with gamma parameter.
 
 ## TODO list
 
+https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
+
+- [ ] https://www.35mmc.com/07/02/2022/contrast-and-tonality-part-3-characteristic-curves-for-film-and-paper-by-sroyon/
+
 ### Minor
 - [/] README : corriger le mode 5 -> image inverser
 - [ ] README : faire des pages spécifiques pour les filtres, films (non?) et papier ?
 - [ ] intégrer photo du labo
-- [ ] Add IFilm ---> NO, we want to render our picture as is on the selected paper
+- [X] gérer les invertions en inversant le tableau dans Paper
 - [/] Tester TopMost
-- [ ] Renommer github et le lien dans frmAbout
 - [ ] Supprimer Mode6.cs ?
 - [ ] frmMain : Supprimer Current time ?
-
-- [X] Move GrayScale to BitmapTools
-- [X] Add IFilter ou IMultiGradeFilter ?
-- [X] Gérer le bouton Preview avec le load/unload/play/stop 
-- [X] frmMain : Add Preview button
-- [X] Manage parameter with cache : error if useCache=true with different parameter 
-- [X] Add IPaper
-- [X] README : fusionner Mode 5 et 6
-- [X] Renomer en DigitalFilm 
-- [X] Bug sur les marges en mode stretched
-- [X] BitmapTools add gamma
-- [X] manage multiple GrayToTime algo
-- [X] Algo graytotime OVH
-- [X] Mode 2 : Find duration for a gray : manque l'initial value dans le texte
-- [X] corriger les inversions de couleur N&B dans gray palette
-- [X] Mode 5 : paramétrage de la mise à l'échelle (voir PictureBox : Stretch, Centered ?)
-- [X] Mode 6 : paramétrage de la mise à l'échelle (voir PictureBox : Stretch, Centered ?)
-- [X] Mode 5 : Ajouter des marges noir ou blanches paramétrables
-- [X] Mode 6 : Ajouter des marges noir ou blanches paramétrables
-- [X] Mode 5 : Ajouter rotation d'image
-- [X] Mode 6 : Ajouter rotation d'image
-- [X] Fusionner mode 5 et 6 avec un paramètre ?
-- [X] Mode 2 : ajouter offset de temps
-- [X] ajouter timer dans frmMain
+- [ ] Renomer duration ExposureTime
 
 ### Major
 - [ ] Test parallel Programming

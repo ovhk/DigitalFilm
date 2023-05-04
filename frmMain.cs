@@ -570,17 +570,25 @@ namespace DigitalFilm
             {
                 return;
             }
-                
+
+            if (!(cbMode.SelectedItem is Mode5 mode))
+            {
+                return;
+            }
+
             this._savedImage = this.myPictureBox1.Image;
 
             // invert pixel
-            Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
+            //Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
 
             // Apply paper gamma
             // 1.4 is standard for paper
-            Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 1.4);
+            //TODO work here : it's not really 1.4, it's invert of 0.7
+            //Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 1.4);
 
-            this.myPictureBox1.Image = gammaImage;
+            Bitmap ImageFromPaper = BitmapTools.BitmapFromPaper(this._savedImage, mode.Paper);
+
+            this.myPictureBox1.Image = ImageFromPaper;
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ using DigitalFilm.Controls;
 using DigitalFilm.Tools;
 using System.ComponentModel;
 using DigitalFilm.Engine;
+using DigitalFilm.Papers;
 
 namespace DigitalFilm.Modes
 {
@@ -33,6 +34,12 @@ namespace DigitalFilm.Modes
         [Description("Display duration in ms")]
         public int Duration
         { get; set; } = 5000;
+
+        [Category("Mode Direct")]
+        [Description("Type of paper")]
+        [TypeConverter(typeof(PaperConverter))]
+        public Paper Paper
+        { get; set; }
 
         /// <summary>
         /// Source file to display
@@ -123,6 +130,8 @@ namespace DigitalFilm.Modes
         public bool Load()
         {
             if (ImagePath == null || ImagePath.Length == 0) return false;
+
+            if (DisplayMode == DisplayMode.Direct && Paper == null) return false;
 
             string md5 = Tools.Checksum.CalculateMD5(ImagePath);
 
@@ -232,6 +241,7 @@ namespace DigitalFilm.Modes
                     imgRect.Y += Convert.ToInt32(((double)engine.Panel.Height - (2 * (double)MarginTopBottom)) / 2 - (double)sz.Height / 2.0);
                 }
 
+                // Check ratio
                 //System.Windows.Forms.MessageBox.Show("Ratio=" + (double)imgRect.Width / (double)imgRect.Height);
 
                 // 6. draw image
@@ -240,16 +250,17 @@ namespace DigitalFilm.Modes
                 switch (DisplayMode)
                 {
                     case DisplayMode.Direct:
-                        // 7.1. invert image
-                        Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
+                        // 7.1. convert image for selected paper
 
-                        // TODO : apply here Film filter (standard gamma for film is 0.7)
-                        Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 0.7);
+                        //engine.PushImage((Bitmap)bmpPanel.Clone(), Duration); // TODO : test only
 
-                        Bitmap gradeImage = gammaImage;
+                        Bitmap imageForPaper = BitmapTools.BitmapToPaper(bmpPanel, Paper);
+
+                        //Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
+                        //Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 0.7);
 
                         // 8.1. push image to engine
-                        engine.PushImage(gradeImage, Duration);
+                        engine.PushImage(imageForPaper, Duration);
                         break;
 
                     case DisplayMode.GrayToTime:

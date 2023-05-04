@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DigitalFilm.Papers;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -11,6 +12,50 @@ namespace DigitalFilm.Tools
     public class BitmapTools
     {
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="paper"></param>
+        /// <returns></returns>
+        public static Bitmap BitmapToPaper(Bitmap bitmap, Paper paper)
+        {
+            DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
+
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                for (int y = 0; y < bitmap.Height; y++)
+                {
+                    Color color = bitmap.GetPixel(x, y);
+
+                    int c = paper.InvertedData[color.R];
+                    Color gammaColor = Color.FromArgb(c, c, c);
+
+                    bbw.SetPixel(x, y, gammaColor);
+                }
+            }
+            return bbw.Bitmap;
+        }
+
+        public static Bitmap BitmapFromPaper(Bitmap bitmap, Paper paper)
+        {
+            DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
+
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                for (int y = 0; y < bitmap.Height; y++)
+                {
+                    Color color = bitmap.GetPixel(x, y);
+
+                    int c = paper.InvertedData[color.R];
+                    Color gammaColor = Color.FromArgb(c, c, c);
+
+                    bbw.SetPixel(x, y, gammaColor);
+                }
+            }
+            return bbw.Bitmap;
+        }
+
+        /// <summary>
         /// Invert pixels color in the bitmap
         /// </summary>
         /// <param name="bitmap"></param>
@@ -19,18 +64,16 @@ namespace DigitalFilm.Tools
         {
             DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
 
-            //Parallel.For(0, bitmap.Width, x =>
             for (int x = 0; x < bitmap.Width; x++)
             {
-                //Parallel.For(0, bitmap.Height, y =>
                 for (int y = 0; y < bitmap.Height; y++)
                 {
-                    Color c = bitmap.GetPixel(x, y); // Parallel : object used elsewhere
+                    Color c = bitmap.GetPixel(x, y);
 
                     // invert
                     bbw.SetPixel(x, y, ColorTools.GetInvertedColor(c));
-                }//);
-            }//);
+                }
+            }
             return bbw.Bitmap;
         }
 
