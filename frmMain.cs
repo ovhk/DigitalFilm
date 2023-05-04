@@ -571,24 +571,26 @@ namespace DigitalFilm
                 return;
             }
 
-            if (!(cbMode.SelectedItem is Mode5 mode))
-            {
-                return;
-            }
-
             this._savedImage = this.myPictureBox1.Image;
 
-            // invert pixel
-            //Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
+            Bitmap imageToDisplay = null;
 
-            // Apply paper gamma
-            // 1.4 is standard for paper
-            //TODO work here : it's not really 1.4, it's invert of 0.7
-            //Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 1.4);
+            if (cbMode.SelectedItem is Mode5)
+            {
+                Mode5 mode = cbMode.SelectedItem as Mode5;
 
-            Bitmap ImageFromPaper = BitmapTools.BitmapFromPaper(this._savedImage, mode.Paper);
+                imageToDisplay = BitmapTools.BitmapFromPaper(this._savedImage, mode.Paper);
+            } 
+            else // Try to display with a default correction : Gamma = 1.4 (standard for paper)
+            {
+                // invert pixel
+                Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
 
-            this.myPictureBox1.Image = ImageFromPaper;
+                // Apply paper gamma
+                imageToDisplay = BitmapTools.GetBitmapWithGamma(invertedImage, 1.4);
+            }
+
+            this.myPictureBox1.Image = imageToDisplay;
         }
 
         /// <summary>

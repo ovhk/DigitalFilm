@@ -36,6 +36,12 @@ namespace DigitalFilm.Tools
             return bbw.Bitmap;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="paper"></param>
+        /// <returns></returns>
         public static Bitmap BitmapFromPaper(Bitmap bitmap, Paper paper)
         {
             DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
@@ -46,7 +52,7 @@ namespace DigitalFilm.Tools
                 {
                     Color color = bitmap.GetPixel(x, y);
 
-                    int c = paper.InvertedData[color.R];
+                    int c = paper.InvertedData[color.R]; // TODO : Same as BitmapToPaper ???
                     Color gammaColor = Color.FromArgb(c, c, c);
 
                     bbw.SetPixel(x, y, gammaColor);
