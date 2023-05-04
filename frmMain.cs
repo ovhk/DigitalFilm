@@ -344,7 +344,7 @@ namespace DigitalFilm
         /// <param name="sender"></param>
         /// <param name="e"></param>
         //private void Engine_EngineStatusNotify(object sender, EngineStatus e)
-        private void Engine_EngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalDuration)
+        private void Engine_EngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalExposureTime)
         {
             switch (engineStatus)
             {
@@ -353,15 +353,15 @@ namespace DigitalFilm
                     this.SafeUpdate(() => this.btStop.Enabled = true);
                     this.SafeUpdate(() => this.gbModes.Enabled = false);
                     this.SafeUpdate(() => this.cbPanels.Enabled = false);
-                    this.SafeUpdate(() => this.lbTotalBuration.Text = "00:00.00");
+                    this.SafeUpdate(() => this.lbTotalExposureTime.Text = "00:00.00");
                     this.SafeUpdate(() => this.btPreview.Enabled = false);
                     break;
 
                 case EngineStatus.Running:
-                    // Init max duration
-                    this.SafeUpdate(() => this.toolStripProgressBar1.Maximum = (int)totalDuration?.TotalSeconds);
-                    string s = String.Format("{0:00}:{1:00}.{2:00}", totalDuration?.Minutes, totalDuration?.Seconds, totalDuration?.Milliseconds / 10);
-                    this.SafeUpdate(() => this.lbTotalBuration.Text = s);
+                    // Init total exposure time
+                    this.SafeUpdate(() => this.toolStripProgressBar1.Maximum = (int)totalExposureTime?.TotalSeconds);
+                    string s = String.Format("{0:00}:{1:00}.{2:00}", totalExposureTime?.Minutes, totalExposureTime?.Seconds, totalExposureTime?.Milliseconds / 10);
+                    this.SafeUpdate(() => this.lbTotalExposureTime.Text = s);
 
                     // Start timers
                     this.SafeUpdate(() => this.timer1.Start());

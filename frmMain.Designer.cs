@@ -49,7 +49,7 @@ namespace DigitalFilm
             this.btLoadMode = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.label3 = new System.Windows.Forms.Label();
-            this.lbTotalBuration = new System.Windows.Forms.Label();
+            this.lbTotalExposureTime = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -265,15 +265,15 @@ namespace DigitalFilm
             // 
             // lbTotalBuration
             // 
-            this.lbTotalBuration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbTotalBuration.AutoSize = true;
-            this.lbTotalBuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTotalBuration.Location = new System.Drawing.Point(880, 504);
-            this.lbTotalBuration.Name = "lbTotalBuration";
-            this.lbTotalBuration.Size = new System.Drawing.Size(96, 25);
-            this.lbTotalBuration.TabIndex = 25;
-            this.lbTotalBuration.Text = "00:00.00";
-            this.lbTotalBuration.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbTotalExposureTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbTotalExposureTime.AutoSize = true;
+            this.lbTotalExposureTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTotalExposureTime.Location = new System.Drawing.Point(880, 504);
+            this.lbTotalExposureTime.Name = "lbTotalBuration";
+            this.lbTotalExposureTime.Size = new System.Drawing.Size(96, 25);
+            this.lbTotalExposureTime.TabIndex = 25;
+            this.lbTotalExposureTime.Text = "00:00.00";
+            this.lbTotalExposureTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label1
             // 
@@ -359,7 +359,7 @@ namespace DigitalFilm
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.lbTotalBuration);
+            this.Controls.Add(this.lbTotalExposureTime);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.myPictureBox1);
             this.Controls.Add(this.listView1);
@@ -411,7 +411,7 @@ namespace DigitalFilm
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbMode;
         private System.Windows.Forms.PropertyGrid pgMode;
-        private System.Windows.Forms.Label lbTotalBuration;
+        private System.Windows.Forms.Label lbTotalExposureTime;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;

@@ -59,11 +59,11 @@ namespace DigitalFilm.Engine
         }
 
         /// <summary>
-        /// Exposition duration
+        /// Exposure time
         /// </summary>
-        [CategoryAttribute("Duration"),
-        DescriptionAttribute("Exposition duration")]
-        public int ExpositionDuration
+        [CategoryAttribute("ExposureTime"),
+        DescriptionAttribute("Exposure time")]
+        public int ExposureTime
         {
             get;
             set; // Not private to able to filter it if needed following panel specs.
@@ -84,17 +84,17 @@ namespace DigitalFilm.Engine
         /// 
         /// </summary>
         /// <param name="bmp"></param>
-        /// <param name="expositionDuration"></param>
+        /// <param name="exposureTime"></param>
         /// <param name="index">index of the bitmap to use in ListView</param>
-        public ImageLayer(Bitmap bmp, int expositionDuration, int index)
+        public ImageLayer(Bitmap bmp, int exposureTime, int index)
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 
-            this._imgPath = DisplayEngine.GetInstance().Cache.GetTmpCachePath(index, expositionDuration);
+            this._imgPath = DisplayEngine.GetInstance().Cache.GetTmpCachePath(index, exposureTime);
             bmp.Save(this._imgPath);
 
             this.Thumbnail = bmp.GetThumbnailImage(ThumbnailSize.Width, ThumbnailSize.Height, callback, new IntPtr()); // 256x256 max
-            this.ExpositionDuration = expositionDuration;
+            this.ExposureTime = exposureTime;
             this.Index = index;
             bmp.Dispose();
         }
@@ -112,14 +112,14 @@ namespace DigitalFilm.Engine
             FileInfo file = new FileInfo(this._imgPath);
 
             int index = 0;
-            int expositionDuration = 0;
+            int exposureTime = 0;
 
-            DisplayEngine.GetInstance().Cache.GetIndexAndExpositionDuration(file.Name, out index, out expositionDuration);
+            DisplayEngine.GetInstance().Cache.GetIndexAndExposureTime(file.Name, out index, out exposureTime);
 
             using (Bitmap bmp = new Bitmap(this._imgPath))
             {
                 this.Thumbnail = bmp.GetThumbnailImage(ThumbnailSize.Width, ThumbnailSize.Height, callback, new IntPtr()); // 256x256 max
-                this.ExpositionDuration = expositionDuration;
+                this.ExposureTime = exposureTime;
                 this.Index = index;
             }
         }

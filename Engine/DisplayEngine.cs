@@ -45,15 +45,14 @@ namespace DigitalFilm.Engine
     /// </summary>
     /// <param name="imageLayerIndex"></param>
     /// <param name="elapseTime"></param>
-    /// <param name="totalDuration"></param>
     public delegate void NewProgessEvent(int imageLayerIndex, TimeSpan elapseTime);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="engineStatus"></param>
-    /// <param name="totalDuration"></param>
-    public delegate void NewEngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalDuration = null);
+    /// <param name="totalExposureTime"></param>
+    public delegate void NewEngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalExposureTime = null);
 
     /// <summary>
     /// This is this Display engine. It manage the scheduling of displaying the list of image
@@ -172,7 +171,7 @@ namespace DigitalFilm.Engine
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DisplayEngine_EngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalDuration)
+        private void DisplayEngine_EngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalExposureTime)
         {
             this._status = engineStatus;
             switch (engineStatus) 
@@ -226,15 +225,15 @@ namespace DigitalFilm.Engine
 
             DisplayEngine de = (DisplayEngine)obj;
 
-            TimeSpan tsTotalDuration = TimeSpan.Zero;
+            TimeSpan tsTotalExposureTime = TimeSpan.Zero;
             int iNotificationInterval = 0;
 
             foreach (ImageLayer i in de._qToDisplay)
             {
-                tsTotalDuration += TimeSpan.FromMilliseconds(i.ExpositionDuration);
+                tsTotalExposureTime += TimeSpan.FromMilliseconds(i.ExposureTime);
             }
 
-            de.EngineStatusNotify?.Invoke(EngineStatus.Running, tsTotalDuration);
+            de.EngineStatusNotify?.Invoke(EngineStatus.Running, tsTotalExposureTime);
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -261,17 +260,17 @@ namespace DigitalFilm.Engine
                 }
 
                 de.OnNewImage?.Invoke(il.Bitmap);
-                //Thread.Yield(); // force handler to execute their task
+                //Thread.Yield(); // Do not use
                 Application.DoEvents(); 
 
-                int duration = il.ExpositionDuration;
+                int exposureTime = il.ExposureTime;
 
-                iNotificationInterval += duration;
+                iNotificationInterval += exposureTime;
 
                 // This timing is important!
                 // Thats why we have a thread to preload and another to dispose
-                // We consider that subscriber's OnPaint (from Refresh to OnPaint) have a fix execution duration, so this timing must be directly the needed exposition duration
-                if (de.SleepMsWithBreak(duration, ref de._threadStop) == false)
+                // We consider that subscriber's OnPaint (from Refresh to OnPaint) have a fix execution time, so this timing must be directly the needed exposition time
+                if (de.SleepMsWithBreak(exposureTime, ref de._threadStop) == false)
                 {
                     break;
                 }
@@ -283,7 +282,7 @@ namespace DigitalFilm.Engine
                 }
 
                 double mesured = (DateTime.Now - dtStart).TotalMilliseconds;
-                Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", il.Index, il.ExpositionDuration, mesured, string.Format("{0:N1}", (mesured - duration)));
+                Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", il.Index, il.ExposureTime, mesured, string.Format("{0:N1}", (mesured - exposureTime)));
 
                 de._qToDispose.Enqueue(il);
             }
@@ -388,7 +387,7 @@ namespace DigitalFilm.Engine
 
             foreach (ImageLayer i in de._qToDisplay)
             {
-                lastSleep = i.ExpositionDuration;
+                lastSleep = i.ExposureTime;
 
                 _semaphorePreload.WaitOne();
 
@@ -439,7 +438,7 @@ namespace DigitalFilm.Engine
                 return true;
             }
 
-            // if duration is small, we don't cut it in seconds
+            // if exposure time is small, we don't cut it in seconds
             if (ms <= 1000)
             {
                 Thread.Sleep(ms);
@@ -563,15 +562,15 @@ namespace DigitalFilm.Engine
         /// Add an image in the DisplayEngine queue
         /// </summary>
         /// <param name="bitmap"></param>
-        /// <param name="expositionDuration"></param>
-        public void PushImage(Bitmap bitmap, int expositionDuration)
+        /// <param name="exposureTime"></param>
+        public void PushImage(Bitmap bitmap, int exposureTime)
         {
-            if (expositionDuration < this.Panel.ResponseTime)
+            if (exposureTime < this.Panel.ResponseTime)
             {
-                Log.WriteLine("expositionDuration has been filtered from {0} to {1} on index {2}.", expositionDuration, this.Panel.ResponseTime, _qToDisplay.Count);
-                expositionDuration = this.Panel.ResponseTime;
+                Log.WriteLine("ExposureTime has been filtered from {0} to {1} on index {2}.", exposureTime, this.Panel.ResponseTime, _qToDisplay.Count);
+                exposureTime = this.Panel.ResponseTime;
             }
-            _qToDisplay.Enqueue(new ImageLayer(bitmap, expositionDuration, _qToDisplay.Count));
+            _qToDisplay.Enqueue(new ImageLayer(bitmap, exposureTime, _qToDisplay.Count));
         }
 
         /// <summary>
@@ -581,10 +580,10 @@ namespace DigitalFilm.Engine
         public void PushImage(ImageLayer imageLayer)
         {
             imageLayer.Index = _qToDisplay.Count;
-            if (imageLayer.ExpositionDuration < this.Panel.ResponseTime)
+            if (imageLayer.ExposureTime < this.Panel.ResponseTime)
             {
-                Log.WriteLine("expositionDuration has been filtered from {0} to {1} on index {2}.", imageLayer.ExpositionDuration, this.Panel.ResponseTime, imageLayer.Index);
-                imageLayer.ExpositionDuration = this.Panel.ResponseTime;
+                Log.WriteLine("ExposureTime has been filtered from {0} to {1} on index {2}.", imageLayer.ExposureTime, this.Panel.ResponseTime, imageLayer.Index);
+                imageLayer.ExposureTime = this.Panel.ResponseTime;
             }
             _qToDisplay.Enqueue(imageLayer);
         }

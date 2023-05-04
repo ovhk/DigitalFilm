@@ -22,14 +22,14 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Browsable(false)]
-        public string Description => "Compare a grayscale with B&W linear duration interval.";
+        public string Description => "Compare a grayscale with B&W linear exposure time interval.";
 
         /// <summary>
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Display duration in ms")]
-        public int Duration
+        [Description("Exposure time in ms")]
+        public int ExposureTime
         { get; set; } = 11000;
 
         [Category("Configuration")]
@@ -40,7 +40,7 @@ namespace DigitalFilm.Modes
         /// <summary>
         /// 
         /// </summary>
-        private int MiniDurationMs = 40;
+        private int MiniExposureTimeMs = 40;
 
         /// <summary>
         /// Access to the Engine
@@ -53,9 +53,9 @@ namespace DigitalFilm.Modes
         /// <returns></returns>
         public bool Load()
         {
-            if (Duration/256 <= MiniDurationMs)
+            if (ExposureTime/256 <= MiniExposureTimeMs)
             {
-                Log.WriteLine("Interval is too short... {0}/256={1} <= {2} ms", Duration, Duration/256, MiniDurationMs);
+                Log.WriteLine("Interval is too short... {0}/256={1} <= {2} ms", ExposureTime, ExposureTime/256, MiniExposureTimeMs);
                 return false;
             }
 
@@ -105,7 +105,7 @@ namespace DigitalFilm.Modes
                     }
 
                     // new Bitmap because we need a copy, next iteration b will be changed
-                    engine.PushImage(new Bitmap(b), (Duration / 256));
+                    engine.PushImage(new Bitmap(b), (ExposureTime / 256));
                 }
                 gfx.Dispose();
             }

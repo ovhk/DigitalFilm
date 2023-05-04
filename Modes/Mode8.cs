@@ -28,7 +28,7 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Display duration")]
+        [Description("Number of interval")]
         public int NbInterval
         { get; set; } = 10;
 
@@ -36,8 +36,8 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Display duration in second")]
-        public int IntervalDuration
+        [Description("Interval exposure time in second")]
+        public int IntervalExposureTime
         { get; set; } = 2;
 
         /// <summary>
@@ -81,11 +81,11 @@ namespace DigitalFilm.Modes
                     gfx.FillRectangle(brush, j * iWidth, 0, iWidth, height);
 
                     // TODO formule compliqué sans doute pour rien...
-                    string str = (NbInterval * IntervalDuration - (j) * IntervalDuration).ToString();
+                    string str = (NbInterval * IntervalExposureTime - (j) * IntervalExposureTime).ToString();
 
                     DrawTools.DrawLargestString(ref gfx, ref brushTxt, str, new Rectangle(j * iWidth, height / 2, iWidth, height / 2));
                 }
-                engine.PushImage(new Bitmap(b), IntervalDuration * 1000);
+                engine.PushImage(new Bitmap(b), IntervalExposureTime * 1000);
             }
 
             gfx.Dispose();

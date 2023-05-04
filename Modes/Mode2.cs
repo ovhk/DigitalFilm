@@ -16,13 +16,13 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Browsable(false)]
-        public string Name => "Find duration for a gray";
+        public string Name => "Find exposure time for a gray";
 
         /// <summary>
         /// 
         /// </summary>
         [Browsable(false)]
-        public string Description => "Find the duration for a specific gray in parameter.";
+        public string Description => "Find the exposure time for a specific gray in parameter.";
 
         /// <summary>
         /// 
@@ -36,7 +36,7 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Display duration")]
+        [Description("Number of interval to display")]
         public int NbInterval
         { get; set; } = 30;
 
@@ -44,16 +44,16 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Display duration in ms")]
-        public int IntervalDuration
+        [Description("Display exposure time in ms")]
+        public int IntervalExposureTime
         { get; set; } = 2000;
 
         /// <summary>
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Initial duration in ms")]
-        public int InitialDuration
+        [Description("Initial exposure time in ms")]
+        public int InitialExposureTime
         { get; set; } = 0;
 
         /// <summary>
@@ -97,14 +97,14 @@ namespace DigitalFilm.Modes
 
             DrawTools.DrawLargestString(ref gfx, ref brushTxt, "GRAY : " + GrayValue, new Rectangle(0, 0, width, height / 2));
 
-            if (InitialDuration > 0)
+            if (InitialExposureTime > 0)
             {
                 using (SolidBrush brush = new SolidBrush(Color.White))
                 {
                     gfx.FillRectangle(brush, 0, height / 2, width, height / 2);
                 }
 
-                engine.PushImage(new Bitmap(b), InitialDuration);
+                engine.PushImage(new Bitmap(b), InitialExposureTime);
 
                 using (SolidBrush brush = new SolidBrush(Color.Black))
                 {
@@ -122,11 +122,11 @@ namespace DigitalFilm.Modes
                     gfx.FillRectangle(brush, j * iWidth, height / 2, iWidth, height / 2);
 
                     // TODO formule compliqué sans doute pour rien...
-                    string str = (InitialDuration + NbInterval * IntervalDuration - j * IntervalDuration).ToString();
+                    string str = (InitialExposureTime + NbInterval * IntervalExposureTime - j * IntervalExposureTime).ToString();
 
                     DrawTools.DrawLargestString(ref gfx, ref brushTxt, str, new Rectangle(j * iWidth, height/2, iWidth, height / 2));
                 }
-                engine.PushImage(new Bitmap(b), IntervalDuration);
+                engine.PushImage(new Bitmap(b), IntervalExposureTime);
             }
 
             gfx.Dispose();

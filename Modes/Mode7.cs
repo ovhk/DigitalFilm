@@ -22,7 +22,7 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Browsable(false)]
-        public string Description => "Compare a grayscale with B&W GrayToTime duration interval.";
+        public string Description => "Compare a grayscale with B&W GrayToTime exposure time interval.";
 
         /// <summary>
         /// 

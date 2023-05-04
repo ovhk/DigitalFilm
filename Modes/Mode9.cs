@@ -28,8 +28,8 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Display duration")]
-        public int Duration
+        [Description("Exposure time")]
+        public int ExposureTime
         { get; set; } = 30;
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace DigitalFilm.Modes
                     }
                 }
 
-                engine.PushImage(new Bitmap(b), Duration * 1000);
+                engine.PushImage(new Bitmap(b), ExposureTime * 1000);
 
                 gfx.Dispose();
             }

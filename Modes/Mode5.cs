@@ -28,11 +28,11 @@ namespace DigitalFilm.Modes
         public string Description => "Display the selected picture following parameters.";
 
         /// <summary>
-        /// Display duration in ms
+        /// Display exposure time in ms
         /// </summary>
         [Category("Mode Direct")]
-        [Description("Display duration in ms")]
-        public int Duration
+        [Description("Display exposure time in ms")]
+        public int ExposureTime
         { get; set; } = 5000;
 
         [Category("Mode Direct")]
@@ -252,7 +252,7 @@ namespace DigitalFilm.Modes
                     case DisplayMode.Direct:
                         // 7.1. convert image for selected paper
 
-                        //engine.PushImage((Bitmap)bmpPanel.Clone(), Duration); // TODO : test only
+                        //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // TODO : test only
 
                         Bitmap imageForPaper = BitmapTools.BitmapToPaper(bmpPanel, Paper);
 
@@ -260,7 +260,7 @@ namespace DigitalFilm.Modes
                         //Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 0.7);
 
                         // 8.1. push image to engine
-                        engine.PushImage(imageForPaper, Duration);
+                        engine.PushImage(imageForPaper, ExposureTime);
                         break;
 
                     case DisplayMode.GrayToTime:

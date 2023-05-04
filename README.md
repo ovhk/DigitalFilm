@@ -8,11 +8,11 @@ How to print a picture from a film negative?
 No! Here is the solution:
 
 - scan the negative, invert colors and save it
-- Find experimentaly the exposition duration to have different values of gray on the paper
-- put gray values and duration in an Excel file, draw the trend curve and get its formula
+- Find experimentaly the exposure time to have different values of gray on the paper
+- put gray values and exposure time in an Excel file, draw the trend curve and get its formula
 - generate 256 bitmaps from your scanned picture. One for each gray value, keep black all pixels lower than this value, put all others in white
 - put the display on the paper and turn on the enlarger light
-- display these bitmaps during the duration calculate with the trend formula onto a transparent black and white display panel
+- display these bitmaps during the exposure time calculate with the trend formula onto a transparent black and white display panel
 
 Tada!
 
@@ -26,7 +26,7 @@ Just a black & White zone to check if the diplay panel is able to block light.
 
 <img src="/img/mode1.png" width="300">
 
-### Mode 2 : Find duration for a specific gray
+### Mode 2 : Find an exposure time for a specific gray
 
 Generate a gray palette following parameters to compare with a specific value of gray.
 
@@ -40,7 +40,7 @@ Draw shapes with different size to see the resolution of the system.
 
 ### Mode 4 : Gray vs B&W Linear"
 
-Draw a gray palette and a B&W scale with a linear duration.
+Draw a gray palette and a B&W scale with a linear exposure time.
 Gamma parameter is available.
 
 <img src="/img/mode4.gif" width="300">
@@ -60,7 +60,7 @@ Display a picture with GrayToTime algorythm.
 
 ### Mode 7 : Gray vs GrayToTime
 
-Draw a gray palette and a B&W scale with GrayToTime algorythm to find the duration.
+Draw a gray palette and a B&W scale with GrayToTime algorythm to find the exposure time.
 
 <img src="/img/mode7.gif" width="300">
 
@@ -97,7 +97,7 @@ https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 - [/] Tester TopMost
 - [ ] Supprimer Mode6.cs ?
 - [ ] frmMain : Supprimer Current time ?
-- [ ] Renomer duration ExposureTime
+- [X] Renomer duration ExposureTime
 
 ### Major
 - [ ] Test parallel Programming

@@ -27,8 +27,8 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Category("Configuration")]
-        [Description("Display duration in second")]
-        public int Duration
+        [Description("Exposure time in second")]
+        public int ExposureTime
         { get; set; } = 30;
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace DigitalFilm.Modes
                     }
                 }
 
-                engine.PushImage(b, Duration * 1000);
+                engine.PushImage(b, ExposureTime * 1000);
             }
 
             return true;

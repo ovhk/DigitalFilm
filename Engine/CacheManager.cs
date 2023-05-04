@@ -133,14 +133,14 @@ namespace DigitalFilm.Engine
         /// 
         /// </summary>
         /// <param name="index"></param>
-        /// <param name="expositionDuration"></param>
+        /// <param name="exposureTime"></param>
         /// <returns></returns>
-        public string GetTmpCachePath(int index, int expositionDuration)
+        public string GetTmpCachePath(int index, int exposureTime)
         {
             if (this._cachePath != null)
-                return this._cachePath + @"\" + index + "_" + expositionDuration + Extention;
+                return this._cachePath + @"\" + index + "_" + exposureTime + Extention;
 
-            return tmpCacheDir + @"\" + index + "_" + expositionDuration + Extention;
+            return tmpCacheDir + @"\" + index + "_" + exposureTime + Extention;
         }
 
         /// <summary>
@@ -148,9 +148,9 @@ namespace DigitalFilm.Engine
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="index"></param>
-        /// <param name="expositionDuration"></param>
+        /// <param name="exposureTime"></param>
         /// <returns></returns>
-        public bool GetIndexAndExpositionDuration(string fileName, out int index, out int expositionDuration)
+        public bool GetIndexAndExposureTime(string fileName, out int index, out int exposureTime)
         {
             try
             {
@@ -159,12 +159,12 @@ namespace DigitalFilm.Engine
                 string[] b = a.Split('_');
 
                 index = int.Parse(b[0]);
-                expositionDuration = int.Parse(b[1]);
+                exposureTime = int.Parse(b[1]);
             }
             catch
             {
                 index = 0;
-                expositionDuration = 0;
+                exposureTime = 0;
                 return false;
             }
 
@@ -175,9 +175,9 @@ namespace DigitalFilm.Engine
         ///// 
         ///// </summary>
         ///// <returns></returns>
-        //public TimeSpan GetTotalDuration()
+        //public TimeSpan GetTotalExposureTime()
         //{
-        //    TimeSpan tsTotalDuration = TimeSpan.Zero;
+        //    TimeSpan tsTotalExposureTime = TimeSpan.Zero;
 
         //    string[] fileEntries = this.GetFiles();
 
@@ -185,12 +185,12 @@ namespace DigitalFilm.Engine
         //    {
         //        FileInfo file = new FileInfo(fileName);
 
-        //        GetIndexAndExpositionDuration(file.Name, out int index, out int expositionDuration);
+        //        GetIndexAndExposureTime(file.Name, out int index, out int exposureTime);
 
-        //        tsTotalDuration += TimeSpan.FromMilliseconds(expositionDuration);
+        //        tsTotalExposureTime += TimeSpan.FromMilliseconds(exposureTime);
         //    }
 
-        //    return tsTotalDuration;
+        //    return tsTotalExposureTime;
         //}
 
         /// <summary>
