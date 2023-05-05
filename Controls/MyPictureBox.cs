@@ -1,12 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace DigitalFilm.Controls
@@ -56,7 +48,7 @@ namespace DigitalFilm.Controls
                     // This is faster than use BackgroudImage or a PictureBox, thanks to https://stackoverflow.com/questions/28689358/slow-picture-box
                     e.Graphics.DrawImage(this._image, this.ClientRectangle);
                 }
-                catch 
+                catch
                 {
                     Log.WriteLine("MyPictureBox:Fail to display one image");
                 }

@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace DigitalFilm.Engine
 {
@@ -45,7 +38,7 @@ namespace DigitalFilm.Engine
                 return _timingsOVH;
             }
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -59,10 +52,10 @@ namespace DigitalFilm.Engine
                 //y = 0,0001x4 - 0,0722x3 + 17,586x2 - 1890,5x + 89686
                 double ii = i;
                 timings[i] = (int)(
-                    0.0001 * Math.Pow(ii, 4) - 
-                    0.0722 * Math.Pow(ii, 3) + 
-                    17.586 * Math.Pow(ii, 2) - 
-                    1890.5 * ii + 
+                    0.0001 * Math.Pow(ii, 4) -
+                    0.0722 * Math.Pow(ii, 3) +
+                    17.586 * Math.Pow(ii, 2) -
+                    1890.5 * ii +
                     89686.0);
             }
 

@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DigitalFilm
@@ -43,7 +35,7 @@ namespace DigitalFilm
         /// <param name="e"></param>
         private void frmAbout_Load(object sender, EventArgs e)
         {
-            Version v = Assembly.GetExecutingAssembly().GetName().Version; 
+            Version v = Assembly.GetExecutingAssembly().GetName().Version;
             string about = string.Format(CultureInfo.InvariantCulture, @"Version : {0}.{1}.{2}.{3}", v.Major, v.Minor, v.Build, v.Revision);
             this.lbVersion.Text = about;
 
@@ -53,7 +45,7 @@ namespace DigitalFilm
             {
                 this.tbLicense.Text = System.IO.File.ReadAllText(@"LICENSE");
             }
-            catch 
+            catch
             {
                 this.tbLicense.Text = "See LICENSE file.";
             }

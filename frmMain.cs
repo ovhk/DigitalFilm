@@ -1,24 +1,14 @@
-﻿using System;
+﻿using DigitalFilm.Engine;
+using DigitalFilm.Modes;
+using DigitalFilm.Panels;
+using DigitalFilm.Tools;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-using System.CodeDom;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using DigitalFilm.Panels;
-using DigitalFilm.Modes;
-using DigitalFilm.Engine;
-using DigitalFilm.Tools;
 
 namespace DigitalFilm
 {
@@ -217,7 +207,7 @@ namespace DigitalFilm
                 }
             }
 
-            e.Graphics.DrawImage(view.LargeImageList.Images[e.Item.Index], e.Bounds.X + border, e.Bounds.Y + border, e.Bounds.Width-2*border, e.Bounds.Height-2*border);
+            e.Graphics.DrawImage(view.LargeImageList.Images[e.Item.Index], e.Bounds.X + border, e.Bounds.Y + border, e.Bounds.Width - 2 * border, e.Bounds.Height - 2 * border);
 
             e.Graphics.DrawRectangle(Pens.Red, e.Bounds);
             TextRenderer.DrawText(e.Graphics, e.Item.Text, view.Font, e.Bounds,
@@ -255,7 +245,7 @@ namespace DigitalFilm
             }
 
             ImageLayer il = lv.SelectedItems[0].Tag as ImageLayer;
-            
+
             if (il != null)
             {
                 this.myPictureBox1.Image = il.Bitmap;
@@ -580,7 +570,7 @@ namespace DigitalFilm
                 Mode5 mode = cbMode.SelectedItem as Mode5;
 
                 imageToDisplay = BitmapTools.BitmapFromPaper(this._savedImage, mode.Paper);
-            } 
+            }
             else // Try to display with a default correction : Gamma = 1.4 (standard for paper)
             {
                 // invert pixel

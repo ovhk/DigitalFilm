@@ -1,21 +1,10 @@
 ﻿using DigitalFilm.Panels;
-using DigitalFilm.Tools;
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Security.Policy;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DigitalFilm.Engine
@@ -174,7 +163,7 @@ namespace DigitalFilm.Engine
         private void DisplayEngine_EngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalExposureTime)
         {
             this._status = engineStatus;
-            switch (engineStatus) 
+            switch (engineStatus)
             {
                 case EngineStatus.Started:
                     break;
@@ -182,7 +171,7 @@ namespace DigitalFilm.Engine
                     break;
                 case EngineStatus.Stopped:
                     this.Clear();
-                    break; 
+                    break;
             }
         }
 
@@ -245,7 +234,7 @@ namespace DigitalFilm.Engine
                 // Please do as fast as possible here !
                 DateTime dtStart = DateTime.Now;
 
-                if (de._qToPreload.Count == 0) 
+                if (de._qToPreload.Count == 0)
                 {
                     Thread.Yield();
                     continue;
@@ -261,7 +250,7 @@ namespace DigitalFilm.Engine
 
                 de.OnNewImage?.Invoke(il.Bitmap);
                 //Thread.Yield(); // Do not use
-                Application.DoEvents(); 
+                Application.DoEvents();
 
                 int exposureTime = il.ExposureTime;
 
@@ -482,7 +471,7 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// Start Engine
         /// </summary>
-        public void Start() 
+        public void Start()
         {
             this._threadStop = false;
 
@@ -504,7 +493,7 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// Stop Engine
         /// </summary>
-        public void Stop() 
+        public void Stop()
         {
             if (this.Status == EngineStatus.Stopped)
             {
@@ -517,12 +506,13 @@ namespace DigitalFilm.Engine
             try
             {
                 _semaphorePreload?.Release();
-            } catch { }
+            }
+            catch { }
 
             this._qToPreload.Clear(); // free _threadPreload from work and go to end
 
             // Wait for the end of threads excecution
-            this._threadPreload?.Join(); 
+            this._threadPreload?.Join();
             this._threadDisplay?.Join();
             this._threadDispose?.Join();
 
@@ -534,7 +524,7 @@ namespace DigitalFilm.Engine
         /// </summary>
         public void Clear()
         {
-            foreach(ImageLayer il in this._qToDisplay) // useful only if there's a stop before the end
+            foreach (ImageLayer il in this._qToDisplay) // useful only if there's a stop before the end
             {
                 il.Dispose();
             }
@@ -587,6 +577,6 @@ namespace DigitalFilm.Engine
             }
             _qToDisplay.Enqueue(imageLayer);
         }
-#endregion
+        #endregion
     }
 }

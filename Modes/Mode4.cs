@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DigitalFilm.Engine;
+using DigitalFilm.Tools;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DigitalFilm.Engine;
-using DigitalFilm.Tools;
 
 namespace DigitalFilm.Modes
 {
@@ -53,9 +48,9 @@ namespace DigitalFilm.Modes
         /// <returns></returns>
         public bool Load()
         {
-            if (ExposureTime/256 <= MiniExposureTimeMs)
+            if (ExposureTime / 256 <= MiniExposureTimeMs)
             {
-                Log.WriteLine("Interval is too short... {0}/256={1} <= {2} ms", ExposureTime, ExposureTime/256, MiniExposureTimeMs);
+                Log.WriteLine("Interval is too short... {0}/256={1} <= {2} ms", ExposureTime, ExposureTime / 256, MiniExposureTimeMs);
                 return false;
             }
 

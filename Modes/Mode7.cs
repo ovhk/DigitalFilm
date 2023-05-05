@@ -1,12 +1,6 @@
-﻿using DigitalFilm.Tools;
-using System;
-using System.Collections.Generic;
+﻿using DigitalFilm.Engine;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DigitalFilm.Engine;
 
 namespace DigitalFilm.Modes
 {
@@ -80,7 +74,7 @@ namespace DigitalFilm.Modes
                             //gfx.FillRectangle(brushBlack, 0, 0, width, height / 2);
                         }
 
-                       // gfx.FillRectangle(brushBlack, 0, height / 2, width, height / 2);
+                        // gfx.FillRectangle(brushBlack, 0, height / 2, width, height / 2);
 
                         gfx.FillRectangle(brushWhite, i * iWidth, height / 2, iWidth, height / 2);
 

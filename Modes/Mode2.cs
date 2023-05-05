@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DigitalFilm.Engine;
+using DigitalFilm.Tools;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DigitalFilm.Engine;
-using DigitalFilm.Tools;
 
 namespace DigitalFilm.Modes
 {
@@ -124,7 +119,7 @@ namespace DigitalFilm.Modes
                     // TODO formule compliqué sans doute pour rien...
                     string str = (InitialExposureTime + NbInterval * IntervalExposureTime - j * IntervalExposureTime).ToString();
 
-                    DrawTools.DrawLargestString(ref gfx, ref brushTxt, str, new Rectangle(j * iWidth, height/2, iWidth, height / 2));
+                    DrawTools.DrawLargestString(ref gfx, ref brushTxt, str, new Rectangle(j * iWidth, height / 2, iWidth, height / 2));
                 }
                 engine.PushImage(new Bitmap(b), IntervalExposureTime);
             }

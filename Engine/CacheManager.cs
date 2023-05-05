@@ -1,12 +1,7 @@
 ﻿using DigitalFilm.Tools;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DigitalFilm.Engine
 {
@@ -20,7 +15,7 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// 
         /// </summary>
-        public CacheManager(DisplayEngine engine) 
+        public CacheManager(DisplayEngine engine)
         {
             this.engine = engine;
             Directory.CreateDirectory(this.tmpCacheDir);

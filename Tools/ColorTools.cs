@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DigitalFilm.Tools
 {
@@ -54,7 +50,7 @@ namespace DigitalFilm.Tools
         /// <param name="color"></param>
         /// <param name="gamma"></param>
         /// <returns></returns>
-        public static Color GetColorWithGamma(Color color, double gamma) 
+        public static Color GetColorWithGamma(Color color, double gamma)
         {
             // Gamma correction
             double range = (double)color.R / 255;

@@ -1,17 +1,7 @@
-﻿using DigitalFilm.Tools;
-using MathNet.Numerics;
-using MathNet.Numerics.LinearAlgebra.Factorization;
-using MathNet.Numerics.RootFinding;
+﻿using DigitalFilm.Papers;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DigitalFilm.Papers;
 
 namespace DigitalFilm.Controls
 {

@@ -1,16 +1,9 @@
-﻿using System;
-using System.CodeDom.Compiler;
+﻿using DigitalFilm.Controls;
+using DigitalFilm.Engine;
+using DigitalFilm.Tools;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using DigitalFilm.Controls;
-using DigitalFilm.Tools;
-using DigitalFilm.Engine;
 
 namespace DigitalFilm.Modes
 {
@@ -115,7 +108,7 @@ namespace DigitalFilm.Modes
                 {
                     engine.Cache.SetCacheIdentifier(md5);
                 }
-            } 
+            }
             else
             {
                 engine.Cache.ClearCacheFromIdentifier(md5);

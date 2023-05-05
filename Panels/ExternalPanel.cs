@@ -1,9 +1,4 @@
 ﻿using DigitalFilm.Tools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DigitalFilm.Panels
@@ -12,7 +7,7 @@ namespace DigitalFilm.Panels
     {
         public Screen Screen
         {
-            get; 
+            get;
             private set;
         }
 
