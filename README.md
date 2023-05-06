@@ -93,11 +93,12 @@ https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 - [/] README : corriger le mode 5 -> image inverser
 - [ ] README : faire des pages spécifiques pour les filtres, films (non?) et papier ?
 - [ ] intégrer photo du labo
-- [X] gérer les invertions en inversant le tableau dans Paper
 - [/] Tester TopMost
 - [ ] Supprimer Mode6.cs ?
 - [ ] frmMain : Supprimer Current time ?
+
 - [X] Renomer duration ExposureTime
+- [X] gérer les invertions en inversant le tableau dans Paper
 
 ### Major
 - [ ] Test parallel Programming

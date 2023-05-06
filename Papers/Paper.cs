@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics;
 using System;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 
 namespace DigitalFilm.Papers
 {
@@ -13,6 +14,7 @@ namespace DigitalFilm.Papers
 
         protected abstract double[] Density { get; }
         protected abstract double[] RelativeLogExposure { get; }
+        protected virtual double NewDmax { get; }
         public abstract string Name { get; }
         public abstract string Description { get; }
 
@@ -43,11 +45,51 @@ namespace DigitalFilm.Papers
         /// </summary>
         private void ComputeDensity()
         {
-            ScaledDensity = new double[Density.Length];
+            double[] filteredDensity;
+
+            // change Dmax for other type of surface
+            if (this.NewDmax != 0)
+            {
+                filteredDensity = new double[Density.Length];
+
+                double trig = Density.Max() - (Density.Max() - this.NewDmax) * 2d;
+
+                trig = (trig > 0) ? trig : 0;
+
+                for (int i = 0; i < Density.Length; i++)
+                { 
+                    if (Density[i] > trig)
+                    {
+                        double delta = this.NewDmax - Density[i];
+                        //Log.Write("Density[i]={0} ", Density[i]);
+                        double newDensity = Density[i] - Math.Sqrt(delta); // TODO : faire la courbe pour voir la tête du filtre
+                        newDensity = (newDensity > 0) ? newDensity : this.NewDmax;
+                        filteredDensity[i] = newDensity;
+                        //Log.WriteLine("NewDensity[i]={0}", newDensity);
+                    }
+                    else
+                    {
+                        filteredDensity[i] = Density[i];
+                    }
+                }
+            }
+            else
+            {
+                filteredDensity = Density;
+            }
+
+            //ScaledDensity = new double[Density.Length];
+
+            //for (int i = 0; i < ScaledDensity.Length; i++)
+            //{
+            //    ScaledDensity[i] = (Density[i] - Density.Min()) / (Density.Max() - Density.Min()) * 255;
+            //}
+
+            ScaledDensity = new double[filteredDensity.Length];
 
             for (int i = 0; i < ScaledDensity.Length; i++)
             {
-                ScaledDensity[i] = (Density[i] - Density.Min()) / (Density.Max() - Density.Min()) * 255;
+                ScaledDensity[i] = (filteredDensity[i] - filteredDensity.Min()) / (filteredDensity.Max() - filteredDensity.Min()) * 255d;
             }
         }
 
@@ -57,19 +99,8 @@ namespace DigitalFilm.Papers
         private void ComputeTransfertFunction()
         {
             // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // - entre le fromPaper et le toPaper : Data ou InvertedData : générer la courbe pour voir si on est dans le sens du 0.7 (recherché) ou 1.4
-            // NaN ?
-            // - faire un filtre les autres type de papier : matt et velvet
-            // Any other surface  –  matt causes a decrease in the maximum density value
-            // Dmax=2.1
-
-            {
-                double velvet = 0.1;
-                double matt = 0.2;
-
-                // des que l'on arrive à val >= (max - 0.1) * 2, val += (max - val) / 2
-                // 
-            }
+            // [ ] entre le fromPaper et le toPaper : Data ou InvertedData : générer la courbe pour voir si on est dans le sens du 0.7 (recherché) ou 1.4
+            // [ ]  NaN ?
 
             // https://numerics.mathdotnet.com/Interpolation
 

@@ -1,6 +1,37 @@
 ﻿namespace DigitalFilm.Papers
 {
-    #region Glossy G0
+    #region Fomaspeed Variant III Grade 0
+
+    #region Fomaspeed Variant III Grade 0, Velvet
+
+    internal class FomaspeedVariantIIIVelvetG0 : FomaspeedVariantIIIGlossyG0
+    {
+        public override string Name => "Fomaspeed Variant III, Velvet, Grade 0";
+
+        /// <summary>
+        /// All we know from datasheet is : "Any other surface – matt causes a decrease in the maximum density value" and Dmax=2.1
+        /// </summary>
+        protected override double NewDmax => 2.0d;
+    }
+
+    #endregion
+
+    #region Fomaspeed Variant III Grade 0, Matt
+
+    internal class FomaspeedVariantIIIMattG0 : FomaspeedVariantIIIGlossyG0
+    {
+        public override string Name => "Fomaspeed Variant III, Matt, Grade 0";
+
+        /// <summary>
+        /// All we know from datasheet is : "Any other surface – matt causes a decrease in the maximum density value" and Dmax=2.1
+        /// </summary>
+        protected override double NewDmax => 1.9d;
+    }
+
+    #endregion
+
+    #region Fomaspeed Variant III Grade 0, Glossy
+
     /// <summary>
     /// Data are extracted from https://www.foma.cz/en/fomaspeed-variant-III with https://automeris.io/WebPlotDigitizer/
     /// Sorted by X Ascending 
@@ -174,6 +205,8 @@
             2.058549302130677
             };
     }
+
+    #endregion
 
     #endregion
 
