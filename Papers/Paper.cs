@@ -1,10 +1,6 @@
 ﻿using MathNet.Numerics;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DigitalFilm.Papers
 {
@@ -14,7 +10,7 @@ namespace DigitalFilm.Papers
     public abstract class Paper
     {
         #region Abstract parameters
-        
+
         protected abstract double[] Density { get; }
         protected abstract double[] RelativeLogExposure { get; }
         public abstract string Name { get; }
@@ -60,23 +56,45 @@ namespace DigitalFilm.Papers
         /// </summary>
         private void ComputeTransfertFunction()
         {
-            Data = new int[256];
+            // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // - entre le fromPaper et le toPaper : Data ou InvertedData : générer la courbe pour voir si on est dans le sens du 0.7 (recherché) ou 1.4
+            // NaN ?
+            // - faire un filtre les autres type de papier : matt et velvet
+            // Any other surface  –  matt causes a decrease in the maximum density value
+            // Dmax=2.1
 
-            // https://numerics.mathdotnet.com/Interpolation
-            var i = Interpolate.LogLinear(ScaledDensity, RelativeLogExposure);
-
-            for (int j = 0; j < Data.Length; j++) // TODO : voir qui est à l'endroit et à l'envers
             {
-                Data[j] = Convert.ToInt32(1d * Math.Pow((double)j / 255, i.Interpolate(j)) * 255);
-                Log.WriteLine("Data: {0}={1}", j, Data[j]);
+                double velvet = 0.1;
+                double matt = 0.2;
+
+                // des que l'on arrive à val >= (max - 0.1) * 2, val += (max - val) / 2
+                // 
             }
 
+            // https://numerics.mathdotnet.com/Interpolation
+
+            // We have lots of points so Linear should be ok.
+            var i = Interpolate.Linear(ScaledDensity, RelativeLogExposure);
+            //var i = Interpolate.LogLinear(ScaledDensity, RelativeLogExposure);
+            //var i = Interpolate.RationalWithoutPoles(ScaledDensity, RelativeLogExposure);
+
+            Data = new int[256];
             InvertedData = new int[256];
 
-            for (int j = 0; j < InvertedData.Length; j++) // TODO : voir qui est à l'endroit et à l'envers
+            for (int j = 0; j < Data.Length; j++)
             {
-                InvertedData[255-j] = Convert.ToInt32(1d * Math.Pow((double)j / 255, i.Interpolate(j)) * 255);
-                Log.WriteLine("InvertedData: {0}={1}", j, InvertedData[255-j]);
+                double inter = i.Interpolate((double)j);
+                inter = (inter is double.NaN) ? 255 : inter; // TODO : bof... 
+                double res    = 1d * Math.Pow((double)j / 255d, inter);
+                double resInv = 1d * Math.Pow((double)j / 255d, 1d / inter);
+
+                //Log.WriteLine("Cacl=" + inter + "/" + res + "/" + res2);
+
+                // 255-j to invert black and white
+                Data[255 - j]         = Convert.ToInt32(res * 255d);
+                InvertedData[255 - j] = Convert.ToInt32(resInv * 255d);
+
+                //Log.WriteLine("Data: {0:000} : {1:000} / {2:000}", j, Data[255-j], InvertedData[255 - j]);
             }
         }
 

@@ -22,7 +22,7 @@ namespace DigitalFilm.Tools
                 {
                     Color color = bitmap.GetPixel(x, y);
 
-                    int c = paper.InvertedData[color.R];
+                    int c = paper.Data[color.R];
                     Color gammaColor = Color.FromArgb(c, c, c);
 
                     bbw.SetPixel(x, y, gammaColor);
@@ -47,7 +47,7 @@ namespace DigitalFilm.Tools
                 {
                     Color color = bitmap.GetPixel(x, y);
 
-                    int c = paper.InvertedData[color.R]; // TODO : Same as BitmapToPaper ???
+                    int c = paper.InvertedData[color.R];
                     Color gammaColor = Color.FromArgb(c, c, c);
 
                     bbw.SetPixel(x, y, gammaColor);

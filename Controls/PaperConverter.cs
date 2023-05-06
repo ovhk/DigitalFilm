@@ -10,12 +10,19 @@ namespace DigitalFilm.Controls
     /// </summary>
     class PaperConverter : TypeConverter
     {
+        /// <summary>
+        /// List of papers
+        /// </summary>
         private readonly List<Paper> _papers = new List<Paper>
         {
-            // TODO ! move list someware else ?
+            // TODO ! move list somewhere else ?
             // Add here new papers
             new FomaspeedVariantIIIGlossyG0(),
-            new FomaspeedVariantIIIGlossyG1()
+            new FomaspeedVariantIIIGlossyG1(),
+            new FomaspeedVariantIIIGlossyG2(),
+            new FomaspeedVariantIIIGlossyG3(),
+            new FomaspeedVariantIIIGlossyG4(),
+            new FomaspeedVariantIIIGlossyG5()
         };
 
         /// <summary>

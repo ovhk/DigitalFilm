@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DigitalFilm.Controls;
-using DigitalFilm.Tools;
-using System.ComponentModel;
+﻿using DigitalFilm.Controls;
 using DigitalFilm.Engine;
 using DigitalFilm.Papers;
+using DigitalFilm.Tools;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 
 namespace DigitalFilm.Modes
 {
@@ -100,7 +96,7 @@ namespace DigitalFilm.Modes
         [Category("Display Mode")]
         [Description("Define algo used to diplay the picture.")]
         public DisplayMode DisplayMode
-        { get; set; } = DisplayMode.GrayToTime;
+        { get; set; } = DisplayMode.Direct;
 
         /// <summary>
         /// 
@@ -135,8 +131,8 @@ namespace DigitalFilm.Modes
 
             string md5 = Tools.Checksum.CalculateMD5(ImagePath);
 
-            md5 += "-" + (Rotation.GetHashCode() 
-                + 22 * SizeMode.GetHashCode() 
+            md5 += "-" + (Rotation.GetHashCode()
+                + 22 * SizeMode.GetHashCode()
                 + 333 * MarginColor.GetHashCode()
                 + 4444 * MarginTopBottom.GetHashCode()
                 + 55555 * MarginLeftRight.GetHashCode()
@@ -209,7 +205,7 @@ namespace DigitalFilm.Modes
                         // get the smaller ratio
                         double ratio = (ratioW < ratioH) ? ratioW : ratioH;
 
-                        sz.Width  = Convert.ToInt32(ratio * bmpPicture.Width);
+                        sz.Width = Convert.ToInt32(ratio * bmpPicture.Width);
                         sz.Height = Convert.ToInt32(ratio * bmpPicture.Height);
                         break;
 
@@ -254,13 +250,13 @@ namespace DigitalFilm.Modes
 
                         //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // TODO : test only
 
-                        Bitmap imageForPaper = BitmapTools.BitmapToPaper(bmpPanel, Paper);
+                        Bitmap imageForPaper = BitmapTools.BitmapToPaper(bmpPanel, this.Paper);
 
                         //Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
                         //Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 0.7);
 
                         // 8.1. push image to engine
-                        engine.PushImage(imageForPaper, ExposureTime);
+                        engine.PushImage(imageForPaper, this.ExposureTime);
                         break;
 
                     case DisplayMode.GrayToTime:
