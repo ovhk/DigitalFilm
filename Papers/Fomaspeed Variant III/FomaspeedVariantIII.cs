@@ -29,7 +29,7 @@
     internal class FomaspeedVariantIIIGlossyG0 : Paper
     {
         public override string Name => "Fomaspeed Variant III, Glossy, Grade 0";
-        public override string RawDataFileName => "Papers/0 - extra soft.csv";
+        public override string RawDataFileName => "Papers/Fomaspeed Variant III/0 - extra soft.csv";
     }
 
     #endregion
@@ -42,7 +42,7 @@
     internal class FomaspeedVariantIIIGlossyG1 : Paper
     {
         public override string Name => "Fomaspeed Variant III, Glossy, Grade 1";
-        public override string RawDataFileName => "Papers/1 - soft.csv";
+        public override string RawDataFileName => "Papers/Fomaspeed Variant III/1 - soft.csv";
 
     
     }
@@ -57,7 +57,7 @@
     internal class FomaspeedVariantIIIGlossyG2 : Paper
     {
         public override string Name => "Fomaspeed Variant III, Glossy, Grade 2";
-        public override string RawDataFileName => @"Papers/2 - special.csv";
+        public override string RawDataFileName => @"Papers/Fomaspeed Variant III/2 - special.csv";
     }
 
     #endregion
@@ -70,7 +70,7 @@
     internal class FomaspeedVariantIIIGlossyG3 : Paper
     {
         public override string Name => "Fomaspeed Variant III, Glossy, Grade 3";
-        public override string RawDataFileName => @"Papers/3 - normal.csv";
+        public override string RawDataFileName => @"Papers/Fomaspeed Variant III/3 - normal.csv";
     }
 
     #endregion
@@ -83,7 +83,7 @@
     internal class FomaspeedVariantIIIGlossyG4 : Paper
     {
         public override string Name => "Fomaspeed Variant III, Glossy, Grade 4";
-        public override string RawDataFileName => @"Papers/4 - hard.csv";
+        public override string RawDataFileName => @"Papers/Fomaspeed Variant III/4 - hard.csv";
     }
 
     #endregion
@@ -96,7 +96,7 @@
     internal class FomaspeedVariantIIIGlossyG5 : Paper
     {
         public override string Name => "Fomaspeed Variant III, Glossy, Grade 5";
-        public override string RawDataFileName => @"Papers/5 - extra hard.csv";
+        public override string RawDataFileName => @"Papers/Fomaspeed Variant III/5 - extra hard.csv";
     }
 
     #endregion

@@ -78,7 +78,11 @@ namespace DigitalFilm.Papers
             {
                 Task.Run(() =>
                 {
-                    p.Load();
+                    if (p.Load() == false)
+                    {
+                        Log.WriteLine("Fail to Load paper data : " + p.Name);
+                        Papers.Remove(p);
+                    }
                 });
             }
         }
