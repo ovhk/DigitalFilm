@@ -94,7 +94,7 @@ https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 - [ ] README : faire des pages spécifiques pour les filtres, films (non?) et papier ?
 - [ ] intégrer photo du labo
 - [/] Tester TopMost
-- [ ] Supprimer Mode6.cs ?
+- [X] Supprimer Mode6.cs ?
 - [ ] frmMain : Supprimer Current time ?
 
 - [X] Renomer duration ExposureTime

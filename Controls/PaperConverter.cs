@@ -11,24 +11,6 @@ namespace DigitalFilm.Controls
     class PaperConverter : TypeConverter
     {
         /// <summary>
-        /// List of papers
-        /// </summary>
-        private readonly List<Paper> _papers = new List<Paper>
-        {
-            // TODO ! move list somewhere else ?
-            // Add here new papers
-            new FomaspeedVariantIIIGlossyG0(),
-            new FomaspeedVariantIIIVelvetG0(),
-            new FomaspeedVariantIIIMattG0(),
-
-            new FomaspeedVariantIIIGlossyG1(),
-            new FomaspeedVariantIIIGlossyG2(),
-            new FomaspeedVariantIIIGlossyG3(),
-            new FomaspeedVariantIIIGlossyG4(),
-            new FomaspeedVariantIIIGlossyG5()
-        };
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="context"></param>
@@ -45,7 +27,7 @@ namespace DigitalFilm.Controls
         /// <returns></returns>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            return new StandardValuesCollection(_papers);
+            return new StandardValuesCollection(PapersManager.Papers);
         }
 
         /// <summary>
@@ -74,7 +56,7 @@ namespace DigitalFilm.Controls
         {
             if (value is string)
             {
-                foreach (Paper p in _papers)
+                foreach (Paper p in PapersManager.Papers)
                 {
                     if (p.Name == (string)value)
                     {

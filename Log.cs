@@ -38,7 +38,7 @@ namespace DigitalFilm
 
             if ((DateTime.Now - lastDT).TotalSeconds > FLUSH_INTERVAL && engine.Status != EngineStatus.Running)
             {
-                System.IO.File.AppendAllText(filePath + "\\" + FILE_NAME, sb.ToString());
+                File.AppendAllText(filePath + "\\" + FILE_NAME, sb.ToString());
                 sb.Clear();
                 lastDT = DateTime.Now;
             }
@@ -56,9 +56,21 @@ namespace DigitalFilm
         /// <summary>
         /// 
         /// </summary>
+        internal static void Clear()
+        {
+            sb.Clear();
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         internal static void Close()
         {
-            System.IO.File.AppendAllText(filePath + "\\" + FILE_NAME, sb.ToString());
+            File.AppendAllText(filePath + "\\" + FILE_NAME, sb.ToString());
             sb.Clear();
         }
     }

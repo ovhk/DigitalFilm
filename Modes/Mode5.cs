@@ -248,7 +248,7 @@ namespace DigitalFilm.Modes
                     case DisplayMode.Direct:
                         // 7.1. convert image for selected paper
 
-                        //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // TODO : test only
+                        //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // test only
 
                         Bitmap imageForPaper = BitmapTools.BitmapToPaper(bmpPanel, this.Paper);
 

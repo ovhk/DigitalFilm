@@ -66,7 +66,7 @@ namespace DigitalFilm
 
             toolStripStatusLabel1.Text = "Welcome to DigitalFilm!";
 
-            // TODO : this is for test
+#if TEST
             if (false)
             {
                 Test.FileFormat file = new Test.FileFormat();
@@ -76,6 +76,7 @@ namespace DigitalFilm
                 // Read the file contents back into a variable.
                 Test.FileFormat object1 = Test.FileManagement.ReadFromJsonFile<Test.FileFormat>(@"C:\someClass.txt");
             }
+#endif
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace DigitalFilm
             engine.Clear();
         }
 
-        #endregion
+#endregion
 
         #region Panels Management
 

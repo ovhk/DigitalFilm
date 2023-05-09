@@ -8,5 +8,8 @@
     <Setting Name="FileBufferSize" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">8</Value>
     </Setting>
+    <Setting Name="PapersDataFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">data.csv</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

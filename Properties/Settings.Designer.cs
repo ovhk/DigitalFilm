@@ -40,5 +40,14 @@ namespace DigitalFilm.Properties {
                 return ((int)(this["FileBufferSize"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("data.csv")]
+        public string PapersDataFileName {
+            get {
+                return ((string)(this["PapersDataFileName"]));
+            }
+        }
     }
 }
