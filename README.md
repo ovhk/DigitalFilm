@@ -28,7 +28,20 @@ The datasheet is <a href="DisplayDatasheets/TOP103MONO8K01A  10.3 inch 黑白屏
 
 <img src="/img/labo4.jpg" width="300">
 
-## Modes
+## The paper
+
+Papers have a caracteristic curve with density and relative log exposure.
+
+<img src="/img/FomaspeedVariantIII.png" width="300">
+
+Remember: more light = more density = darker.
+
+Basicly, the gamma for a paper is arround 1.4 and for a film, it's arround 0.7. 0.7 + 1.4 = ~1, that why your picture look like the reality.
+So the idea if you want to use your screen as a film, is to apply the invert of the gamma of the paper and invert black and white.
+
+is to convert the density to 255 gray level. 
+
+## The application
 
 ### Mode 1 : Back & White
 
