@@ -18,8 +18,8 @@ Tada!
 
 DigitalFilm helps to transfer digital picture to analog print.
 
-<img src="/img/labo1.png" width="300"><img src="/img/labo2.png" width="300">
-<img src="/img/labo3.png" width="300"><img src="/img/labo4.png" width="300">
+<img src="/img/labo1.jpg" width="300"><img src="/img/labo2.jpg" width="300">
+<img src="/img/labo3.jpg" width="300"><img src="/img/labo4.jpg" width="300">
 
 ## Modes
 
