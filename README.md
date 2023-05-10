@@ -1,4 +1,4 @@
-# Digital Film
+﻿# Digital Film
 
 How to print a picture from a film negative?
 
@@ -16,10 +16,17 @@ No! Here is the solution:
 
 Tada!
 
-DigitalFilm helps to transfer digital picture to analog print.
+DigitalFilm helps to transfer digital picture to analog print through a transparent screen.
 
-<img src="/img/labo1.jpg" width="300"><img src="/img/labo2.jpg" width="300">
-<img src="/img/labo3.jpg" width="300"><img src="/img/labo4.jpg" width="300">
+<img src="/img/labo1.jpg" width="300"><img src="/img/labo2.jpg" width="300"><img src="/img/labo3.jpg" width="300">
+
+## The screen
+
+This type of screen is usually dedicated for resin 3D printing.
+Test are made with a 10.3", 8K (7680 x 4320) monochrome from <a href="https://wisecocodisplay.com/">Wisecoco</a>.
+The datasheet is <a href="DisplayDatasheets/TOP103MONO8K01A  10.3 inch 黑白屏.pdf">here</a>.
+
+<img src="/img/labo4.jpg" width="300">
 
 ## Modes
 
@@ -93,15 +100,15 @@ https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 - [ ] https://www.35mmc.com/07/02/2022/contrast-and-tonality-part-3-characteristic-curves-for-film-and-paper-by-sroyon/
 
 ### Minor
-- [ ] README : faire des pages sp�cifiques pour les filtres, films (non?) et papier ?
-- [ ] int�grer photos du labo
+- [ ] README : faire des pages spécifiques pour les filtres, films (non?) et papier ?
+- [ ] intégrer photos du labo
 - [ ] frmMain : Supprimer Current time ?
 
 - [X] README : corriger le mode 5 -> image inverser
 - [X] Supprimer Mode6.cs ?
 - [X] Tester TopMost
 - [X] Renomer duration ExposureTime
-- [X] g�rer les invertions en inversant le tableau dans Paper
+- [X] gérer les invertions en inversant le tableau dans Paper
 
 ### Major
 - [ ] Test parallel Programming
