@@ -18,6 +18,9 @@ Tada!
 
 DigitalFilm helps to transfer digital picture to analog print.
 
+<img src="/img/labo1.png" width="300"><img src="/img/labo2.png" width="300">
+<img src="/img/labo3.png" width="300"><img src="/img/labo4.png" width="300">
+
 ## Modes
 
 ### Mode 1 : Back & White
@@ -48,9 +51,9 @@ Gamma parameter is available.
 ### Mode 5 : Display a picture following parameters
 
 #### Display mode : Direct, convert a colored picture in grayscale and diplay it
-Convert the picture to graysclale and display it with inverted colors (like films). 
+Convert the picture to graysclale and display it with inverted colors (like films) adapted for the specified paper. 
 
-<img src="/img/mode5.jpg" width="300"> <img src="/img/mode5inverted.jpg" width="300">
+<img src="/img/mode5inverted.png" width="300">
 
 #### Display mode : Display a picture with GrayToTime algorythm
 
@@ -90,13 +93,13 @@ https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 - [ ] https://www.35mmc.com/07/02/2022/contrast-and-tonality-part-3-characteristic-curves-for-film-and-paper-by-sroyon/
 
 ### Minor
-- [/] README : corriger le mode 5 -> image inverser
 - [ ] README : faire des pages spécifiques pour les filtres, films (non?) et papier ?
-- [ ] intégrer photo du labo
-- [/] Tester TopMost
-- [X] Supprimer Mode6.cs ?
+- [ ] intégrer photos du labo
 - [ ] frmMain : Supprimer Current time ?
 
+- [X] README : corriger le mode 5 -> image inverser
+- [X] Supprimer Mode6.cs ?
+- [X] Tester TopMost
 - [X] Renomer duration ExposureTime
 - [X] gérer les invertions en inversant le tableau dans Paper
 
