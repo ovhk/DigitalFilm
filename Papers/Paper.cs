@@ -24,7 +24,7 @@ namespace DigitalFilm.Papers
 
         #endregion
 
-        protected double[] ScaledDensity 
+        private double[] ScaledDensity 
         { 
             get
             {
@@ -37,7 +37,7 @@ namespace DigitalFilm.Papers
             }
         }
         
-        protected double[] RelativeLogExposure
+        private double[] RelativeLogExposure
         {
             get
             {
@@ -201,7 +201,8 @@ namespace DigitalFilm.Papers
             for (int j = 0; j < Data.Length; j++)
             {
                 double inter = i.Interpolate((double)j);
-                inter = (inter is double.NaN) ? 255 : inter; // TODO : bof... !!!!!! en fait on a 2 valeur diff de X pour la même valeur de Y
+                inter = (inter is double.NaN) ? 255d : inter; // TODO : bof... !!!!!! en fait on a 2 valeur diff de X pour la même valeur de Y (à cause de la mise à l'échelle)
+                inter = (inter < 0) ? 255d : inter;
                 double res = 1d * Math.Pow((double)j / 255d, inter);
                 double resInv = 1d * Math.Pow((double)j / 255d, 1d / inter);
 

@@ -72,7 +72,6 @@
   <ItemGroup>
     <Compile Include="Engine\CacheManager.cs" />
     <Compile Include="Engine\DisplayEngine.cs" />
-    <Compile Include="Filters\IMultiGradeFilter.cs" />
     <Compile Include="Modes\Mode9.cs" />
     <Compile Include="Modes\ModeParameters.cs" />
     <Compile Include="Papers\Fomaspeed Variant III\FomaspeedVariantIII.cs" />
