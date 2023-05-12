@@ -298,10 +298,6 @@ namespace DigitalFilm
         {
             this.SafeUpdate(() => this.SuspendLayout());
 
-            // Update Time
-            string s = String.Format("{0:00}:{1:00}.{2:00}", elapseTime.Minutes, elapseTime.Seconds, elapseTime.Milliseconds / 10);
-            this.SafeUpdate(() => this.lbTime.Text = s);
-
             // Update Tile
             try
             {
@@ -370,7 +366,7 @@ namespace DigitalFilm
                     // Stop timers
                     this.SafeUpdate(() => this.timer1.Stop());
                     this.SafeUpdate(() => this.timer2.Stop());
-                    Console.Beep(); // 200ms
+                    System.Media.SystemSounds.Exclamation.Play();
                     break;
             }
         }
@@ -611,6 +607,7 @@ namespace DigitalFilm
         /// <param name="e"></param>
         private void btPlay_Click(object sender, EventArgs e)
         {
+            this.btPlay.Enabled = false;
             {
                 string s = "Playing";
                 toolStripStatusLabel1.Text = s;
