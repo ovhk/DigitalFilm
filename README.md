@@ -117,6 +117,7 @@ https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 https://www.covingtoninnovations.com/dslr/curves.html
 
 ### Minor
+- [ ] faire affiche pour l'AS8
 - [ ] frmMain : Supprimer Current time ?
 - [ ] tester les courbes
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
