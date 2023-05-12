@@ -36,6 +36,8 @@ Papers have a caracteristic curve with density and relative log exposure.
 
 Remember: more light = more density = darker.
 
+"Typically, negatives have a gamma of about 0.7 and are printed on photographic paper with a gamma of about 1.4 (to turn the negative back into a positive). Note that 0.7×1.4=1.0, so the picture looks like the original." (a reformuler)
+
 Basicly, the gamma for a paper is arround 1.4 and for a film, it's arround 0.7. 0.7 + 1.4 = ~1, that why your picture look like the reality.
 So the idea if you want to use your screen as a film, is to apply the invert of the gamma of the paper and invert black and white.
 
@@ -111,6 +113,8 @@ Generate a gray palette with gamma parameter.
 https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 
 - [ ] https://www.35mmc.com/07/02/2022/contrast-and-tonality-part-3-characteristic-curves-for-film-and-paper-by-sroyon/
+
+https://www.covingtoninnovations.com/dslr/curves.html
 
 ### Minor
 - [ ] frmMain : Supprimer Current time ?
