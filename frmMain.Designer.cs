@@ -39,7 +39,6 @@ namespace DigitalFilm
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btPlay = new System.Windows.Forms.Button();
             this.btStop = new System.Windows.Forms.Button();
-            this.lbTime = new System.Windows.Forms.Label();
             this.cbPanels = new System.Windows.Forms.ComboBox();
             this.gbModes = new System.Windows.Forms.GroupBox();
             this.pgMode = new System.Windows.Forms.PropertyGrid();
@@ -51,7 +50,6 @@ namespace DigitalFilm
             this.label3 = new System.Windows.Forms.Label();
             this.lbTotalExposureTime = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lbTimer = new System.Windows.Forms.Label();
             this.btPreview = new System.Windows.Forms.Button();
@@ -71,6 +69,7 @@ namespace DigitalFilm
             // pgImageLayer
             // 
             this.pgImageLayer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pgImageLayer.HelpBackColor = System.Drawing.SystemColors.ControlDark;
             this.pgImageLayer.Location = new System.Drawing.Point(787, 115);
             this.pgImageLayer.Name = "pgImageLayer";
             this.pgImageLayer.Size = new System.Drawing.Size(193, 307);
@@ -79,7 +78,7 @@ namespace DigitalFilm
             // 
             // statusStrip1
             // 
-            this.statusStrip1.BackColor = System.Drawing.SystemColors.Control;
+            this.statusStrip1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.toolStripStatusLabel1});
@@ -141,18 +140,6 @@ namespace DigitalFilm
             this.btStop.UseVisualStyleBackColor = true;
             this.btStop.Click += new System.EventHandler(this.btStop_Click);
             // 
-            // lbTime
-            // 
-            this.lbTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbTime.AutoSize = true;
-            this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTime.Location = new System.Drawing.Point(880, 447);
-            this.lbTime.Name = "lbTime";
-            this.lbTime.Size = new System.Drawing.Size(96, 25);
-            this.lbTime.TabIndex = 10;
-            this.lbTime.Text = "00:00.00";
-            this.lbTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // cbPanels
             // 
             this.cbPanels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -184,10 +171,12 @@ namespace DigitalFilm
             // 
             this.pgMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.pgMode.HelpBackColor = System.Drawing.SystemColors.ControlDark;
             this.pgMode.Location = new System.Drawing.Point(12, 51);
             this.pgMode.Name = "pgMode";
             this.pgMode.Size = new System.Drawing.Size(177, 79);
             this.pgMode.TabIndex = 25;
+            this.pgMode.ViewBackColor = System.Drawing.SystemColors.ControlDark;
             // 
             // cbMode
             // 
@@ -263,13 +252,13 @@ namespace DigitalFilm
             this.label3.TabIndex = 24;
             this.label3.Text = "Screen :";
             // 
-            // lbTotalBuration
+            // lbTotalExposureTime
             // 
             this.lbTotalExposureTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbTotalExposureTime.AutoSize = true;
             this.lbTotalExposureTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTotalExposureTime.Location = new System.Drawing.Point(880, 504);
-            this.lbTotalExposureTime.Name = "lbTotalBuration";
+            this.lbTotalExposureTime.Name = "lbTotalExposureTime";
             this.lbTotalExposureTime.Size = new System.Drawing.Size(96, 25);
             this.lbTotalExposureTime.TabIndex = 25;
             this.lbTotalExposureTime.Text = "00:00.00";
@@ -286,18 +275,6 @@ namespace DigitalFilm
             this.label1.TabIndex = 26;
             this.label1.Text = "Total:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(787, 447);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 25);
-            this.label2.TabIndex = 27;
-            this.label2.Text = "Current:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label4
             // 
@@ -357,7 +334,6 @@ namespace DigitalFilm
             this.Controls.Add(this.btPreview);
             this.Controls.Add(this.lbTimer);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbTotalExposureTime);
             this.Controls.Add(this.label3);
@@ -365,7 +341,6 @@ namespace DigitalFilm
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.gbModes);
             this.Controls.Add(this.cbPanels);
-            this.Controls.Add(this.lbTime);
             this.Controls.Add(this.btStop);
             this.Controls.Add(this.btPlay);
             this.Controls.Add(this.statusStrip1);
@@ -398,7 +373,6 @@ namespace DigitalFilm
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Button btPlay;
         private System.Windows.Forms.Button btStop;
-        private System.Windows.Forms.Label lbTime;
         private System.Windows.Forms.ComboBox cbPanels;
         private System.Windows.Forms.GroupBox gbModes;
         private System.Windows.Forms.Button btUnloadMode;
@@ -413,7 +387,6 @@ namespace DigitalFilm
         private System.Windows.Forms.PropertyGrid pgMode;
         private System.Windows.Forms.Label lbTotalExposureTime;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lbTimer;
         private System.Windows.Forms.Button btPreview;
