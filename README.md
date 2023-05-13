@@ -29,9 +29,11 @@ Then, you have to put the screen directly on the paper and light it up.
 
 ## The screen
 
-This type of screen is usually dedicated for resin 3D printers.
+This type of screen is usually dedicated for resin 3D printers with UV light.
 These tests are made with a 10.3", 8K (7680 x 4320) monochrome from <a href="https://wisecocodisplay.com/">Wisecoco</a>.
 The datasheet is <a href="DisplayDatasheets/TOP103MONO8K01A  10.3 inch 黑白屏.pdf">here</a>.
+
+Why transparent? Just because it's acctually the way to have a small screen with very high resolution.
 
 <img src="/img/labo4.jpg" width="300">
 
