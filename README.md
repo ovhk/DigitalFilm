@@ -113,11 +113,10 @@ https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 - [ ] https://www.35mmc.com/07/02/2022/contrast-and-tonality-part-3-characteristic-curves-for-film-and-paper-by-sroyon/
 
 ### Minor
-- [ ] frmMain : Supprimer Current time ?
-- [ ] tester les courbes
+- [ ] Bug en mode CenterImage car l'écran est en portrait
+- [ ] intégrer tirages du labo
+- [ ] en G3, pb à 255 -> 0 au lieu de 255
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
-
-- [X] intégrer photos du labo
 
 ### Major
 - [ ] Test parallel Programming
