@@ -125,6 +125,11 @@ https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 
 https://www.covingtoninnovations.com/dslr/curves.html
 
+### Creative TODO list
+- [ ] Multiple exposure : film + screen
+    - [ ] With edge detection
+    - [ ] digital texture background
+
 ### Minor
 - [ ] faire affiche pour l'AS8
 - [ ] frmMain : Supprimer Current time ?
