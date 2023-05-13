@@ -132,6 +132,7 @@ https://www.covingtoninnovations.com/dslr/curves.html
 
 ### Minor
 - [ ] faire affiche pour l'AS8
+- [ ] Générer et imprimer une feuille A3 de référence de gris avec trou au milieu
 - [ ] frmMain : Supprimer Current time ?
 - [ ] tester les courbes
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
