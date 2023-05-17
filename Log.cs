@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DigitalFilm
@@ -24,7 +25,7 @@ namespace DigitalFilm
         /// 
         /// </summary>
         /// <param name="text"></param>
-        internal static void Write(string text, params object[] parameters)
+        private static void Write(string text, params object[] parameters)
         {
             sb.Append(string.Format("{0} {1} : ", DateTime.Now.ToShortDateString(), DateTime.Now.ToLongTimeString()));
             sb.Append(string.Format(text, parameters));
