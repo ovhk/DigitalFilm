@@ -146,6 +146,52 @@ namespace DigitalFilm.Tools
         }
 
         /// <summary>
+        /// Adapted from https://stackoverflow.com/questions/20055024/draw-histogram-from-points-array
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static Bitmap Histogram(Bitmap bitmap)
+        {
+            int[] histogram_r = new int[256];
+            float max = 0;
+
+            // find max value
+            for (int i = 0; i < bitmap.Width; i++)
+            {
+                for (int j = 0; j < bitmap.Height; j++)
+                {
+                    int redValue = bitmap.GetPixel(i, j).R;
+
+                    histogram_r[redValue]++;
+
+                    if (max < histogram_r[redValue])
+                    {
+                        max = histogram_r[redValue];
+                    }
+                }
+            }
+
+            int histHeight = 128;
+
+            Bitmap img = new Bitmap(256, histHeight + 10);
+
+            using (Graphics g = Graphics.FromImage(img))
+            {
+                for (int i = 0; i < histogram_r.Length; i++)
+                {
+                    float pct = histogram_r[i] / max;   // What percentage of the max is this value?
+
+                    g.DrawLine(Pens.WhiteSmoke,
+                        new Point(i, img.Height - 5),
+                        new Point(i, img.Height - 5 - (int)(pct * histHeight))  // Use that percentage of the height
+                        );
+                }
+            }
+
+            return img;
+        }
+
+        /// <summary>
         /// Based on http://www.switchonthecode.com/tutorials/csharp-tutorial-convert-a-color-image-to-grayscale
         /// </summary>
         /// <returns></returns>

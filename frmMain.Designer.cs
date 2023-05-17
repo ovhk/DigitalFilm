@@ -53,6 +53,7 @@ namespace DigitalFilm
             this.label4 = new System.Windows.Forms.Label();
             this.lbTimer = new System.Windows.Forms.Label();
             this.btPreview = new System.Windows.Forms.Button();
+            this.myPictureBoxHistogram = new DigitalFilm.Controls.MyPictureBox();
             this.myPictureBox1 = new DigitalFilm.Controls.MyPictureBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -69,10 +70,12 @@ namespace DigitalFilm
             // pgImageLayer
             // 
             this.pgImageLayer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pgImageLayer.CategorySplitterColor = System.Drawing.SystemColors.ControlDarkDark;
             this.pgImageLayer.HelpBackColor = System.Drawing.SystemColors.ControlDark;
-            this.pgImageLayer.Location = new System.Drawing.Point(787, 115);
+            this.pgImageLayer.Location = new System.Drawing.Point(787, 228);
             this.pgImageLayer.Name = "pgImageLayer";
-            this.pgImageLayer.Size = new System.Drawing.Size(193, 307);
+            this.pgImageLayer.SelectedItemWithFocusBackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.pgImageLayer.Size = new System.Drawing.Size(193, 194);
             this.pgImageLayer.TabIndex = 1;
             this.pgImageLayer.ViewBackColor = System.Drawing.SystemColors.ControlDark;
             // 
@@ -171,9 +174,11 @@ namespace DigitalFilm
             // 
             this.pgMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.pgMode.CategorySplitterColor = System.Drawing.SystemColors.ControlDarkDark;
             this.pgMode.HelpBackColor = System.Drawing.SystemColors.ControlDark;
             this.pgMode.Location = new System.Drawing.Point(12, 51);
             this.pgMode.Name = "pgMode";
+            this.pgMode.SelectedItemWithFocusBackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.pgMode.Size = new System.Drawing.Size(177, 79);
             this.pgMode.TabIndex = 25;
             this.pgMode.ViewBackColor = System.Drawing.SystemColors.ControlDark;
@@ -241,7 +246,6 @@ namespace DigitalFilm
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Tile;
             this.listView1.ItemActivate += new System.EventHandler(this.listView1_ItemActivate);
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -313,6 +317,16 @@ namespace DigitalFilm
             this.btPreview.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btPreview_MouseDown);
             this.btPreview.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btPreview_MouseUp);
             // 
+            // myPictureBoxHistogram
+            // 
+            this.myPictureBoxHistogram.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.myPictureBoxHistogram.BackColor = System.Drawing.Color.Black;
+            this.myPictureBoxHistogram.Image = null;
+            this.myPictureBoxHistogram.Location = new System.Drawing.Point(787, 115);
+            this.myPictureBoxHistogram.Name = "myPictureBoxHistogram";
+            this.myPictureBoxHistogram.Size = new System.Drawing.Size(193, 107);
+            this.myPictureBoxHistogram.TabIndex = 31;
+            // 
             // myPictureBox1
             // 
             this.myPictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -331,6 +345,7 @@ namespace DigitalFilm
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(988, 619);
+            this.Controls.Add(this.myPictureBoxHistogram);
             this.Controls.Add(this.btPreview);
             this.Controls.Add(this.lbTimer);
             this.Controls.Add(this.label4);
@@ -390,6 +405,7 @@ namespace DigitalFilm
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lbTimer;
         private System.Windows.Forms.Button btPreview;
+        private MyPictureBox myPictureBoxHistogram;
     }
 }
 

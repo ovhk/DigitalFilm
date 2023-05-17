@@ -216,21 +216,7 @@ namespace DigitalFilm
                                   TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void listView1_ItemActivate(object sender, EventArgs e)
         {
             ListView lv = sender as ListView;
@@ -250,6 +236,7 @@ namespace DigitalFilm
             if (il != null)
             {
                 this.myPictureBox1.Image = il.Bitmap;
+                this.myPictureBoxHistogram.Image = BitmapTools.Histogram(il.Bitmap);
                 this.pgImageLayer.SelectedObject = lv.SelectedItems[0].Tag as ImageLayer;
             }
         }
@@ -578,6 +565,7 @@ namespace DigitalFilm
             }
 
             this.myPictureBox1.Image = imageToDisplay;
+            this.myPictureBoxHistogram.Image = BitmapTools.Histogram(imageToDisplay);
         }
 
         /// <summary>
@@ -593,6 +581,7 @@ namespace DigitalFilm
             }
 
             this.myPictureBox1.Image = this._savedImage;
+            this.myPictureBoxHistogram.Image = BitmapTools.Histogram(this._savedImage);
             this._savedImage = null;
         }
 
