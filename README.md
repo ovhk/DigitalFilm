@@ -116,11 +116,12 @@ https://www.covingtoninnovations.com/dslr/curves.html
     - [ ] digital texture background
 
 ### Minor
-- [ ] faire affiche pour l'AS8
+- [ ] tester les courbes
 - [ ] Générer et imprimer une feuille A3 de référence de gris avec trou au milieu
 - [ ] Faire une image avec les 5 niveaux de grade
-- [ ] frmMain : Supprimer Current time ?
-- [ ] tester les courbes
+- [ ] Faire un histogramme
+
+- [ ] faire affiche pour l'AS8
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
 
 ### Major
