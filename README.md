@@ -1,33 +1,17 @@
 ﻿# Digital Film
 
-How to print a picture from a film negative?
-
-- put the negative into the enlarger 
-- project the negative on the paper
-
-No! Here is the solution:
-
-- scan the negative, invert colors and save it
-- Find experimentaly the exposure time to have different values of gray on the paper
-- put gray values and exposure time in an Excel file, draw the trend curve and get its formula
-- generate 256 bitmaps from your scanned picture. One for each gray value, keep black all pixels lower than this value, put all others in white
-- put the display on the paper and turn on the enlarger light
-- display these bitmaps during the exposure time calculate with the trend formula onto a transparent black and white display panel
-
-Tada!
-
 DigitalFilm helps to transfer digital picture to analog print through a transparent screen. In a way, it's a digital film.
 
 <img src="/img/labo1.jpg" width="300"><img src="/img/labo2.jpg" width="300"><img src="/img/labo3.jpg" width="300">
 
-## The method
+## Method
 
 Basicly, negatives films have a gamma of arround 0.7 and are printed on photographic paper with a gamma of arround 1.4. 
 0.7 × 1.4 = 1.0, that's why the picture looks like the original view.
 So the idea if you want to use a screen as a film, is to apply the invert of the gamma of the paper and invert black and white.
 Then, you have to put the screen directly on the paper and light it up.
 
-## The screen
+## Screen
 
 This type of screen is usually dedicated for resin 3D printers with UV light.
 These tests are made with a 10.3", 8K (7680 x 4320) monochrome from <a href="https://wisecocodisplay.com/">Wisecoco</a>.
@@ -37,7 +21,7 @@ Why transparent? Just because it's acctually the way to have a small screen with
 
 <img src="/img/labo4.jpg" width="300">
 
-## The paper
+## Papers
 
 Papers have a caracteristic curve with density and relative log exposure.
 Remember: more light = more density = darker.
@@ -46,9 +30,10 @@ Remember: more light = more density = darker.
 
 So the idea is to extract the data of the curve and convert the density to 256 gray level.
 
-Tests here are made with a Famaspeed Variant III RC paper : https://www.foma.cz/en/fomaspeed-variant-III
+Tests here are made with a Famaspeed Variant III RC paper (matt and glossy) : https://www.foma.cz/en/fomaspeed-variant-III
+Thanks to Foma for getting me few usefull informations.
 
-## The application
+## Application
 
 The application is made with different mode for diffrent tests.
 
@@ -133,6 +118,7 @@ https://www.covingtoninnovations.com/dslr/curves.html
 ### Minor
 - [ ] faire affiche pour l'AS8
 - [ ] Générer et imprimer une feuille A3 de référence de gris avec trou au milieu
+- [ ] Faire une image avec les 5 niveaux de grade
 - [ ] frmMain : Supprimer Current time ?
 - [ ] tester les courbes
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
@@ -148,6 +134,24 @@ https://www.covingtoninnovations.com/dslr/curves.html
 - [ ] Add GrayToTime formula in parameter and evaluate it on the fly?
       if trend nedded https://stackoverflow.com/questions/40269793/replicate-excel-power-trendline-values-with-c-sharp
 - [ ] Add mask managment
+
+---
+
+How to print a picture from a film negative?
+
+- put the negative into the enlarger 
+- project the negative on the paper
+
+No! Here is the solution:
+
+- scan the negative, invert colors and save it
+- Find experimentaly the exposure time to have different values of gray on the paper
+- put gray values and exposure time in an Excel file, draw the trend curve and get its formula
+- generate 256 bitmaps from your scanned picture. One for each gray value, keep black all pixels lower than this value, put all others in white
+- put the display on the paper and turn on the enlarger light
+- display these bitmaps during the exposure time calculate with the trend formula onto a transparent black and white display panel
+
+Tada!
 
 ---
 
