@@ -4,6 +4,8 @@ DigitalFilm helps to transfer digital picture to analog print through a transpar
 
 <img src="/img/labo1.jpg" width="300"><img src="/img/labo2.jpg" width="300"><img src="/img/labo3.jpg" width="300">
 
+---
+
 ## Method
 
 Basicly, negatives films have a gamma of arround 0.7 and are printed on photographic paper with a gamma of arround 1.4. 
@@ -98,43 +100,40 @@ Generate a gray palette with gamma parameter.
 ## Thanks
 
 - Many thanks to http://ateliersuper8.com!
-- Thanks to https://ezgif.com/maker for animated GIFs
 
 ---
 
 ## TODO list
-
-https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
-
-- [ ] https://www.35mmc.com/07/02/2022/contrast-and-tonality-part-3-characteristic-curves-for-film-and-paper-by-sroyon/
-
-https://www.covingtoninnovations.com/dslr/curves.html
 
 ### Creative TODO list
 - [ ] Multiple exposure : film + screen
     - [ ] With edge detection
     - [ ] digital texture background
 
-### Minor
+### Next release
 - [ ] faire affiche pour l'AS8
 - [ ] Générer et imprimer une feuille A3 de référence de gris avec trou au milieu
 - [ ] Faire une image avec les 5 niveaux de grade
-- [ ] frmMain : Supprimer Current time ?
-- [ ] tester les courbes
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
 
-- [X] intégrer photos du labo
-
-### Major
-- [ ] Test parallel Programming
-- [ ] Racadrer les images ?
-- [ ] Add Images configuration system : add, remove with custom params on each steps
+### Futur release
+- [ ] Parallel Programming : in 4K or 8K, generate 256 bitmap take times. Thanks for the cache system.
+- [ ] Reframe picture : maybe it has to be done in a true image manupulation program
+- [ ] Add mask managment 
 - [ ] Add GrayToTime configuration system
       can show the impact on picture on real time
 - [ ] Add GrayToTime formula in parameter and evaluate it on the fly?
       if trend nedded https://stackoverflow.com/questions/40269793/replicate-excel-power-trendline-values-with-c-sharp
-- [ ] Add mask managment
+- [ ] Add Images configuration system : add, remove with custom params on each steps
 
+## Reference
+
+- https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
+- https://www.35mmc.com/07/02/2022/contrast-and-tonality-part-3-characteristic-curves-for-film-and-paper-by-sroyon/
+- https://www.covingtoninnovations.com/dslr/curves.html
+- https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/
+- https://ezgif.com/maker
+- 
 ---
 
 How to print a picture from a film negative?
