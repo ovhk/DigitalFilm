@@ -1,4 +1,5 @@
 ﻿using DigitalFilm.Papers;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -57,6 +58,71 @@ namespace DigitalFilm.Tools
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static Bitmap BitmapToPapers(Bitmap bitmap)
+        {
+            DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
+
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                double iWidth = (double)bitmap.Width / PapersManager.Papers.Count;
+
+                int indexPaper = (x == bitmap.Width) // is it the end ?
+                                  ? PapersManager.Papers.Count - 1 // so go to last index
+                                  : (int) Math.Truncate(x / iWidth); // else calculate
+
+                Paper paper = PapersManager.Papers[indexPaper] as Paper;
+
+                for (int y = 0; y < bitmap.Height; y++)
+                {
+                    Color color = bitmap.GetPixel(x, y);
+
+                    int c = paper.Data[color.R];
+
+                    Color gammaColor = Color.FromArgb(c, c, c);
+
+                    bbw.SetPixel(x, y, gammaColor);
+                }
+            }
+            return bbw.Bitmap;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static Bitmap BitmapFromPapers(Bitmap bitmap)
+        {
+            DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
+
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                double iWidth = (double)bitmap.Width / PapersManager.Papers.Count;
+
+                int indexPaper = (x == bitmap.Width) // is it the end ?
+                                  ? PapersManager.Papers.Count - 1 // so go to last index
+                                  : (int)Math.Truncate(x / iWidth); // else calculate
+
+                Paper paper = PapersManager.Papers[indexPaper] as Paper;
+
+                for (int y = 0; y < bitmap.Height; y++)
+                {
+                    Color color = bitmap.GetPixel(x, y);
+
+                    int c = paper.InvertedData[color.R];
+                    Color gammaColor = Color.FromArgb(c, c, c);
+
+                    bbw.SetPixel(x, y, gammaColor);
+                }
+            }
+            return bbw.Bitmap;
+        }
+
+        /// <summary>
         /// Invert pixels color in the bitmap
         /// </summary>
         /// <param name="bitmap"></param>
@@ -88,20 +154,18 @@ namespace DigitalFilm.Tools
         {
             DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
 
-            //Parallel.For(0, bitmap.Width, x =>
             for (int x = 0; x < bitmap.Width; x++)
             {
-                //Parallel.For(0, bitmap.Height, y =>
                 for (int y = 0; y < bitmap.Height; y++)
                 {
-                    Color color = bitmap.GetPixel(x, y); // Parallel : object used elsewhere
+                    Color color = bitmap.GetPixel(x, y);
 
                     Color gammaColor = ColorTools.GetColorWithGamma(color, gamma);
 
                     // invert
                     bbw.SetPixel(x, y, gammaColor);
-                }//);
-            }//);
+                }
+            }
             return bbw.Bitmap;
         }
 
@@ -181,7 +245,7 @@ namespace DigitalFilm.Tools
                 {
                     float pct = histogram_r[i] / max;   // What percentage of the max is this value?
 
-                    g.DrawLine(Pens.WhiteSmoke,
+                    g.DrawLine(Pens.DarkRed,
                         new Point(i, img.Height - 5),
                         new Point(i, img.Height - 5 - (int)(pct * histHeight))  // Use that percentage of the height
                         );
