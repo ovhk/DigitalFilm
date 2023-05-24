@@ -7,9 +7,9 @@
         public override string Name => "Fomaspeed Variant III, Velvet, Grade 0";
 
         /// <summary>
-        /// All we know from datasheet is : "Any other surface – matt causes a decrease in the maximum density value" and Dmax=2.1
+        /// Data from Foma, thanks!
         /// </summary>
-        protected override double NewDmax => 2.0d;
+        protected override double NewDmax => 1.95d;
     }
 
     internal class FomaspeedVariantIIIMattG0 : FomaspeedVariantIIIGlossyG0
@@ -17,9 +17,9 @@
         public override string Name => "Fomaspeed Variant III, Matt, Grade 0";
 
         /// <summary>
-        /// All we know from datasheet is : "Any other surface – matt causes a decrease in the maximum density value" and Dmax=2.1
+        /// Data from Foma, thanks!
         /// </summary>
-        protected override double NewDmax => 1.9d;
+        protected override double NewDmax => 1.75d;
     }
 
     /// <summary>
