@@ -48,13 +48,9 @@ namespace DigitalFilm
             cbPanels.Items.Add(new Panels.NoPanel(this.myPictureBox1));
             cbPanels.Items.Add(new Panels.PanelSimulator());
 
-            // Find first external screen
-            foreach (var screen in System.Windows.Forms.Screen.AllScreens)
+            foreach (var screen in ScreenManager.GetInstance().Detect())
             {
-                if (screen.Primary == false)
-                {
-                    cbPanels.Items.Add(new Panels.ExternalPanel(screen));
-                }
+                cbPanels.Items.Add(screen);
             }
 
             cbPanels.SelectedIndex = 0; // Select first panel in list
@@ -553,7 +549,16 @@ namespace DigitalFilm
             {
                 Mode5 mode = cbMode.SelectedItem as Mode5;
 
-                imageToDisplay = BitmapTools.BitmapFromPaper(this._savedImage, mode.Paper);
+                switch (mode.DisplayMode)
+                {
+                    case Modes.DisplayMode.Direct:
+                    case Modes.DisplayMode.GrayToTime:
+                        imageToDisplay = BitmapTools.BitmapFromPaper(this._savedImage, mode.Paper);
+                    break;
+                    case Modes.DisplayMode.DirectAllGrade:
+                        imageToDisplay = BitmapTools.BitmapFromPapers(this._savedImage);
+                        break;
+                }
             }
             else // Try to display with a default correction : Gamma = 1.4 (standard for paper)
             {

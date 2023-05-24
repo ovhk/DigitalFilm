@@ -4,7 +4,7 @@
 
     internal enum SizeMode { StretchImage, CenterImage };
 
-    internal enum DisplayMode { Direct, GrayToTime };
+    internal enum DisplayMode { Direct, DirectAllGrade, GrayToTime };
 
     internal enum GrayToTimeCurve { PMuth, Ovh };
 }

@@ -246,27 +246,41 @@ namespace DigitalFilm.Modes
                 switch (DisplayMode)
                 {
                     case DisplayMode.Direct:
-                        // 7.1. convert image for selected paper
+                        {
+                            // 7.1. convert image for selected paper
 
-                        //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // test only
+                            //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // test only
 
-                        Bitmap imageForPaper = BitmapTools.BitmapToPaper(bmpPanel, this.Paper);
+                            Bitmap imageForPaper = BitmapTools.BitmapToPaper(bmpPanel, this.Paper);
 
-                        //Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
-                        //Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 0.7);
+                            //Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
+                            //Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 0.7);
 
-                        // 8.1. push image to engine
-                        engine.PushImage(imageForPaper, this.ExposureTime);
+                            // 8.1. push image to engine
+                            engine.PushImage(imageForPaper, this.ExposureTime);
+                        }
+                        break;
+
+                    case DisplayMode.DirectAllGrade:
+                        {
+                            // 7.2. convert image with all grade of selected paper
+                            Bitmap imageForPaper = BitmapTools.BitmapToPapers(bmpPanel);
+
+                            // 8.2. push image to engine
+                            engine.PushImage(imageForPaper, this.ExposureTime);
+                        }
                         break;
 
                     case DisplayMode.GrayToTime:
-                        // 7.2. get image layers
-                        List<ImageLayer> ils = GetImageLayers(bmpPanel);
-
-                        foreach (ImageLayer il in ils)
                         {
-                            // 8.2. push image to engine
-                            engine.PushImage(il);
+                            // 7.3. get image layers
+                            List<ImageLayer> ils = GetImageLayers(bmpPanel);
+
+                            foreach (ImageLayer il in ils)
+                            {
+                                // 8.3. push image to engine
+                                engine.PushImage(il);
+                            }
                         }
                         break;
                 }
