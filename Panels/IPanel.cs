@@ -8,5 +8,6 @@
         int NumberOfColors { get; }
         int ResponseTime { get; } // Response time of the OnPaint in ms
         bool IsFullScreen { get; }
+        double RatioCorrection { get; }
     }
 }

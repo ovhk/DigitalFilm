@@ -1,9 +1,14 @@
 ﻿using DigitalFilm.Tools;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DigitalFilm.Panels
 {
-    public class ExternalPanel : IPanel
+    internal class Wisecoco8k103 : IPanel
     {
         public Screen Screen
         {
@@ -19,26 +24,25 @@ namespace DigitalFilm.Panels
 
         int IPanel.NumberOfColors => 256;
 
-        int IPanel.ResponseTime => 120;  // TODO : 30 Hz so consider x2 = 80 ms ????
+        int IPanel.ResponseTime => 120;
 
         bool IPanel.IsFullScreen => true;
 
-        double IPanel.RatioCorrection => 1d;
+        double IPanel.RatioCorrection => 1d; // TODO Adjust here !!!!
 
         public override string ToString()
         {
             return this._name;
         }
 
-        public ExternalPanel()
+        public Wisecoco8k103()
         {
             this._name = "External Panel";
         }
 
-        public ExternalPanel(Screen screen)
+        public Wisecoco8k103(Screen screen)
         {
             this._name = ScreenInterrogatory.DeviceFriendlyName(screen);
-            //this._name = screen.DeviceName.Replace("\\\\.\\", "");
             this.Screen = screen;
         }
     }

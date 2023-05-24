@@ -15,6 +15,8 @@
 
         bool IPanel.IsFullScreen => false;
 
+        double IPanel.RatioCorrection => 1d;
+
         public override string ToString()
         {
             return this._name;
