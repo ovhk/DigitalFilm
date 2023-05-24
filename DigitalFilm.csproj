@@ -74,6 +74,8 @@
     <Compile Include="Engine\DisplayEngine.cs" />
     <Compile Include="Modes\Mode9.cs" />
     <Compile Include="Modes\ModeParameters.cs" />
+    <Compile Include="Panels\ScreenManager.cs" />
+    <Compile Include="Panels\Wisecoco8k103.cs" />
     <Compile Include="Papers\Fomaspeed Variant III\FomaspeedVariantIII.cs" />
     <Compile Include="Papers\Paper.cs" />
     <Compile Include="Controls\PaperConverter.cs" />
