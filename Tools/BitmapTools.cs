@@ -23,7 +23,7 @@ namespace DigitalFilm.Tools
                 {
                     Color color = bitmap.GetPixel(x, y);
 
-                    int c = paper.Data[color.R];
+                    int c = paper.DataToPaper[color.R];
                     Color gammaColor = Color.FromArgb(c, c, c);
 
                     bbw.SetPixel(x, y, gammaColor);
@@ -48,7 +48,7 @@ namespace DigitalFilm.Tools
                 {
                     Color color = bitmap.GetPixel(x, y);
 
-                    int c = paper.InvertedData[color.R];
+                    int c = paper.DataFromPaper[color.R];
                     Color gammaColor = Color.FromArgb(c, c, c);
 
                     bbw.SetPixel(x, y, gammaColor);
@@ -80,7 +80,7 @@ namespace DigitalFilm.Tools
                 {
                     Color color = bitmap.GetPixel(x, y);
 
-                    int c = paper.Data[color.R];
+                    int c = paper.DataToPaper[color.R];
 
                     Color gammaColor = Color.FromArgb(c, c, c);
 
@@ -113,7 +113,7 @@ namespace DigitalFilm.Tools
                 {
                     Color color = bitmap.GetPixel(x, y);
 
-                    int c = paper.InvertedData[color.R];
+                    int c = paper.DataFromPaper[color.R];
                     Color gammaColor = Color.FromArgb(c, c, c);
 
                     bbw.SetPixel(x, y, gammaColor);
@@ -216,6 +216,11 @@ namespace DigitalFilm.Tools
         /// <returns></returns>
         public static Bitmap Histogram(Bitmap bitmap)
         {
+            if (bitmap == null)
+            {
+                return null;
+            }
+
             int[] histogram_r = new int[256];
             float max = 0;
 
