@@ -3,8 +3,7 @@
 DigitalFilm helps to transfer digital picture to analog print through a transparent screen. In a way, it's a digital film.
 
 <img src="/img/labo1.jpg" width="300"><img src="/img/labo2.jpg" width="300"><img src="/img/labo3.jpg" width="300">
-<br />
-<img src="/img/DigitalFimPrintScreen.png" width="400">
+
 
 ## Method
 
@@ -38,6 +37,8 @@ Thanks to Foma for getting me few usefull information.
 ## Application
 
 The application is made with different mode for different tests.
+<br />
+<img src="/img/DigitalFimPrintScreen.png" width="500">
 
 ### Mode 1 : Back & White
 
