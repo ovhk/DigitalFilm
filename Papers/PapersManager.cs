@@ -43,7 +43,7 @@ namespace DigitalFilm.Papers
         }
 
         /// <summary>
-        /// Display Engine private constructor, use only the GetInstance
+        /// Papers Manager private constructor, use only the GetInstance
         /// </summary>
         private PapersManager()
         {
@@ -119,9 +119,9 @@ namespace DigitalFilm.Papers
 
                 foreach (Paper p in PapersManager.Papers)
                 {
-                    s.Append(p.Data?[i]);
+                    s.Append(p.DataToPaper?[i]);
                     s.Append(";");
-                    s.Append(p.InvertedData?[i]);
+                    s.Append(p.DataFromPaper?[i]);
                     s.Append(";");
                 }
 
