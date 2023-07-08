@@ -1,6 +1,7 @@
 ﻿using DigitalFilm.Tools;
 using MathNet.Numerics;
 using MathNet.Numerics.Interpolation;
+using MathNet.Numerics.Statistics.Mcmc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,19 +25,75 @@ namespace DigitalFilm.Papers
 
         #endregion
 
-        private double[] ScaledDensity 
-        { 
+        private double[] ScaledDensity
+        {
             get
             {
                 List<double> list = new List<double>();
-                foreach(PaperDataItem paperDataItem in this.paperDataItems) 
+                foreach (PaperDataItem paperDataItem in this.paperDataItems)
                 {
                     list.Add(paperDataItem.ScaledDensity);
                 }
                 return list.ToArray();
             }
         }
-        
+
+        public double ContrastRatio
+        {
+            get
+            {
+                return Math.Pow(10, Dmax - Dmin);
+            }
+        }
+
+        public double Gamma
+        {
+            get
+            {
+                return (this.DmaxLinear - this.DminLinear) / (this.RLEmax - this.RLEmin);
+            }
+        }
+
+        public int ISO // TODO à tester
+        {
+            get
+            {
+                double Hm = 0;
+                foreach (PaperDataItem paperDataItem in this.paperDataItems)
+                {
+                    if (paperDataItem.Density.Equals(this.DminLinear))
+                    {
+                        Hm = paperDataItem.RelativeLogExposure;
+                        break;
+                    }
+                }
+                return Convert.ToInt32((this.DmaxLinear - this.DminLinear) / Hm);
+            }
+        }
+
+        public int ISO2 // TODO à tester
+        {
+            get
+            {
+                double Hm = 0; // TODO fill Hm
+
+                return Convert.ToInt32((0.8) / Hm);
+            }
+        }
+
+        private double[] Density
+        {
+            get
+            {
+                List<double> list = new List<double>();
+                foreach (PaperDataItem paperDataItem in this.paperDataItems)
+                {
+                    list.Add(paperDataItem.Density);
+                }
+                return list.ToArray();
+            }
+        }
+
         private double[] RelativeLogExposure
         {
             get
@@ -50,10 +107,10 @@ namespace DigitalFilm.Papers
             }
         }
 
-        public int[] InvertedData
+        public int[] DataFromPaper
         { get; private set; }
 
-        public int[] Data
+        public int[] DataToPaper
         { get; private set; }
 
 
@@ -64,9 +121,12 @@ namespace DigitalFilm.Papers
         /// </summary>
         private class PaperDataItem
         {
+            // raw data from csv
             public double Density;
-            public double ScaledDensity;
             public double RelativeLogExposure;
+
+            // calculated data
+            public double ScaledDensity;
         }
 
         /// <summary>
@@ -89,8 +149,14 @@ namespace DigitalFilm.Papers
 
         private readonly List<PaperDataItem> paperDataItems = new List<PaperDataItem>();
 
-        private double Dmin = Double.MinValue;
-        private double Dmax = Double.MinValue;
+        private double Dmin = Double.MinValue; // init to MinValue
+        private double Dmax = Double.MinValue; // init to MinValue
+
+        private double RLEmin = Double.MinValue; // init to MinValue
+        private double RLEmax = Double.MinValue; // init to MinValue
+
+        private double DminLinear = Double.MinValue; // init to MinValue
+        private double DmaxLinear = Double.MinValue; // init to MinValue
 
         /// <summary>
         /// 
@@ -116,7 +182,7 @@ namespace DigitalFilm.Papers
                 double RelativeLogExposure = 0;
                 double Density = 0;
 
-                bool valid = double.TryParse(data[0].Trim(), out RelativeLogExposure) 
+                bool valid = double.TryParse(data[0].Trim(), out RelativeLogExposure)
                                 && double.TryParse(data[1].Trim(), out Density);
 
                 if (valid)
@@ -125,10 +191,10 @@ namespace DigitalFilm.Papers
                     {
                         Density = Density,
                         ScaledDensity = 0,
-                        RelativeLogExposure = RelativeLogExposure
+                        RelativeLogExposure = RelativeLogExposure,
                     });
 
-                    if (this.Dmin > Density || this.Dmin == Double.MinValue) 
+                    if (this.Dmin > Density || this.Dmin == Double.MinValue)
                     {
                         this.Dmin = Density;
                     }
@@ -180,45 +246,107 @@ namespace DigitalFilm.Papers
             }
 #endif
 
-            // 3. Scale Density to 0-255
+            // 3. Filter data
+
+            // Following these articles, max exposure latitude seems to be from Dmin + 0.1 to Dmax - 0.1
+            // It seems arbitrary but it allows to get rid of the toe (underexposed) and shoulder (overexposed) region, so lets do this
+            // https://en.wikipedia.org/wiki/Sensitometry
+            // https://en.wikipedia.org/wiki/Gamma_correction
+            // https://fr.wikipedia.org/wiki/Absorbance
+            // https://fr.wikipedia.org/wiki/Gamma_(photographie)
+            // https://ru.wikipedia.org/wiki/%D0%A4%D0%BE%D1%82%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B0%D1%8F_%D1%88%D0%B8%D1%80%D0%BE%D1%82%D0%B0
+            // https://ru.wikipedia.org/wiki/%D0%A1%D0%B2%D0%B5%D1%82%D0%BE%D1%87%D1%83%D0%B2%D1%81%D1%82%D0%B2%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C_%D1%84%D0%BE%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2
+
+            // https://www.photo.net/forums/topic/535264-film-characteristic-curves-and-logluxsec/
+            // https://www.filmshooterscollective.com/analog-film-photography-blog/a-practical-guide-to-using-film-characteristic-curves-12-25
+
+            // https://www.filmlabs.org/docs/cours_sensitometrie.pdf
+
+            // https://www.souvenirsdephotographe.fr/technique/gradationpapier.html
+
+            double M = this.Dmin + 0.1;
+            double N = this.Dmax - 0.1;
+
+            for (int i = paperDataItems.Count - 1; i >= 0; i--) // reverse iterate to go through all datas
+            {
+                var item = paperDataItems[i] as PaperDataItem;
+
+                if ((item.Density < M) || (item.Density > N))
+                {
+                    paperDataItems.Remove(item);
+                }
+            }
+
+            // update Min/Max on linear part
             foreach (PaperDataItem item in paperDataItems)
             {
-                item.ScaledDensity = (item.Density - this.Dmin) / (this.Dmax - this.Dmin) * 255d;
+                if (this.DminLinear > item.Density || this.DminLinear == Double.MinValue)
+                {
+                    this.DminLinear = item.Density;
+                }
+
+                if (this.DmaxLinear < item.Density || this.DmaxLinear == Double.MinValue)
+                {
+                    this.DmaxLinear = item.Density;
+                }
+
+                if (this.RLEmin > item.RelativeLogExposure || this.RLEmin == Double.MinValue)
+                {
+                    this.RLEmin = item.RelativeLogExposure;
+                }
+
+                if (this.RLEmax < item.RelativeLogExposure || this.RLEmax == Double.MinValue)
+                {
+                    this.RLEmax = item.RelativeLogExposure;
+                }
             }
 
-            // 4. Compute Transfert Function
+            // 4. Scale data to 0-255
+
+            foreach (PaperDataItem item in paperDataItems)
+            {
+                item.ScaledDensity = (item.Density - this.DminLinear) / (this.DmaxLinear - this.DminLinear) * 255d;
+            }
+
+            // 5. Compute Transfert Function
 
             // https://numerics.mathdotnet.com/Interpolation
+            // We have lots of points so Linear should be ok.           
+            var ii = LinearSpline.InterpolateSorted(this.ScaledDensity, this.RelativeLogExposure);
 
-            // We have lots of points so Linear should be ok.
-            var i = LinearSpline.InterpolateSorted(this.ScaledDensity, this.RelativeLogExposure);
-            //var i = Interpolate.LogLinear(ScaledDensity, RelativeLogExposure);
-            //var i = Interpolate.RationalWithoutPoles(ScaledDensity, RelativeLogExposure);
+            DataToPaper = new int[256];
+            DataFromPaper = new int[256];
 
-            Data = new int[256];
-            InvertedData = new int[256];
-
-            for (int j = 0; j < Data.Length; j++)
+            for (int x = 0; x < DataToPaper.Length; x++)
             {
-                double inter = i.Interpolate((double)j);
-                inter = (inter is double.NaN) ? 255d : inter; // TODO : bof... !!!!!! en fait on a 2 valeur diff de X pour la même valeur de Y (à cause de la mise à l'échelle)
-                inter = (inter < 0) ? 255d : inter;
-                double res = 1d * Math.Pow((double)j / 255d, inter);
-                double resInv = 1d * Math.Pow((double)j / 255d, 1d / inter);
+                double y = ii.Interpolate((double)x);
 
-                //Log.WriteLine("Cacl=" + inter + "/" + res + "/" + res2);
+                if (y < 0 || y is double.NaN)
+                {
+                    // If NaN, you probably have the same Y for 2 different X
+                    Log.WriteLine("Load paper : " + this.Name + ", Something goes wrong with the interpolation...");
+                    return false;
+                }
 
-                // 255-j to invert black and white
-                Data[255 - j] = Convert.ToInt32(res * 255d);
-                InvertedData[255 - j] = Convert.ToInt32(resInv * 255d);
+                // https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7238748
 
-                //Log.WriteLine("Data: {0:000} : {1:000} / {2:000}", j, Data[255-j], InvertedData[255 - j]);
+                double res = (y - this.RLEmin) / (this.RLEmax - this.RLEmin);
+                double resInv = Math.Pow((double)(255d - x) / 255d, res); // antilog
+                ///double resInv = Math.Pow((double)x / 255d, res); // antilog             SI ça, alors il faut DataToPaper[255 - x]
+
+                // 255-x to invert black and white
+                // X =   0 = black
+                // X = 255 = white
+                DataToPaper[x] = Convert.ToInt32(resInv * 255d);
+                DataFromPaper[255 - x] = Convert.ToInt32(res * 255d);
             }
+
+            Log.WriteLine("ISO : " + this.ISO);
 
             return true;
         }
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Return the name of the paper

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace DigitalFilm.Modes
 {
@@ -261,24 +262,36 @@ namespace DigitalFilm.Modes
                         }
                         break;
 
-                    case DisplayMode.DirectAllGrade:
+                    case DisplayMode.DirectPaperGamma:
                         {
-                            // 7.2. convert image with all grade of selected paper
-                            Bitmap imageForPaper = BitmapTools.BitmapToPapers(bmpPanel);
+                            // 7.2. invert the image and convert it with the selected paper gamma value
+                            // TODO : on applique le gamma sur l'image inversée ou non ?
+                            Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
+                            Bitmap imageForPaper = BitmapTools.GetBitmapWithGamma(invertedImage, this.Paper.Gamma);
 
                             // 8.2. push image to engine
                             engine.PushImage(imageForPaper, this.ExposureTime);
                         }
                         break;
 
+                    case DisplayMode.DirectAllGrade:
+                        {
+                            // 7.3. convert image with all grade of selected paper
+                            Bitmap imageForPaper = BitmapTools.BitmapToPapers(bmpPanel);
+
+                            // 8.3. push image to engine
+                            engine.PushImage(imageForPaper, this.ExposureTime);
+                        }
+                        break;
+
                     case DisplayMode.GrayToTime:
                         {
-                            // 7.3. get image layers
+                            // 7.4. get image layers
                             List<ImageLayer> ils = GetImageLayers(bmpPanel);
 
                             foreach (ImageLayer il in ils)
                             {
-                                // 8.3. push image to engine
+                                // 8.4. push image to engine
                                 engine.PushImage(il);
                             }
                         }

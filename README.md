@@ -136,22 +136,4 @@ Generate a gray palette with the gamma parameter.
 
 ---
 
-How to print a picture from a film negative?
-
-- put the negative into the enlarger 
-- project the negative on the paper
-
-No! Here is the solution:
-
-- scan the negative, invert colors and save it
-- Find experimentaly the exposure time to have different values of gray on the paper
-- put gray values and exposure time in an Excel file, draw the trend curve and get its formula
-- generate 256 bitmaps from your scanned picture. One for each gray value, keep black all pixels lower than this value, put all others in white
-- put the display on the paper and turn on the enlarger light
-- display these bitmaps during the exposure time calculate with the trend formula onto a transparent black and white display panel
-
-Tada!
-
----
-
 Thanks for your comments!

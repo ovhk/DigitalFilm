@@ -554,7 +554,12 @@ namespace DigitalFilm
                     case Modes.DisplayMode.Direct:
                     case Modes.DisplayMode.GrayToTime:
                         imageToDisplay = BitmapTools.BitmapFromPaper(this._savedImage, mode.Paper);
-                    break;
+                        break;
+                    case Modes.DisplayMode.DirectPaperGamma:
+                        // TODO apply gamma after or before invertion ?????????
+                        Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
+                        imageToDisplay = BitmapTools.GetBitmapWithGamma(invertedImage, 1 / mode.Paper.Gamma);
+                        break;
                     case Modes.DisplayMode.DirectAllGrade:
                         imageToDisplay = BitmapTools.BitmapFromPapers(this._savedImage);
                         break;
