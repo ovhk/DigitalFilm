@@ -6,7 +6,7 @@ DigitalFilm helps to transfer digital picture to analog print through a transpar
 
 ## Method
 
-Basicly, negatives films have a gamma of arround 0.7 and are printed on photographic paper with a gamma of arround 1.4.<br /> 
+Basically, negative films have a gamma of around 0.7 and are printed on photographic paper with a gamma of around 1.4.<br /> 
 0.7 × 1.4 = 1.0, that's why the picture looks like the original view.<br />
 So the idea if you want to use a screen as a film, is to apply the invert of the gamma of the paper and invert black and white.
 Then, you have to put the screen directly on the paper and light it up.
@@ -17,21 +17,21 @@ This type of screen is usually dedicated for resin 3D printers with UV light.<br
 These tests are made with a 10.3", 8K (7680 x 4320) monochrome from <a href="https://wisecocodisplay.com/">Wisecoco</a>.
 The datasheet is <a href="DisplayDatasheets/TOP103MONO8K01A  10.3 inch 黑白屏.pdf">here</a>.
 <br />
-Why transparent? Just because it's acctually the way to have a small screen with very high resolution.
+Why transparent? Just because it's actually the way to have a small screen with very high resolution.
 
 <img src="/img/labo4.jpg" width="300">
 
 ## Papers
 
-Papers have a caracteristic curve with density and relative log exposure.<br />
+Papers have a characteristic curve with density and relative log exposure.<br />
 Remember: more light = more density = darker.
 
 <img src="/img/FomaspeedVariantIII.png" width="300">
 
-So you need to extract the data of the curve and convert the density to 256 gray level.<br />
+So you need to extract the data of the curve and convert the density to 256 gray levels.<br />
 <br />
 Tests here are made with a Famaspeed Variant III RC paper (matt and glossy) : https://www.foma.cz/en/fomaspeed-variant-III
-Thanks to Foma for getting me few usefull informations.
+Thanks to Foma for getting me few usefull information.
 
 ## Application
 
@@ -39,7 +39,7 @@ The application is made with different mode for different tests.
 
 ### Mode 1 : Back & White
 
-Just a black & White zone to check if the diplay panel is able to block light.
+Just a black & White zone to check if the display panel is able to block light.
 
 <img src="/img/mode1.png" width="300">
 
@@ -55,7 +55,7 @@ Draw shapes with different size to see the resolution of the system.
 
 <img src="/img/mode3.bmp" width="300">
 
-### Mode 4 : Gray vs B&W Linear
+### Mode 4 : Gray vs. B&W Linear
 
 Draw a gray palette and a B&W scale with a linear exposure time.
 The gamma parameter is available.
@@ -64,22 +64,22 @@ The gamma parameter is available.
 
 ### Mode 5 : Display a picture following parameters
 
-#### Display mode : Direct, convert a colored picture in grayscale and diplay it
-Convert the picture to grayscale and display it with inverted colors (like films) adapted for the specified paper and grade.
+#### Display mode : Direct, convert a colored picture in grayscale and display it
+Convert the picture to grayscale and display it with inverted colors (like films), adapted for the specified paper and grade.
 With this method, you don't use the entire gray palette (because of the extrapolation), so you end up with artifacts. One solution is to use the GrayToTime mode.
 
 <img src="/img/mode5inverted.png" width="300">
 
-#### Display mode : Display a picture with GrayToTime algorythm
-Display a picture with GrayToTime algorythm based on the article of Pierre MUTH : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/
-In this mode, each value of gray is converted in an exposure time.
-The function transfert gray to time is build by experimention, it depend especially of you light source.
+#### Display mode : Display a picture with GrayToTime algorithm
+Display a picture with GrayToTime algorithm based on the article of Pierre MUTH : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/
+In this mode, each value of gray is converted to an exposure time.
+The function transfer gray to time is built by experimentation, it depends especially of your light source.
 
 <img src="/img/mode6.gif" width="300">
 
-### Mode 7 : Gray vs GrayToTime
+### Mode 7 : Gray vs. GrayToTime
 
-Draw a gray palette and a B&W scale with GrayToTime algorythm to find the exposure time.
+Draw a gray palette and a B&W scale with GrayToTime algorithm to find the exposure time.
 
 <img src="/img/mode7.gif" width="300">
 
@@ -91,7 +91,7 @@ Draw test band.
 
 ### Mode 9 : Gray palette
 
-Generate a gray palette with gamma parameter.
+Generate a gray palette with the gamma parameter.
 
 <img src="/img/mode9.bmp" width="300">
 
