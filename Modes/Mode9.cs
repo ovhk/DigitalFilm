@@ -106,8 +106,8 @@ namespace DigitalFilm.Modes
         /// <returns></returns>
         public bool Unload()
         {
-            DisplayEngine engine = DisplayEngine.GetInstance();
-            engine.Clear();
+            this.engine.Clear();
+
             return true;
         }
 

@@ -69,8 +69,7 @@ namespace DigitalFilm.Modes
         /// <returns></returns>
         bool IMode.Unload()
         {
-            DisplayEngine engine = DisplayEngine.GetInstance();
-            engine.Clear();
+            this.engine.Clear();
 
             return true;
         }
