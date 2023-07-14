@@ -14,7 +14,7 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// the path of the image
         /// </summary>
-        private string _imgPath;
+        private readonly string _imgPath;
 
         /// <summary>
         ///  The image
@@ -106,10 +106,8 @@ namespace DigitalFilm.Engine
 
             FileInfo file = new FileInfo(this._imgPath);
 
-            int index = 0;
-            int exposureTime = 0;
 
-            DisplayEngine.GetInstance().Cache.GetIndexAndExposureTime(file.Name, out index, out exposureTime);
+            _ = DisplayEngine.GetInstance().Cache.GetIndexAndExposureTime(file.Name, out int index, out int exposureTime);
 
             using (Bitmap bmp = new Bitmap(this._imgPath))
             {
@@ -127,7 +125,7 @@ namespace DigitalFilm.Engine
             if (this._bitmap == null)
             {
                 // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
-                using (var bmpTemp = new Bitmap(this._imgPath))
+                using (Bitmap bmpTemp = new Bitmap(this._imgPath))
                 {
                     this._bitmap = new Bitmap(bmpTemp);
                 }

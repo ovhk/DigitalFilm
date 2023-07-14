@@ -14,7 +14,7 @@ namespace DigitalFilm.Controls
         /// <summary>
         /// 
         /// </summary>
-        private OpenFileDialog _ofd = new OpenFileDialog();
+        private readonly OpenFileDialog _ofd = new OpenFileDialog();
 
         /// <summary>
         /// 
@@ -38,12 +38,7 @@ namespace DigitalFilm.Controls
             this._ofd.FileName = value as string;
             this._ofd.Filter = ImageFileFilter.GetImageFilter();
 
-            if (this._ofd.ShowDialog() == DialogResult.OK)
-            {
-                return this._ofd.FileName;
-            }
-
-            return base.EditValue(context, serviceProvider, value);
+            return this._ofd.ShowDialog() == DialogResult.OK ? this._ofd.FileName : base.EditValue(context, serviceProvider, value);
         }
     }
 }

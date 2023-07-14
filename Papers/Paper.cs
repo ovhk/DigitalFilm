@@ -1,14 +1,8 @@
-﻿using DigitalFilm.Tools;
-using MathNet.Numerics;
-using MathNet.Numerics.Interpolation;
-using MathNet.Numerics.Statistics.Mcmc;
+﻿using MathNet.Numerics.Interpolation;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Windows.Forms.VisualStyles;
 
 namespace DigitalFilm.Papers
 {
@@ -38,21 +32,9 @@ namespace DigitalFilm.Papers
             }
         }
 
-        public double ContrastRatio
-        {
-            get
-            {
-                return Math.Pow(10, Dmax - Dmin);
-            }
-        }
+        public double ContrastRatio => Math.Pow(10, this.Dmax - this.Dmin);
 
-        public double Gamma
-        {
-            get
-            {
-                return (this.DmaxLinear - this.DminLinear) / (this.RLEmax - this.RLEmin);
-            }
-        }
+        public double Gamma => (this.DmaxLinear - this.DminLinear) / (this.RLEmax - this.RLEmin);
 
         public int ISO // TODO à tester
         {
@@ -77,7 +59,7 @@ namespace DigitalFilm.Papers
             {
                 double Hm = 0; // TODO fill Hm
 
-                return Convert.ToInt32((0.8) / Hm);
+                return Convert.ToInt32(0.8 / Hm);
             }
         }
 
@@ -149,14 +131,14 @@ namespace DigitalFilm.Papers
 
         private readonly List<PaperDataItem> paperDataItems = new List<PaperDataItem>();
 
-        private double Dmin = Double.MinValue; // init to MinValue
-        private double Dmax = Double.MinValue; // init to MinValue
+        private double Dmin = double.MinValue; // init to MinValue
+        private double Dmax = double.MinValue; // init to MinValue
 
-        private double RLEmin = Double.MinValue; // init to MinValue
-        private double RLEmax = Double.MinValue; // init to MinValue
+        private double RLEmin = double.MinValue; // init to MinValue
+        private double RLEmax = double.MinValue; // init to MinValue
 
-        private double DminLinear = Double.MinValue; // init to MinValue
-        private double DmaxLinear = Double.MinValue; // init to MinValue
+        private double DminLinear = double.MinValue; // init to MinValue
+        private double DmaxLinear = double.MinValue; // init to MinValue
 
         /// <summary>
         /// 
@@ -164,7 +146,7 @@ namespace DigitalFilm.Papers
         /// <returns></returns>
         public bool Load()
         {
-            string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\" + this.RawDataFileName;
+            string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\" + RawDataFileName;
 
             if (File.Exists(filepath) == false)
             {
@@ -179,10 +161,9 @@ namespace DigitalFilm.Papers
             {
                 string[] data = line.Split(';');
 
-                double RelativeLogExposure = 0;
                 double Density = 0;
 
-                bool valid = double.TryParse(data[0].Trim(), out RelativeLogExposure)
+                bool valid = double.TryParse(data[0].Trim(), out double RelativeLogExposure)
                                 && double.TryParse(data[1].Trim(), out Density);
 
                 if (valid)
@@ -269,7 +250,7 @@ namespace DigitalFilm.Papers
 
             for (int i = paperDataItems.Count - 1; i >= 0; i--) // reverse iterate to go through all datas
             {
-                var item = paperDataItems[i] as PaperDataItem;
+                PaperDataItem item = paperDataItems[i];
 
                 if ((item.Density < M) || (item.Density > N))
                 {
@@ -280,22 +261,22 @@ namespace DigitalFilm.Papers
             // update Min/Max on linear part
             foreach (PaperDataItem item in paperDataItems)
             {
-                if (this.DminLinear > item.Density || this.DminLinear == Double.MinValue)
+                if (this.DminLinear > item.Density || this.DminLinear == double.MinValue)
                 {
                     this.DminLinear = item.Density;
                 }
 
-                if (this.DmaxLinear < item.Density || this.DmaxLinear == Double.MinValue)
+                if (this.DmaxLinear < item.Density || this.DmaxLinear == double.MinValue)
                 {
                     this.DmaxLinear = item.Density;
                 }
 
-                if (this.RLEmin > item.RelativeLogExposure || this.RLEmin == Double.MinValue)
+                if (this.RLEmin > item.RelativeLogExposure || this.RLEmin == double.MinValue)
                 {
                     this.RLEmin = item.RelativeLogExposure;
                 }
 
-                if (this.RLEmax < item.RelativeLogExposure || this.RLEmax == Double.MinValue)
+                if (this.RLEmax < item.RelativeLogExposure || this.RLEmax == double.MinValue)
                 {
                     this.RLEmax = item.RelativeLogExposure;
                 }
@@ -312,14 +293,14 @@ namespace DigitalFilm.Papers
 
             // https://numerics.mathdotnet.com/Interpolation
             // We have lots of points so Linear should be ok.           
-            var ii = LinearSpline.InterpolateSorted(this.ScaledDensity, this.RelativeLogExposure);
+            LinearSpline ii = LinearSpline.InterpolateSorted(this.ScaledDensity, this.RelativeLogExposure);
 
             DataToPaper = new int[256];
             DataFromPaper = new int[256];
 
             for (int x = 0; x < DataToPaper.Length; x++)
             {
-                double y = ii.Interpolate((double)x);
+                double y = ii.Interpolate(x);
 
                 if (y < 0 || y is double.NaN)
                 {
@@ -341,7 +322,7 @@ namespace DigitalFilm.Papers
                 DataFromPaper[255 - x] = Convert.ToInt32(res * 255d);
             }
 
-            Log.WriteLine("ISO : " + this.ISO);
+            Log.WriteLine("ISO : " + ISO);
 
             return true;
         }

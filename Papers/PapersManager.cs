@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,12 +73,12 @@ namespace DigitalFilm.Papers
         {
             foreach (Paper p in PapersManager.Papers)
             {
-                Task.Run(() =>
+                _ = Task.Run(() =>
                 {
                     if (p.Load() == false)
                     {
                         Log.WriteLine("Fail to Load paper data : " + p.Name);
-                        Papers.Remove(p);
+                        _ = Papers.Remove(p);
                     }
                 });
             }
@@ -95,40 +92,40 @@ namespace DigitalFilm.Papers
         {
             StringBuilder s = new StringBuilder();
 
-            s.Append("Index");
-            s.Append(";");
+            _ = s.Append("Index");
+            _ = s.Append(";");
 
             foreach (Paper p in PapersManager.Papers)
             {
-                s.Append(p.GetType().Name);
-                s.Append(";");
-                s.Append("Inv-");
-                s.Append(p.GetType().Name);
-                s.Append(";");
+                _ = s.Append(p.GetType().Name);
+                _ = s.Append(";");
+                _ = s.Append("Inv-");
+                _ = s.Append(p.GetType().Name);
+                _ = s.Append(";");
             }
 
-            s.Append("0.7");
-            s.Append(";");
-            s.Append("1/0.7");
-            s.Append("\r\n");
+            _ = s.Append("0.7");
+            _ = s.Append(";");
+            _ = s.Append("1/0.7");
+            _ = s.Append("\r\n");
 
             for (int i = 0; i < 256; i++)
             {
-                s.Append(i);
-                s.Append(";");
+                _ = s.Append(i);
+                _ = s.Append(";");
 
                 foreach (Paper p in PapersManager.Papers)
                 {
-                    s.Append(p.DataToPaper?[i]);
-                    s.Append(";");
-                    s.Append(p.DataFromPaper?[i]);
-                    s.Append(";");
+                    _ = s.Append(p.DataToPaper?[i]);
+                    _ = s.Append(";");
+                    _ = s.Append(p.DataFromPaper?[i]);
+                    _ = s.Append(";");
                 }
 
-                s.Append(1d * Math.Pow((255d - (double)i) / 255d, 0.7) * 255d);
-                s.Append(";");
-                s.Append(1d * Math.Pow((255d - (double)i) / 255d, 1d / 0.7) * 255d);
-                s.Append("\r\n");
+                _ = s.Append(1d * Math.Pow((255d - i) / 255d, 0.7) * 255d);
+                _ = s.Append(";");
+                _ = s.Append(1d * Math.Pow((255d - i) / 255d, 1d / 0.7) * 255d);
+                _ = s.Append("\r\n");
             }
 
             File.WriteAllText(fileName, s.ToString());

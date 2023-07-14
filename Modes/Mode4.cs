@@ -35,7 +35,7 @@ namespace DigitalFilm.Modes
         /// <summary>
         /// 
         /// </summary>
-        private int MiniExposureTimeMs = 40;
+        private readonly int MiniExposureTimeMs = 40;
 
         /// <summary>
         /// Access to the Engine
@@ -56,7 +56,7 @@ namespace DigitalFilm.Modes
 
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;
-            int iWidth = (width / engine.Panel.NumberOfColors);
+            int iWidth = width / engine.Panel.NumberOfColors;
 
             // width / engine.Panel.NumberOfColors not round so we adjust...
             width = iWidth * engine.Panel.NumberOfColors;
@@ -100,7 +100,7 @@ namespace DigitalFilm.Modes
                     }
 
                     // new Bitmap because we need a copy, next iteration b will be changed
-                    engine.PushImage(new Bitmap(b), (ExposureTime / 256));
+                    engine.PushImage(new Bitmap(b), ExposureTime / 256);
                 }
                 gfx.Dispose();
             }

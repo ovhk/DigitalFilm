@@ -41,12 +41,12 @@ namespace DigitalFilm.Modes
 
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;
-            int iWidth = (width / timings.Length);
+            int iWidth = width / timings.Length;
 
             // width / timings.Length not round so we adjust...
             width = iWidth * timings.Length;
 
-            SolidBrush brushBlack = new SolidBrush(Color.Black);
+            //SolidBrush brushBlack = new SolidBrush(Color.Black);
             SolidBrush brushWhite = new SolidBrush(Color.White);
 
             using (Bitmap b = new Bitmap(width, height))

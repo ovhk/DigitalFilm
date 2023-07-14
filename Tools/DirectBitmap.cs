@@ -8,7 +8,7 @@ namespace DigitalFilm.Tools
     public class DirectBitmap : IDisposable
     {
         public Bitmap Bitmap { get; private set; }
-        public Int32[] Bits { get; private set; }
+        public int[] Bits { get; private set; }
         public bool Disposed { get; private set; }
         public int Height { get; private set; }
         public int Width { get; private set; }
@@ -19,7 +19,7 @@ namespace DigitalFilm.Tools
         {
             Width = width;
             Height = height;
-            Bits = new Int32[width * height];
+            Bits = new int[width * height];
             BitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
             Bitmap = new Bitmap(width, height, width * 4, PixelFormat.Format32bppPArgb, BitsHandle.AddrOfPinnedObject());
         }
@@ -43,7 +43,11 @@ namespace DigitalFilm.Tools
 
         public void Dispose()
         {
-            if (Disposed) return;
+            if (Disposed)
+            {
+                return;
+            }
+
             Disposed = true;
             Bitmap.Dispose();
             BitsHandle.Free();

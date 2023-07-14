@@ -1,10 +1,5 @@
-﻿using DigitalFilm.Papers;
-using DigitalFilm.Tools;
-using System;
+﻿using DigitalFilm.Tools;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DigitalFilm.Panels
 {
@@ -60,14 +55,14 @@ namespace DigitalFilm.Panels
             List<IPanel> result = new List<IPanel>();
 
             // Find first external screen
-            foreach (var screen in System.Windows.Forms.Screen.AllScreens)
+            foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
             {
                 if (screen.Primary == false)
                 {
                     // search for known name
-                    var name = ScreenInterrogatory.DeviceFriendlyName(screen);
+                    string name = ScreenInterrogatory.DeviceFriendlyName(screen);
 
-                    switch(name)
+                    switch (name)
                     {
                         case "lontium semi":
                             result.Add(new Panels.Wisecoco8k103(screen));
@@ -77,7 +72,7 @@ namespace DigitalFilm.Panels
                             break;
                     }
 
-                    
+
                 }
             }
 

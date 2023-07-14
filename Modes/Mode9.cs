@@ -51,8 +51,8 @@ namespace DigitalFilm.Modes
 
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;
-            int iWidth = (width / squareW);
-            int iHeight = (height / squareH);
+            int iWidth = width / squareW;
+            int iHeight = height / squareH;
 
             // width / squareW not round so we adjust...
             width = iWidth * squareW;

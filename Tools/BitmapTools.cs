@@ -72,9 +72,9 @@ namespace DigitalFilm.Tools
 
                 int indexPaper = (x == bitmap.Width) // is it the end ?
                                   ? PapersManager.Papers.Count - 1 // so go to last index
-                                  : (int) Math.Truncate(x / iWidth); // else calculate
+                                  : (int)Math.Truncate(x / iWidth); // else calculate
 
-                Paper paper = PapersManager.Papers[indexPaper] as Paper;
+                Paper paper = PapersManager.Papers[indexPaper];
 
                 for (int y = 0; y < bitmap.Height; y++)
                 {
@@ -107,7 +107,7 @@ namespace DigitalFilm.Tools
                                   ? PapersManager.Papers.Count - 1 // so go to last index
                                   : (int)Math.Truncate(x / iWidth); // else calculate
 
-                Paper paper = PapersManager.Papers[indexPaper] as Paper;
+                Paper paper = PapersManager.Papers[indexPaper];
 
                 for (int y = 0; y < bitmap.Height; y++)
                 {
@@ -264,7 +264,7 @@ namespace DigitalFilm.Tools
         /// Based on http://www.switchonthecode.com/tutorials/csharp-tutorial-convert-a-color-image-to-grayscale
         /// </summary>
         /// <returns></returns>
-        static ColorPalette GetGrayScalePalette()
+        private static ColorPalette GetGrayScalePalette()
         {
             Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed);
 

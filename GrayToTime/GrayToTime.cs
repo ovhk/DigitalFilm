@@ -121,7 +121,7 @@ namespace DigitalFilm.Engine
             {
                 // y = 17.06 * ln(x) + 96.417
 
-                timings[i] = (int)((-17.06 * Math.Log((double)i) + 96.417) * 1000);
+                timings[i] = (int)(((-17.06 * Math.Log(i)) + 96.417) * 1000);
             }
 
             for (int i = 5; i < timings.Length - 1; i++)

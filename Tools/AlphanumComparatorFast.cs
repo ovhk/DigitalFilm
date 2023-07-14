@@ -9,13 +9,11 @@ namespace DigitalFilm.Tools
     {
         public int Compare(object x, object y)
         {
-            string s1 = x as string;
-            if (s1 == null)
+            if (!(x is string s1))
             {
                 return 0;
             }
-            string s2 = y as string;
-            if (s2 == null)
+            if (!(y is string s2))
             {
                 return 0;
             }

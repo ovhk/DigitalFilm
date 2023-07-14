@@ -2,7 +2,7 @@
 {
     public class PanelSimulator : IPanel
     {
-        private string _name;
+        private readonly string _name;
         string IPanel.Name => this._name;
 
         int IPanel.Width => 1024;

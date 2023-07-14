@@ -44,7 +44,7 @@
         public override string Name => "Fomaspeed Variant III, Glossy, Grade 1";
         public override string RawDataFileName => "Papers/Fomaspeed Variant III/1 - soft.csv";
 
-    
+
     }
 
     #endregion

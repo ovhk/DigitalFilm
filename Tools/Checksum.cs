@@ -12,11 +12,11 @@ namespace DigitalFilm.Tools
         /// <returns></returns>
         public static string CalculateMD5(string filename)
         {
-            using (var md5 = MD5.Create())
+            using (MD5 md5 = MD5.Create())
             {
-                using (var stream = System.IO.File.OpenRead(filename))
+                using (System.IO.FileStream stream = System.IO.File.OpenRead(filename))
                 {
-                    var hash = md5.ComputeHash(stream);
+                    byte[] hash = md5.ComputeHash(stream);
                     return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
                 }
             }

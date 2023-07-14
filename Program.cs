@@ -1,6 +1,5 @@
 ﻿using DigitalFilm.Papers;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace DigitalFilm
@@ -12,7 +11,7 @@ namespace DigitalFilm
         /// Point d'entrée principal de l'application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             string[] args = Environment.GetCommandLineArgs();
 

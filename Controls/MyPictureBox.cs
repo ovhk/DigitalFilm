@@ -19,10 +19,7 @@ namespace DigitalFilm.Controls
         /// </summary>
         public Bitmap Image
         {
-            get
-            {
-                return this._image;
-            }
+            get => _image;
             set
             {
                 this._image = value;

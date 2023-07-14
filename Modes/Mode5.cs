@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace DigitalFilm.Modes
 {
@@ -126,9 +125,15 @@ namespace DigitalFilm.Modes
         /// <returns></returns>
         public bool Load()
         {
-            if (ImagePath == null || ImagePath.Length == 0) return false;
+            if (ImagePath == null || ImagePath.Length == 0)
+            {
+                return false;
+            }
 
-            if (DisplayMode == DisplayMode.Direct && Paper == null) return false;
+            if (DisplayMode == DisplayMode.Direct && Paper == null)
+            {
+                return false;
+            }
 
             string md5 = Tools.Checksum.CalculateMD5(ImagePath);
 
@@ -160,7 +165,7 @@ namespace DigitalFilm.Modes
             }
 
             // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
-            using (var bmpPicture = new Bitmap(ImagePath))
+            using (Bitmap bmpPicture = new Bitmap(ImagePath))
             {
                 Bitmap bmpPanel = new Bitmap(engine.Panel.Width, engine.Panel.Height);
 
@@ -200,8 +205,8 @@ namespace DigitalFilm.Modes
                 {
                     case SizeMode.CenterImage:
                         // Ratio is : canavas / original
-                        double ratioW = ((double)engine.Panel.Width - (2 * (double)MarginLeftRight)) / ((double)bmpPicture.Width);
-                        double ratioH = ((double)engine.Panel.Height - (2 * (double)MarginTopBottom)) / ((double)bmpPicture.Height);
+                        double ratioW = (engine.Panel.Width - (2 * (double)MarginLeftRight)) / bmpPicture.Width;
+                        double ratioH = (engine.Panel.Height - (2 * (double)MarginTopBottom)) / bmpPicture.Height;
 
                         // get the smaller ratio
                         double ratio = (ratioW < ratioH) ? ratioW : ratioH;
@@ -234,8 +239,8 @@ namespace DigitalFilm.Modes
                 if (SizeMode == SizeMode.CenterImage)
                 {
                     // Add offset to center image
-                    imgRect.X += Convert.ToInt32(((double)engine.Panel.Width - (2 * (double)MarginLeftRight)) / 2 - (double)sz.Width / 2.0);
-                    imgRect.Y += Convert.ToInt32(((double)engine.Panel.Height - (2 * (double)MarginTopBottom)) / 2 - (double)sz.Height / 2.0);
+                    imgRect.X += Convert.ToInt32(((engine.Panel.Width - (2 * (double)MarginLeftRight)) / 2) - (sz.Width / 2.0));
+                    imgRect.Y += Convert.ToInt32(((engine.Panel.Height - (2 * (double)MarginTopBottom)) / 2) - (sz.Height / 2.0));
                 }
 
                 // Check ratio
@@ -248,6 +253,10 @@ namespace DigitalFilm.Modes
                 {
                     case DisplayMode.Direct:
                         {
+                            if (this.Paper == null)
+                            {
+                                return false;
+                            }
                             // 7.1. convert image for selected paper
 
                             //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // test only
@@ -264,6 +273,11 @@ namespace DigitalFilm.Modes
 
                     case DisplayMode.DirectPaperGamma:
                         {
+                            if (this.Paper == null)
+                            {
+                                return false;
+                            }
+
                             // 7.2. invert the image and convert it with the selected paper gamma value
                             // TODO : on applique le gamma sur l'image inversée ou non ?
                             Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);

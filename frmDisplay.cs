@@ -15,7 +15,7 @@ namespace DigitalFilm
         /// <summary>
         /// Display Engine
         /// </summary>
-        private DisplayEngine engine;
+        private readonly DisplayEngine engine;
 
         /// <summary>
         /// FrmDisplay constructor
@@ -28,7 +28,7 @@ namespace DigitalFilm
             engine.OnNewPanel += Engine_OnNewPanel;
         }
 
-        private Stopwatch _sw = new Stopwatch();
+        private readonly Stopwatch _sw = new Stopwatch();
 
         /// <summary>
         /// DisplayEngine send us a new image to display
@@ -89,11 +89,15 @@ namespace DigitalFilm
 
         #region Invoke Management
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
         private void SafeUpdate(Action action)
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(action);
+                _ = this.BeginInvoke(action);
             }
             else
             {

@@ -10,7 +10,7 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// Access to DisplayEngine
         /// </summary>
-        private DisplayEngine engine;
+        private readonly DisplayEngine engine;
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@ namespace DigitalFilm.Engine
         public CacheManager(DisplayEngine engine)
         {
             this.engine = engine;
-            Directory.CreateDirectory(this.tmpCacheDir);
+            _ = Directory.CreateDirectory(this.tmpCacheDir);
         }
 
         /// <summary>
@@ -34,17 +34,17 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// 
         /// </summary>
-        private static string appDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static readonly string appDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         /// <summary>
         /// 
         /// </summary>
-        private string cacheDir = appDir + @"\cache\";
+        private readonly string cacheDir = appDir + @"\cache\";
 
         /// <summary>
         /// 
         /// </summary>
-        private string tmpCacheDir = appDir + @"\cache\tmp";
+        private readonly string tmpCacheDir = appDir + @"\cache\tmp";
 
         /// <summary>
         /// 
@@ -82,7 +82,7 @@ namespace DigitalFilm.Engine
 
             if (Directory.Exists(cachedir) == true)
             {
-                var list = Directory.GetFiles(cachedir, CacheManager.ExtentionSearchFilter);
+                string[] list = Directory.GetFiles(cachedir, CacheManager.ExtentionSearchFilter);
 
                 Array.Sort(list, new AlphanumComparatorFast());
 
@@ -104,7 +104,7 @@ namespace DigitalFilm.Engine
         {
             this._cachePath = this._formatCachePath(identifier);
 
-            Directory.CreateDirectory(this._cachePath);
+            _ = Directory.CreateDirectory(this._cachePath);
         }
 
         /// <summary>
@@ -132,10 +132,9 @@ namespace DigitalFilm.Engine
         /// <returns></returns>
         public string GetTmpCachePath(int index, int exposureTime)
         {
-            if (this._cachePath != null)
-                return this._cachePath + @"\" + index + "_" + exposureTime + Extention;
-
-            return tmpCacheDir + @"\" + index + "_" + exposureTime + Extention;
+            return this._cachePath != null
+                ? this._cachePath + @"\" + index + "_" + exposureTime + Extention
+                : tmpCacheDir + @"\" + index + "_" + exposureTime + Extention;
         }
 
         /// <summary>
@@ -208,7 +207,10 @@ namespace DigitalFilm.Engine
         {
             string[] fileEntries = this.GetFiles();
 
-            if (fileEntries == null || fileEntries.Length == 0) return;
+            if (fileEntries == null || fileEntries.Length == 0)
+            {
+                return;
+            }
 
             foreach (string fileName in fileEntries)
             {

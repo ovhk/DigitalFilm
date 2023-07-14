@@ -48,7 +48,7 @@ namespace DigitalFilm
             cbPanels.Items.Add(new Panels.NoPanel(this.myPictureBox1));
             cbPanels.Items.Add(new Panels.PanelSimulator());
 
-            foreach (var screen in ScreenManager.GetInstance().Detect())
+            foreach (IPanel screen in ScreenManager.GetInstance().Detect())
             {
                 cbPanels.Items.Add(screen);
             }
@@ -85,14 +85,14 @@ namespace DigitalFilm
             engine.Clear();
         }
 
-#endregion
+        #endregion
 
         #region Panels Management
 
         /// <summary>
         /// Display Form
         /// </summary>
-        private frmDisplay display = new frmDisplay();
+        private readonly frmDisplay display = new frmDisplay();
 
         /// <summary>
         /// 
@@ -115,7 +115,7 @@ namespace DigitalFilm
             this.engine.Panel = selectedPanel;
 
             {
-                string s = String.Format("New selected panel : {0}", selectedPanel.Name);
+                string s = string.Format("New selected panel : {0}", selectedPanel.Name);
                 toolStripStatusLabel1.Text = s;
                 Log.WriteLine(s);
             }
@@ -131,15 +131,16 @@ namespace DigitalFilm
         /// <returns></returns>
         public ImageList GetImageList()
         {
-            ImageList il = new ImageList();
-
-            il.ImageSize = ImageLayer.ThumbnailSize;
+            ImageList il = new ImageList
+            {
+                ImageSize = ImageLayer.ThumbnailSize
+            };
 
             ImageLayer[] arr = engine.Items;
 
             for (int y = 0; y < arr.Length; y++)
             {
-                ImageLayer i = arr[y] as ImageLayer;
+                ImageLayer i = arr[y];
                 string key = y.ToString();
                 il.Images.Add(key, i.Thumbnail);
             }
@@ -159,13 +160,14 @@ namespace DigitalFilm
 
             for (int y = 0; y < arr.Length; y++)
             {
-                ImageLayer i = arr[y] as ImageLayer;
+                ImageLayer i = arr[y];
                 string key = y.ToString();
-                ListViewItem lvi = new ListViewItem(key);
-
-                lvi.ImageIndex = i.Index;
-                lvi.Tag = i;
-                lvi.ImageKey = key;
+                ListViewItem lvi = new ListViewItem(key)
+                {
+                    ImageIndex = i.Index,
+                    Tag = i,
+                    ImageKey = key
+                };
                 list.Add(lvi);
             }
 
@@ -204,7 +206,7 @@ namespace DigitalFilm
                 }
             }
 
-            e.Graphics.DrawImage(view.LargeImageList.Images[e.Item.Index], e.Bounds.X + border, e.Bounds.Y + border, e.Bounds.Width - 2 * border, e.Bounds.Height - 2 * border);
+            e.Graphics.DrawImage(view.LargeImageList.Images[e.Item.Index], e.Bounds.X + border, e.Bounds.Y + border, e.Bounds.Width - (2 * border), e.Bounds.Height - (2 * border));
 
             e.Graphics.DrawRectangle(Pens.Red, e.Bounds);
             TextRenderer.DrawText(e.Graphics, e.Item.Text, view.Font, e.Bounds,
@@ -227,9 +229,8 @@ namespace DigitalFilm
                 return;
             }
 
-            ImageLayer il = lv.SelectedItems[0].Tag as ImageLayer;
 
-            if (il != null)
+            if (lv.SelectedItems[0].Tag is ImageLayer il)
             {
                 this.myPictureBox1.Image = il.Bitmap;
                 this.myPictureBoxHistogram.Image = BitmapTools.Histogram(il.Bitmap);
@@ -244,12 +245,12 @@ namespace DigitalFilm
         /// <summary>
         /// 
         /// </summary>
-        private System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+        private readonly System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
 
         /// <summary>
         /// 
         /// </summary>
-        private Stopwatch timer2 = new Stopwatch();
+        private readonly Stopwatch timer2 = new Stopwatch();
 
         /// <summary>
         /// 
@@ -258,7 +259,7 @@ namespace DigitalFilm
         /// <param name="e"></param>
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            string s = String.Format("{0:00}:{1:00}.{2:00}", timer2.Elapsed.Minutes, timer2.Elapsed.Seconds, timer2.Elapsed.Milliseconds / 10);
+            string s = string.Format("{0:00}:{1:00}.{2:00}", timer2.Elapsed.Minutes, timer2.Elapsed.Seconds, timer2.Elapsed.Milliseconds / 10);
 
             this.SafeUpdate(() => this.lbTimer.Text = s);
         }
@@ -284,7 +285,7 @@ namespace DigitalFilm
             // Update Tile
             try
             {
-                this.SafeUpdate(() => { if (listView1.Items?[imageLayerIndex] != null) listView1.Items[imageLayerIndex].Selected = true; }); // Select
+                this.SafeUpdate(() => { if (listView1.Items?[imageLayerIndex] != null) { listView1.Items[imageLayerIndex].Selected = true; } }); // Select
                 this.SafeUpdate(() => listView1.Items?[imageLayerIndex].EnsureVisible()); // Scroll
             }
             catch { } // In case of a stop, Items could be empty so that trow an exception
@@ -292,7 +293,7 @@ namespace DigitalFilm
             // Update ProgressBar
 
             // avec les lenteurs de la VM, il arrive que le temps d'éxécution soit plus long que le max théorique, donc on filtre pour ne pas avoir une exception...
-            int val = (elapseTime.TotalSeconds > this.toolStripProgressBar1.Maximum) ? (int)this.toolStripProgressBar1.Maximum : (int)elapseTime.TotalSeconds;
+            int val = (elapseTime.TotalSeconds > this.toolStripProgressBar1.Maximum) ? this.toolStripProgressBar1.Maximum : (int)elapseTime.TotalSeconds;
 
             this.SafeUpdate(() => this.toolStripProgressBar1.Value = val);
 
@@ -330,7 +331,7 @@ namespace DigitalFilm
                 case EngineStatus.Running:
                     // Init total exposure time
                     this.SafeUpdate(() => this.toolStripProgressBar1.Maximum = (int)totalExposureTime?.TotalSeconds);
-                    string s = String.Format("{0:00}:{1:00}.{2:00}", totalExposureTime?.Minutes, totalExposureTime?.Seconds, totalExposureTime?.Milliseconds / 10);
+                    string s = string.Format("{0:00}:{1:00}.{2:00}", totalExposureTime?.Minutes, totalExposureTime?.Seconds, totalExposureTime?.Milliseconds / 10);
                     this.SafeUpdate(() => this.lbTotalExposureTime.Text = s);
 
                     // Start timers
@@ -363,15 +364,15 @@ namespace DigitalFilm
         /// </summary>
         private void LoadModes()
         {
-            this.cbMode.Items.Add(new Modes.Mode1());
-            this.cbMode.Items.Add(new Modes.Mode2());
-            this.cbMode.Items.Add(new Modes.Mode3());
-            this.cbMode.Items.Add(new Modes.Mode4());
-            this.cbMode.Items.Add(new Modes.Mode5());
-            //this.cbMode.Items.Add(new Modes.Mode6());
-            this.cbMode.Items.Add(new Modes.Mode7());
-            this.cbMode.Items.Add(new Modes.Mode8());
-            this.cbMode.Items.Add(new Modes.Mode9());
+            _ = this.cbMode.Items.Add(new Modes.Mode1());
+            _ = this.cbMode.Items.Add(new Modes.Mode2());
+            _ = this.cbMode.Items.Add(new Modes.Mode3());
+            _ = this.cbMode.Items.Add(new Modes.Mode4());
+            _ = this.cbMode.Items.Add(new Modes.Mode5());
+            _ = this.cbMode.Items.Add(new Modes.Mode6());
+            _ = this.cbMode.Items.Add(new Modes.Mode7());
+            _ = this.cbMode.Items.Add(new Modes.Mode8());
+            _ = this.cbMode.Items.Add(new Modes.Mode9());
 
             this.btUnloadMode.Enabled = false;
         }
@@ -392,7 +393,7 @@ namespace DigitalFilm
             this.pgMode.SelectedObject = mode;
 
             {
-                string s = String.Format("New selected mode : {0}", mode.Name);
+                string s = string.Format("New selected mode : {0}", mode.Name);
                 toolStripStatusLabel1.Text = s;
                 Log.WriteLine(s);
             }
@@ -437,7 +438,7 @@ namespace DigitalFilm
                     string s = "Fail to load selected mode!";
                     this.toolStripStatusLabel1.Text = s;
                     Log.WriteLine(s);
-                    MessageBox.Show(s);
+                    _ = MessageBox.Show(s);
                 }
                 this.btUnloadMode_Click(null, null);
                 return;
@@ -501,7 +502,7 @@ namespace DigitalFilm
 
             this.SuspendLayout();
 
-            mode.Unload();
+            _ = mode.Unload();
 
             this.pgMode.Enabled = true;
             this.cbMode.Enabled = true;
@@ -557,6 +558,7 @@ namespace DigitalFilm
                         break;
                     case Modes.DisplayMode.DirectPaperGamma:
                         // TODO apply gamma after or before invertion ?????????
+                        // Voir Test GAMMA avant-après invertion couleur.xlsx
                         Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
                         imageToDisplay = BitmapTools.GetBitmapWithGamma(invertedImage, 1 / mode.Paper.Gamma);
                         break;
@@ -652,7 +654,7 @@ namespace DigitalFilm
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmAbout about = new frmAbout();
-            about.ShowDialog();
+            _ = about.ShowDialog();
         }
 
         #endregion
@@ -667,7 +669,7 @@ namespace DigitalFilm
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(action);
+                _ = this.BeginInvoke(action);
             }
             else
             {

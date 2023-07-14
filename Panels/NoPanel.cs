@@ -4,14 +4,14 @@ namespace DigitalFilm.Panels
 {
     internal class NoPanel : IPanel
     {
-        private string _name;
+        private readonly string _name;
         string IPanel.Name => this._name;
 
-        private int width;
+        private readonly int width;
 
         int IPanel.Width => this.width;
 
-        private int height;
+        private readonly int height;
         int IPanel.Height => this.height;
 
         int IPanel.NumberOfColors => 256;

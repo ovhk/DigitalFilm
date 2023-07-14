@@ -23,14 +23,13 @@ namespace DigitalFilm.Test
             TextWriter writer = null;
             try
             {
-                var contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite);
+                string contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite);
                 writer = new StreamWriter(filePath, append);
                 writer.Write(contentsToWriteToFile);
             }
             finally
             {
-                if (writer != null)
-                    writer.Close();
+                writer?.Close();
             }
         }
 
@@ -47,13 +46,12 @@ namespace DigitalFilm.Test
             try
             {
                 reader = new StreamReader(filePath);
-                var fileContents = reader.ReadToEnd();
+                string fileContents = reader.ReadToEnd();
                 return JsonConvert.DeserializeObject<T>(fileContents);
             }
             finally
             {
-                if (reader != null)
-                    reader.Close();
+                reader?.Close();
             }
         }
     }

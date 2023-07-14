@@ -11,7 +11,7 @@ namespace DigitalFilm.Panels
             private set;
         }
 
-        private string _name;
+        private readonly string _name;
         string IPanel.Name => this._name;
         int IPanel.Width => this.Screen.Bounds.Width;
 

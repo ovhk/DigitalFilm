@@ -3,7 +3,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DigitalFilm
@@ -13,9 +12,9 @@ namespace DigitalFilm
     /// </summary>
     internal class Log
     {
-        private static StringBuilder sb = new StringBuilder();
+        private static readonly StringBuilder sb = new StringBuilder();
         private static DateTime lastDT = DateTime.Now;
-        private static string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static readonly string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private const int FLUSH_INTERVAL = 90; // in seconds
         private const string FILE_NAME = "log.txt";
 
@@ -59,7 +58,7 @@ namespace DigitalFilm
         /// </summary>
         internal static void Clear()
         {
-            sb.Clear();
+            _ = sb.Clear();
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
@@ -72,7 +71,7 @@ namespace DigitalFilm
         internal static void Close()
         {
             File.AppendAllText(filePath + "\\" + FILE_NAME, sb.ToString());
-            sb.Clear();
+            _ = sb.Clear();
         }
     }
 }

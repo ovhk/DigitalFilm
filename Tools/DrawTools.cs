@@ -18,19 +18,19 @@ namespace DigitalFilm.Tools
         /// <param name="rectangle"></param>
         public static void DrawLargestString(ref Graphics graphics, ref SolidBrush brush, string txt, Rectangle rectangle, double factor)
         {
-            SizeF stringSize = new SizeF();
-
             for (int i = 100; i > 0; i--)
             {
-                using (Font font = new Font(DrawTools.DefaultFont, i, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0))))
+                using (Font font = new Font(DrawTools.DefaultFont, i, FontStyle.Regular, GraphicsUnit.Point, 0))
                 {
-                    stringSize = graphics.MeasureString(txt, font);
+                    SizeF stringSize = graphics.MeasureString(txt, font);
 
                     if (stringSize.Width < rectangle.Width * factor)
                     {
-                        StringFormat stringFormat = new StringFormat();
-                        stringFormat.Alignment = StringAlignment.Center;
-                        stringFormat.LineAlignment = StringAlignment.Center;
+                        StringFormat stringFormat = new StringFormat
+                        {
+                            Alignment = StringAlignment.Center,
+                            LineAlignment = StringAlignment.Center
+                        };
 
                         graphics.DrawString(txt, font, brush, rectangle, stringFormat);
                         break;

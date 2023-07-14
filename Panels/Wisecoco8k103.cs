@@ -1,9 +1,4 @@
 ﻿using DigitalFilm.Tools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DigitalFilm.Panels
@@ -16,7 +11,7 @@ namespace DigitalFilm.Panels
             private set;
         }
 
-        private string _name;
+        private readonly string _name;
         string IPanel.Name => this._name;
         int IPanel.Width => this.Screen.Bounds.Width;
 

@@ -148,12 +148,7 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// 
         /// </summary>
-        private EngineStatus _status;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public EngineStatus Status => this._status;
+        public EngineStatus Status { get; private set; }
 
         /// <summary>
         /// Engine self notification
@@ -162,7 +157,7 @@ namespace DigitalFilm.Engine
         /// <param name="e"></param>
         private void DisplayEngine_EngineStatusNotify(EngineStatus engineStatus, TimeSpan? totalExposureTime)
         {
-            this._status = engineStatus;
+            this.Status = engineStatus;
             switch (engineStatus)
             {
                 case EngineStatus.Started:
@@ -194,10 +189,7 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// 
         /// </summary>
-        public ImageLayer[] Items
-        {
-            get { return _qToDisplay.ToArray(); }
-        }
+        public ImageLayer[] Items => this._qToDisplay.ToArray();
 
         /// <summary>
         /// Thread Display instance
@@ -227,7 +219,7 @@ namespace DigitalFilm.Engine
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             // We're waiing to start
-            _evStartDisplay.WaitOne();
+            _ = _evStartDisplay.WaitOne();
 
             while (!de._threadStop)
             {
@@ -236,12 +228,12 @@ namespace DigitalFilm.Engine
 
                 if (de._qToPreload.Count == 0)
                 {
-                    Thread.Yield();
+                    _ = Thread.Yield();
                     continue;
                 }
 
                 ImageLayer il = de._qToPreload.Dequeue();
-                _semaphorePreload.Release();
+                _ = _semaphorePreload.Release();
 
                 if (de._threadStop)
                 {
@@ -271,7 +263,7 @@ namespace DigitalFilm.Engine
                 }
 
                 double mesured = (DateTime.Now - dtStart).TotalMilliseconds;
-                Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", il.Index, il.ExposureTime, mesured, string.Format("{0:N1}", (mesured - exposureTime)));
+                Log.WriteLine("Step Count={0}, {1}ms, measured: {2}ms, delta: {3}ms", il.Index, il.ExposureTime, mesured, string.Format("{0:N1}", mesured - exposureTime));
 
                 de._qToDispose.Enqueue(il);
             }
@@ -319,8 +311,7 @@ namespace DigitalFilm.Engine
                     continue;
                 }
 
-                ImageLayer il;
-                if (de._qToDispose.TryDequeue(out il) == true)
+                if (de._qToDispose.TryDequeue(out ImageLayer il) == true)
                 {
                     il.Dispose();
                 }
@@ -351,7 +342,7 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// 
         /// </summary>
-        private static AutoResetEvent _evStartDisplay = new AutoResetEvent(false);
+        private static readonly AutoResetEvent _evStartDisplay = new AutoResetEvent(false);
 
         /// <summary>
         /// Thread Preload instance
@@ -378,7 +369,7 @@ namespace DigitalFilm.Engine
             {
                 lastSleep = i.ExposureTime;
 
-                _semaphorePreload.WaitOne();
+                _ = _semaphorePreload.WaitOne();
 
                 if (de._threadStop)
                 {
@@ -393,7 +384,7 @@ namespace DigitalFilm.Engine
 
                 if (de._qToDisplay.Count <= fbSize || de._qToPreload.Count >= fbSize)
                 {
-                    _evStartDisplay.Set(); // Start ThreadProcDisplay
+                    _ = _evStartDisplay.Set(); // Start ThreadProcDisplay
                 }
             }
 
@@ -403,7 +394,7 @@ namespace DigitalFilm.Engine
                 Thread.Sleep(100);
             }
 
-            de.SleepMsWithBreak(lastSleep, ref de._threadStop); // To be sure last one is done...
+            _ = de.SleepMsWithBreak(lastSleep, ref de._threadStop); // To be sure last one is done...
 
             de._threadStop = true; // end ThreadProcDisplay
         }
@@ -454,12 +445,7 @@ namespace DigitalFilm.Engine
                 }
             }
 
-            if (stop)
-            {
-                return false;
-            }
-
-            return true;
+            return !stop;
         }
 
         #endregion
@@ -477,15 +463,15 @@ namespace DigitalFilm.Engine
 
             // One thread to preload images
             this._threadPreload = new Thread(ThreadProcPreload);
-            this._threadPreload.Start((object)this);
+            this._threadPreload.Start(this);
 
             // One thread to unload images
             this._threadDispose = new Thread(ThreadProcDispose);
-            this._threadDispose.Start((object)this);
+            this._threadDispose.Start(this);
 
             // One thread to display images
             this._threadDisplay = new Thread(ThreadProcDisplay);
-            this._threadDisplay.Start((object)this);
+            this._threadDisplay.Start(this);
 
             this.EngineStatusNotify?.Invoke(EngineStatus.Started);
         }
@@ -501,11 +487,11 @@ namespace DigitalFilm.Engine
             }
 
             this._threadStop = true;
-            _evStartDisplay.Set();
+            _ = _evStartDisplay.Set();
 
             try
             {
-                _semaphorePreload?.Release();
+                _ = (_semaphorePreload?.Release());
             }
             catch { }
 
@@ -557,10 +543,10 @@ namespace DigitalFilm.Engine
         {
             if (exposureTime < this.Panel.ResponseTime)
             {
-                Log.WriteLine("ExposureTime has been filtered from {0} to {1} on index {2}.", exposureTime, this.Panel.ResponseTime, _qToDisplay.Count);
+                Log.WriteLine("ExposureTime has been filtered from {0} to {1} on index {2}.", exposureTime, this.Panel.ResponseTime, this._qToDisplay.Count);
                 exposureTime = this.Panel.ResponseTime;
             }
-            _qToDisplay.Enqueue(new ImageLayer(bitmap, exposureTime, _qToDisplay.Count));
+            this._qToDisplay.Enqueue(new ImageLayer(bitmap, exposureTime, this._qToDisplay.Count));
         }
 
         /// <summary>
@@ -569,13 +555,13 @@ namespace DigitalFilm.Engine
         /// <param name="imageLayer"></param>
         public void PushImage(ImageLayer imageLayer)
         {
-            imageLayer.Index = _qToDisplay.Count;
+            imageLayer.Index = this._qToDisplay.Count;
             if (imageLayer.ExposureTime < this.Panel.ResponseTime)
             {
                 Log.WriteLine("ExposureTime has been filtered from {0} to {1} on index {2}.", imageLayer.ExposureTime, this.Panel.ResponseTime, imageLayer.Index);
                 imageLayer.ExposureTime = this.Panel.ResponseTime;
             }
-            _qToDisplay.Enqueue(imageLayer);
+            this._qToDisplay.Enqueue(imageLayer);
         }
         #endregion
     }

@@ -48,7 +48,7 @@ namespace DigitalFilm.Modes
         {
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;
-            int iWidth = (width / NbInterval);
+            int iWidth = width / NbInterval;
 
             // width / NbInterval not round so we adjust...
             width = iWidth * NbInterval;

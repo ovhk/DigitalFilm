@@ -1,6 +1,5 @@
 ﻿using DigitalFilm.Papers;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace DigitalFilm.Controls
@@ -8,7 +7,7 @@ namespace DigitalFilm.Controls
     /// <summary>
     /// 
     /// </summary>
-    class PaperConverter : TypeConverter
+    internal class PaperConverter : TypeConverter
     {
         /// <summary>
         /// 
@@ -38,11 +37,7 @@ namespace DigitalFilm.Controls
         /// <returns></returns>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            if (sourceType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertFrom(context, sourceType);
+            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
         }
 
         /// <summary>
