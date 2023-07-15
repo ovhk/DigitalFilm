@@ -109,13 +109,28 @@ namespace DigitalFilm.Modes
         }
 
         /// <summary>
+        /// Get Image preview
+        /// </summary>
+        /// <param name="bitmap">displayed image</param>
+        /// <returns>preview image</returns>
+        public Bitmap GetPrewiew(Bitmap bitmap)
+        {
+            // Try to display with a default correction : Gamma = 1.4 (standard for paper)
+
+            // invert pixel
+            Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bitmap);
+
+            // Apply paper gamma
+            return BitmapTools.GetBitmapWithGamma(invertedImage, 1.4);
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public bool Unload()
         {
-            DisplayEngine engine = DisplayEngine.GetInstance();
-            engine.Clear();
+            this.engine.Clear();
 
             return true;
         }

@@ -542,40 +542,14 @@ namespace DigitalFilm
                 return;
             }
 
+            // Save current picture
             this._savedImage = this.myPictureBox1.Image;
 
-            Bitmap imageToDisplay = null;
+            // Get picture preview
+            IMode mode = cbMode.SelectedItem as IMode;
+            Bitmap imageToDisplay = mode?.GetPrewiew(this._savedImage);
 
-            if (cbMode.SelectedItem is Mode5)
-            {
-                Mode5 mode = cbMode.SelectedItem as Mode5;
-
-                switch (mode.DisplayMode)
-                {
-                    case Modes.DisplayMode.Direct:
-                    case Modes.DisplayMode.GrayToTime:
-                        imageToDisplay = BitmapTools.BitmapFromPaper(this._savedImage, mode.Paper);
-                        break;
-                    case Modes.DisplayMode.DirectPaperGamma:
-                        // TODO apply gamma after or before invertion ?????????
-                        // Voir Test GAMMA avant-après invertion couleur.xlsx
-                        Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
-                        imageToDisplay = BitmapTools.GetBitmapWithGamma(invertedImage, 1 / mode.Paper.Gamma);
-                        break;
-                    case Modes.DisplayMode.DirectAllGrade:
-                        imageToDisplay = BitmapTools.BitmapFromPapers(this._savedImage);
-                        break;
-                }
-            }
-            else // Try to display with a default correction : Gamma = 1.4 (standard for paper)
-            {
-                // invert pixel
-                Bitmap invertedImage = BitmapTools.GetInvertedBitmap(this._savedImage);
-
-                // Apply paper gamma
-                imageToDisplay = BitmapTools.GetBitmapWithGamma(invertedImage, 1.4);
-            }
-
+            // Display it with the histogram
             this.myPictureBox1.Image = imageToDisplay;
             this.myPictureBoxHistogram.Image = BitmapTools.Histogram(imageToDisplay);
         }
@@ -592,6 +566,7 @@ namespace DigitalFilm
                 return;
             }
 
+            // get saved picture back
             this.myPictureBox1.Image = this._savedImage;
             this.myPictureBoxHistogram.Image = BitmapTools.Histogram(this._savedImage);
             this._savedImage = null;

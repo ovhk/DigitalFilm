@@ -1,4 +1,5 @@
 ﻿using DigitalFilm.Engine;
+using DigitalFilm.Tools;
 using System.ComponentModel;
 using System.Drawing;
 
@@ -85,6 +86,22 @@ namespace DigitalFilm.Modes
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Get Image preview
+        /// </summary>
+        /// <param name="bitmap">displayed image</param>
+        /// <returns>preview image</returns>
+        public Bitmap GetPrewiew(Bitmap bitmap)
+        {
+            // Try to display with a default correction : Gamma = 1.4 (standard for paper)
+
+            // invert pixel
+            Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bitmap);
+
+            // Apply paper gamma
+            return BitmapTools.GetBitmapWithGamma(invertedImage, 1.4);
         }
 
         /// <summary>

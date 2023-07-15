@@ -1,4 +1,6 @@
-﻿namespace DigitalFilm.Modes
+﻿using System.Drawing;
+
+namespace DigitalFilm.Modes
 {
     /// <summary>
     /// Interface for modes
@@ -9,5 +11,6 @@
         string Description { get; }
         bool Load();
         bool Unload();
+        Bitmap GetPrewiew(Bitmap bitmap);
     }
 }
