@@ -244,10 +244,12 @@ namespace DigitalFilm.Modes
                 }
 
                 // Check ratio
-                //System.Windows.Forms.MessageBox.Show("Ratio=" + (double)imgRect.Width / (double)imgRect.Height);
+                //System.Windows.Forms.MessageBox.Show("Ratio=" + (double)imgRect.Width / (double)imgRect.Height); // for debug only
 
                 // 6. draw image
                 gfx.DrawImage(grayscalePicture, imgRect);
+
+                //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // for debug only
 
                 switch (DisplayMode)
                 {
@@ -258,13 +260,7 @@ namespace DigitalFilm.Modes
                                 return false;
                             }
                             // 7.1. convert image for selected paper
-
-                            //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // test only
-
                             Bitmap imageForPaper = BitmapTools.BitmapToPaper(bmpPanel, this.Paper);
-
-                            //Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
-                            //Bitmap gammaImage = BitmapTools.GetBitmapWithGamma(invertedImage, 0.7);
 
                             // 8.1. push image to engine
                             engine.PushImage(imageForPaper, this.ExposureTime);
@@ -278,10 +274,11 @@ namespace DigitalFilm.Modes
                                 return false;
                             }
 
-                            // 7.2. invert the image and convert it with the selected paper gamma value
-                            // TODO : on applique le gamma sur l'image inversée ou non ?
-                            Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bmpPanel);
-                            Bitmap imageForPaper = BitmapTools.GetBitmapWithGamma(invertedImage, this.Paper.Gamma);
+                            // 7.2.1 apply the Gamma from the selected paper
+                            Bitmap imageGamma = BitmapTools.GetBitmapWithGamma(bmpPanel, this.Paper.Gamma);
+
+                            // 7.2.2 invert black and white
+                            Bitmap imageForPaper = BitmapTools.GetInvertedBitmap(imageGamma);
 
                             // 8.2. push image to engine
                             engine.PushImage(imageForPaper, this.ExposureTime);
@@ -319,6 +316,34 @@ namespace DigitalFilm.Modes
         }
 
         /// <summary>
+        /// Get Image preview
+        /// </summary>
+        /// <param name="bitmap">displayed image</param>
+        /// <returns>preview image</returns>
+        public Bitmap GetPrewiew(Bitmap bitmap)
+        {
+            Bitmap imageToDisplay = null;
+
+            switch (this.DisplayMode)
+            {
+                case Modes.DisplayMode.Direct:
+                case Modes.DisplayMode.GrayToTime:
+                    imageToDisplay = BitmapTools.BitmapFromPaper(bitmap, this.Paper);
+                    break;
+                case Modes.DisplayMode.DirectPaperGamma:
+                    // Upper we applied Gamma, then invert color, so now invert color and apply invert Gamma 
+                    Bitmap invertedImage = BitmapTools.GetInvertedBitmap(bitmap);
+                    imageToDisplay = BitmapTools.GetBitmapWithGamma(invertedImage, 1 / this.Paper.Gamma);
+                    break;
+                case Modes.DisplayMode.DirectAllGrade:
+                    imageToDisplay = BitmapTools.BitmapFromPapers(bitmap);
+                    break;
+            }
+
+            return imageToDisplay;
+        }
+
+        /// <summary>
         /// Unload function
         /// </summary>
         /// <returns></returns>
@@ -351,35 +376,16 @@ namespace DigitalFilm.Modes
 
             int[] timings = (Curve == GrayToTimeCurve.PMuth) ? GrayToTime.TimingsPMUTH : GrayToTime.TimingsOVH;
 
-#if TEST_PARALLEL2
-            //Stopwatch stopwatch = Stopwatch.StartNew();
-
-            Parallel.For(0, timings.Length, i =>
-            { 
-                Bitmap bitmap2 = (Bitmap) bitmap.Clone();
-#else
             for (int i = 0; i < timings.Length; i++)
             {
-#endif
                 using (DirectBitmap b = new DirectBitmap(bitmap.Width, bitmap.Height))
                 {
-#if TEST_PARALLEL
-                    Parallel.For(0, b.Width, x =>
-#else
                     for (int x = 0; x < b.Width; x++)
-#endif
                     {
-#if TEST_PARALLEL
-                        Parallel.For(0, b.Height, y =>
-#else
                         for (int y = 0; y < b.Height; y++)
-#endif
                         {
-#if TEST_PARALLEL2
-                            Color c = bitmap2.GetPixel(x, y);
-#else
                             Color c = bitmap.GetPixel(x, y);
-#endif
+
                             // we use R but G or B are equal
                             if (c.R < i) // TODO : < or <= ?
                             {
@@ -390,24 +396,11 @@ namespace DigitalFilm.Modes
                                 b.SetPixel(x, y, Color.FromArgb(0, 0, 0));
                             }
                         }
-#if TEST_PARALLEL
-);
-#endif
                     }
-#if TEST_PARALLEL
-);
-#endif
+
                     imageLayers.Add(new ImageLayer(b.Bitmap, timings[i], i));
                 }
             }
-
-#if TEST_PARALLEL2
-            );
-
-        //    stopwatch.Stop();
-
-        //    Log.WriteLine("For : {0}", stopwatch.Elapsed.TotalMilliseconds);
-#endif
 
             return imageLayers;
         }

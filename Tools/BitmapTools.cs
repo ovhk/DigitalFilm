@@ -29,7 +29,8 @@ namespace DigitalFilm.Tools
                     bbw.SetPixel(x, y, gammaColor);
                 }
             }
-            return bbw.Bitmap;
+
+            return BitmapTools.GetInvertedBitmap(bbw.Bitmap);
         }
 
         /// <summary>
@@ -42,11 +43,13 @@ namespace DigitalFilm.Tools
         {
             DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
 
-            for (int x = 0; x < bitmap.Width; x++)
+            Bitmap invBitmap = BitmapTools.GetInvertedBitmap(bitmap);
+
+            for (int x = 0; x < invBitmap.Width; x++)
             {
-                for (int y = 0; y < bitmap.Height; y++)
+                for (int y = 0; y < invBitmap.Height; y++)
                 {
-                    Color color = bitmap.GetPixel(x, y);
+                    Color color = invBitmap.GetPixel(x, y);
 
                     int c = paper.DataFromPaper[color.R];
                     Color gammaColor = Color.FromArgb(c, c, c);
@@ -87,7 +90,8 @@ namespace DigitalFilm.Tools
                     bbw.SetPixel(x, y, gammaColor);
                 }
             }
-            return bbw.Bitmap;
+
+            return BitmapTools.GetInvertedBitmap(bbw.Bitmap);
         }
 
         /// <summary>
@@ -99,19 +103,21 @@ namespace DigitalFilm.Tools
         {
             DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
 
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                double iWidth = (double)bitmap.Width / PapersManager.Papers.Count;
+            Bitmap invBitmap = BitmapTools.GetInvertedBitmap(bitmap);
 
-                int indexPaper = (x == bitmap.Width) // is it the end ?
+            for (int x = 0; x < invBitmap.Width; x++)
+            {
+                double iWidth = (double)invBitmap.Width / PapersManager.Papers.Count;
+
+                int indexPaper = (x == invBitmap.Width) // is it the end ?
                                   ? PapersManager.Papers.Count - 1 // so go to last index
                                   : (int)Math.Truncate(x / iWidth); // else calculate
 
                 Paper paper = PapersManager.Papers[indexPaper];
 
-                for (int y = 0; y < bitmap.Height; y++)
+                for (int y = 0; y < invBitmap.Height; y++)
                 {
-                    Color color = bitmap.GetPixel(x, y);
+                    Color color = invBitmap.GetPixel(x, y);
 
                     int c = paper.DataFromPaper[color.R];
                     Color gammaColor = Color.FromArgb(c, c, c);

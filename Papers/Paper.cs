@@ -32,7 +32,7 @@ namespace DigitalFilm.Papers
             }
         }
 
-        public double ContrastRatio => Math.Pow(10, this.Dmax - this.Dmin);
+        public double ContrastRatio => Math.Pow(10, this.DmaxLinear - this.DminLinear);
 
         public double Gamma => (this.DmaxLinear - this.DminLinear) / (this.RLEmax - this.RLEmin);
 
@@ -57,8 +57,15 @@ namespace DigitalFilm.Papers
         {
             get
             {
-                double Hm = 0; // TODO fill Hm
-
+                double Hm = 0;
+                foreach (PaperDataItem paperDataItem in this.paperDataItems)
+                {
+                    if (paperDataItem.Density.Equals(this.DminLinear))
+                    {
+                        Hm = paperDataItem.RelativeLogExposure;
+                        break;
+                    }
+                }
                 return Convert.ToInt32(0.8 / Hm);
             }
         }
@@ -123,7 +130,6 @@ namespace DigitalFilm.Papers
 
                 if (x.RelativeLogExposure < y.RelativeLogExposure)
                     return -1;
-
                 else
                     return 0;
             }
@@ -146,6 +152,8 @@ namespace DigitalFilm.Papers
         /// <returns></returns>
         public bool Load()
         {
+            // 0. check file path 
+
             string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\" + RawDataFileName;
 
             if (File.Exists(filepath) == false)
@@ -153,7 +161,7 @@ namespace DigitalFilm.Papers
                 return false;
             }
 
-            // 1. Read and parse CVS file
+            // 1. Read and parse CVS file to make a list of PaperDataItem
 
             string[] lines = File.ReadAllLines(filepath);
 
@@ -175,11 +183,13 @@ namespace DigitalFilm.Papers
                         RelativeLogExposure = RelativeLogExposure,
                     });
 
+                    // search for Density min
                     if (this.Dmin > Density || this.Dmin == Double.MinValue)
                     {
                         this.Dmin = Density;
                     }
 
+                    // search for Density max
                     if (this.Dmax < Density || this.Dmax == Double.MinValue)
                     {
                         this.Dmax = Density;
@@ -190,42 +200,6 @@ namespace DigitalFilm.Papers
             // 2. Sort data
 
             this.paperDataItems.Sort(new PaperDataItemComparer());
-
-#if TODO_FILTER_DENSITY
-            double[] filteredDensity;
-
-            // change Dmax for other type of surface
-            // TODO : maybe other solution is just to push exposure time ???
-            if (this.NewDmax != 0)
-            {
-                filteredDensity = new double[Density.Length];
-
-                double trig = Density.Max() - (Density.Max() - this.NewDmax) * 2d;
-
-                trig = (trig > 0) ? trig : 0;
-
-                for (int i = 0; i < Density.Length; i++)
-                { 
-                    if (Density[i] > trig)
-                    {
-                        double delta = this.NewDmax - Density[i];
-                        //Log.Write("Density[i]={0} ", Density[i]);
-                        double newDensity = Density[i] - Math.Sqrt(delta); // TODO : faire la courbe pour voir la tête du filtre
-                        newDensity = (newDensity > 0) ? newDensity : this.NewDmax;
-                        filteredDensity[i] = newDensity;
-                        //Log.WriteLine("NewDensity[i]={0}", newDensity);
-                    }
-                    else
-                    {
-                        filteredDensity[i] = Density[i];
-                    }
-                }
-            }
-            else
-            {
-                filteredDensity = Density;
-            }
-#endif
 
             // 3. Filter data
 
@@ -244,10 +218,12 @@ namespace DigitalFilm.Papers
             // https://www.filmlabs.org/docs/cours_sensitometrie.pdf
 
             // https://www.souvenirsdephotographe.fr/technique/gradationpapier.html
+            // https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7238748
 
             double M = this.Dmin + 0.1;
             double N = this.Dmax - 0.1;
 
+            // Remove from the list all PaperDataItem outside M and N
             for (int i = paperDataItems.Count - 1; i >= 0; i--) // reverse iterate to go through all datas
             {
                 PaperDataItem item = paperDataItems[i];
@@ -282,7 +258,9 @@ namespace DigitalFilm.Papers
                 }
             }
 
-            // 4. Scale data to 0-255
+            // from this part, do not use Dmin and Dmax anymore
+
+            // 4. Scale density data to 0-255
 
             foreach (PaperDataItem item in paperDataItems)
             {
@@ -292,16 +270,20 @@ namespace DigitalFilm.Papers
             // 5. Compute Transfert Function
 
             // https://numerics.mathdotnet.com/Interpolation
-            // We have lots of points so Linear should be ok.           
+            // We have lots of points so Linear should be ok.
+            // X = Density from 0 to 255
+            // Y = RelativeLogExposure from RLEmin to RLEmax
             LinearSpline ii = LinearSpline.InterpolateSorted(this.ScaledDensity, this.RelativeLogExposure);
 
             DataToPaper = new int[256];
             DataFromPaper = new int[256];
 
-            for (int x = 0; x < DataToPaper.Length; x++)
+            for (int x = 0; x < DataToPaper.Length; x++) // for each 256 density = color
             {
+                // interpolate RelativeLogExposure
                 double y = ii.Interpolate(x);
 
+                // check value
                 if (y < 0 || y is double.NaN)
                 {
                     // If NaN, you probably have the same Y for 2 different X
@@ -309,20 +291,20 @@ namespace DigitalFilm.Papers
                     return false;
                 }
 
-                // https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7238748
+                double res = Math.Pow((double)x / 255d, y);
+                double resInv = Math.Pow((double)x / 255d, 1/y);
 
-                double res = (y - this.RLEmin) / (this.RLEmax - this.RLEmin);
-                double resInv = Math.Pow((double)(255d - x) / 255d, res); // antilog
-                ///double resInv = Math.Pow((double)x / 255d, res); // antilog             SI ça, alors il faut DataToPaper[255 - x]
-
-                // 255-x to invert black and white
+                // Do not invert here
                 // X =   0 = black
                 // X = 255 = white
-                DataToPaper[x] = Convert.ToInt32(resInv * 255d);
-                DataFromPaper[255 - x] = Convert.ToInt32(res * 255d);
+                DataToPaper[x] = Convert.ToInt32(res * 255d);
+                DataFromPaper[x] = Convert.ToInt32(resInv * 255d);
             }
 
+            Log.WriteLine("Name : " + Name);
             Log.WriteLine("ISO : " + ISO);
+            Log.WriteLine("ISO2 : " + ISO2);
+            Log.WriteLine("ContrastRatio : " + ContrastRatio);
 
             return true;
         }
