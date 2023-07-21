@@ -36,6 +36,7 @@ namespace DigitalFilm
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.colorSensorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btPlay = new System.Windows.Forms.Button();
             this.btStop = new System.Windows.Forms.Button();
@@ -105,12 +106,20 @@ namespace DigitalFilm
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.colorSensorToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(988, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // colorSensorToolStripMenuItem
+            // 
+            this.colorSensorToolStripMenuItem.Name = "colorSensorToolStripMenuItem";
+            this.colorSensorToolStripMenuItem.Size = new System.Drawing.Size(85, 20);
+            this.colorSensorToolStripMenuItem.Text = "Color sensor";
+            this.colorSensorToolStripMenuItem.Click += new System.EventHandler(this.colorSensorToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -308,7 +317,7 @@ namespace DigitalFilm
             // 
             this.btPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btPreview.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btPreview.Location = new System.Drawing.Point(787, 63);
+            this.btPreview.Location = new System.Drawing.Point(787, 30);
             this.btPreview.Name = "btPreview";
             this.btPreview.Size = new System.Drawing.Size(193, 46);
             this.btPreview.TabIndex = 30;
@@ -322,9 +331,9 @@ namespace DigitalFilm
             this.myPictureBoxHistogram.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.myPictureBoxHistogram.BackColor = System.Drawing.Color.Black;
             this.myPictureBoxHistogram.Image = null;
-            this.myPictureBoxHistogram.Location = new System.Drawing.Point(787, 115);
+            this.myPictureBoxHistogram.Location = new System.Drawing.Point(787, 82);
             this.myPictureBoxHistogram.Name = "myPictureBoxHistogram";
-            this.myPictureBoxHistogram.Size = new System.Drawing.Size(193, 107);
+            this.myPictureBoxHistogram.Size = new System.Drawing.Size(193, 140);
             this.myPictureBoxHistogram.TabIndex = 31;
             // 
             // myPictureBox1
@@ -406,6 +415,7 @@ namespace DigitalFilm
         private System.Windows.Forms.Label lbTimer;
         private System.Windows.Forms.Button btPreview;
         private MyPictureBox myPictureBoxHistogram;
+        private System.Windows.Forms.ToolStripMenuItem colorSensorToolStripMenuItem;
     }
 }
 
