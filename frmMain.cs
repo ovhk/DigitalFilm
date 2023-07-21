@@ -626,6 +626,17 @@ namespace DigitalFilm
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void colorSensorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmColorSensor frm = new frmColorSensor();
+            _ = frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmAbout about = new frmAbout();

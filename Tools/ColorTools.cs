@@ -59,5 +59,16 @@ namespace DigitalFilm.Tools
 
             return Color.FromArgb(filteredColor, filteredColor, filteredColor);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public static Color ColorToGrayScale(Color color)
+        {
+            int grayScale = (int)((color.R * 0.299) + (color.G * 0.587) + (color.B * 0.114));
+            return Color.FromArgb(color.A, grayScale, grayScale, grayScale);
+        }
     }
 }

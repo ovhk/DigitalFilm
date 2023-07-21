@@ -72,6 +72,12 @@
   <ItemGroup>
     <Compile Include="Engine\CacheManager.cs" />
     <Compile Include="Engine\DisplayEngine.cs" />
+    <Compile Include="frmColorSensor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmColorSensor.Designer.cs">
+      <DependentUpon>frmColorSensor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Modes\Mode9.cs" />
     <Compile Include="Modes\ModeParameters.cs" />
     <Compile Include="Panels\ScreenManager.cs" />
@@ -80,6 +86,7 @@
     <Compile Include="Papers\Paper.cs" />
     <Compile Include="Controls\PaperConverter.cs" />
     <Compile Include="Papers\PapersManager.cs" />
+    <Compile Include="Sensors\AtlasScientific.cs" />
     <Compile Include="Test\File\FileFormat.cs" />
     <Compile Include="Test\File\FileManagement.cs" />
     <Compile Include="frmAbout.cs">
@@ -136,6 +143,9 @@
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmColorSensor.resx">
+      <DependentUpon>frmColorSensor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDisplay.resx">
       <DependentUpon>frmDisplay.cs</DependentUpon>
