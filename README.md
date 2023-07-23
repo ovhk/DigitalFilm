@@ -36,9 +36,9 @@ Thanks to Foma for getting me few usefull information.
 
 ## Application
 
-The application is made with different mode for different tests.
+The application is made with different mode for different tests.<br />
 <br />
-<img src="/img/DigitalFimPrintScreen.png" width="500">
+<img src="/img/DigitalFimPrintScreen.png" width="600">
 
 ### Mode 1 : Back & White
 
@@ -113,27 +113,26 @@ Generate a gray palette with the gamma parameter.
 
 ### Next release
 - [ ] tester les courbes
-- [ ] Générer et imprimer une feuille A3 de référence de gris avec trou au milieu
-- [/] Faire une image avec les 5 niveaux de grade
-- [/] Faire un dérivé de l'external panel pour modifier le ratio
-- [X] Faire un histogramme
+- [ ] tester ratio écran Wisecoco
+- [ ] tester capteur de couleur
+- [?] Générer et imprimer une feuille A3 de référence de gris avec trou au milieu --> remplacer par le capteur de mesure ?
 
 - [ ] faire affiche pour l'AS8
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
 
 ### Futur release
-- [ ] Parallel Programming : in 4K or 8K, generate 256 bitmap take times. Thanks for the cache system.
 - [ ] Reframe picture : maybe it has to be done in a true image manupulation program
 - [ ] Add mask managment
 - [ ] Add GrayToTime configuration system can show the impact on picture on real time
 - [ ] Add GrayToTime formula in parameter and evaluate it on the fly?
-      if trend nedded https://stackoverflow.com/questions/40269793/replicate-excel-power-trendline-values-with-c-sharp
+      if trend needed https://stackoverflow.com/questions/40269793/replicate-excel-power-trendline-values-with-c-sharp
 - [ ] Add Images configuration system : add, remove with custom params on each steps
 
 ## Reference
 - https://tech.snmjournals.org/content/jnmt/20/2/62.full.pdf
 - https://www.35mmc.com/07/02/2022/contrast-and-tonality-part-3-characteristic-curves-for-film-and-paper-by-sroyon/
 - https://www.covingtoninnovations.com/dslr/curves.html
+- https://nvlpubs.nist.gov/nistpubs/jres/7/jresv7n3p495_A2b.pdf
 - https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/
 - https://ezgif.com/maker
 
