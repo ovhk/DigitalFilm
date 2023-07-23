@@ -206,6 +206,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="README.md" />
+    <None Include="TODO.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -301,10 +301,10 @@ namespace DigitalFilm.Papers
                 DataFromPaper[x] = Convert.ToInt32(resInv * 255d);
             }
 
-            Log.WriteLine("Name : " + Name);
-            Log.WriteLine("ISO : " + ISO);
-            Log.WriteLine("ISO2 : " + ISO2);
-            Log.WriteLine("ContrastRatio : " + ContrastRatio);
+            //Log.WriteLine("Name : " + Name);
+            //Log.WriteLine("ISO : " + ISO);
+            //Log.WriteLine("ISO2 : " + ISO2);
+            //Log.WriteLine("ContrastRatio : " + ContrastRatio);
 
             return true;
         }
