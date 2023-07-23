@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace DigitalFilm.Modes
 {
@@ -167,7 +169,7 @@ namespace DigitalFilm.Modes
             // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
             using (Bitmap bmpPicture = new Bitmap(ImagePath))
             {
-                Bitmap bmpPanel = new Bitmap(engine.Panel.Width, engine.Panel.Height);
+                Bitmap bmpPanel = new Bitmap(engine.Panel.Width, engine.Panel.Height, PixelFormat.Format24bppRgb);
 
                 Graphics gfx = Graphics.FromImage(bmpPanel);
 
@@ -247,6 +249,15 @@ namespace DigitalFilm.Modes
                 //System.Windows.Forms.MessageBox.Show("Ratio=" + (double)imgRect.Width / (double)imgRect.Height); // for debug only
 
                 // 6. draw image
+                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                //bmpPanel.SetResolution(grayscalePicture.HorizontalResolution/2, grayscalePicture.VerticalResolution*2);
+
+                //Log.WriteLine("bmpPicture H={0},V={1}", bmpPicture.HorizontalResolution, bmpPicture.VerticalResolution);
+                //Log.WriteLine("grayscalePicture H={0},V={1}", grayscalePicture.HorizontalResolution, grayscalePicture.VerticalResolution);
+                //Log.WriteLine("bmpPanel H={0},V={1}", bmpPanel.HorizontalResolution, bmpPanel.VerticalResolution);
+
+                //gfx.DrawImage(imgPhoto, new Rectangle(destX, destY, destWidth, destHeight), new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight), GraphicsUnit.Pixel);
+
                 gfx.DrawImage(grayscalePicture, imgRect);
 
                 //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // for debug only
