@@ -19,7 +19,7 @@ namespace DigitalFilm.Panels
 
         int IPanel.NumberOfColors => 256;
 
-        int IPanel.ResponseTime => 120;  // TODO : 30 Hz so consider x2 = 80 ms ????
+        int IPanel.ResponseTime => 80;
 
         bool IPanel.IsFullScreen => true;
 

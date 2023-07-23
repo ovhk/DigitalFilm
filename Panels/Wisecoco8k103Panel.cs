@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace DigitalFilm.Panels
 {
-    internal class Wisecoco8k103 : IPanel
+    internal class Wisecoco8k103Panel : IPanel
     {
         public Screen Screen
         {
@@ -11,11 +11,16 @@ namespace DigitalFilm.Panels
             private set;
         }
 
+        public const string Identification = "lontium semi";
+
         private readonly string _name;
         string IPanel.Name => this._name;
+
         int IPanel.Width => this.Screen.Bounds.Width;
+        //int IPanel.Width => (int)(this.Screen.Bounds.Width * (this.Screen.Bounds.Width / 7680.0)); // TODO : test here !
 
         int IPanel.Height => this.Screen.Bounds.Height;
+        //int IPanel.Height => (int)(this.Screen.Bounds.Height * (this.Screen.Bounds.Height / 4320.0));  // TODO : test here !
 
         int IPanel.NumberOfColors => 256;
 
@@ -30,12 +35,12 @@ namespace DigitalFilm.Panels
             return this._name;
         }
 
-        public Wisecoco8k103()
+        public Wisecoco8k103Panel()
         {
             this._name = "External Panel";
         }
 
-        public Wisecoco8k103(Screen screen)
+        public Wisecoco8k103Panel(Screen screen)
         {
             this._name = ScreenInterrogatory.DeviceFriendlyName(screen);
             this.Screen = screen;

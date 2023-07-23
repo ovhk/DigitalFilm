@@ -460,8 +460,8 @@ namespace DigitalFilm
 
             this.ResumeLayout(true);
 
-            // If panel is an external panel, show on Load button
-            if (engine.Panel is ExternalPanel)
+            // If panel is an external panel or a Wisecoco, show on Load button
+            if (engine.Panel is ExternalPanel || engine.Panel is Wisecoco8k103Panel)
             {
                 display.Show();
             }

@@ -180,7 +180,18 @@ namespace DigitalFilm
                 engine.OnNewImage += Engine_OnNewImage;
 
                 // Adapte to panel size
-                if (engine.Panel.IsFullScreen)
+                if (engine.Panel is PanelSimulator) // TODO simplify this ! Put Screen in IPanel?
+                {
+                    Point p = new Point
+                    {
+                        X = Screen.PrimaryScreen.WorkingArea.Left,
+                        Y = Screen.PrimaryScreen.WorkingArea.Top
+                    };
+
+                    this.TopMost = false;
+                    this.Location = p;
+                }
+                else if (engine.Panel is ExternalPanel)
                 {
                     ExternalPanel ep = engine.Panel as ExternalPanel;
 
@@ -190,18 +201,20 @@ namespace DigitalFilm
                         Y = ep.Screen.WorkingArea.Top
                     };
 
-                    this.TopMost = true; // TODO : A tester
+                    this.TopMost = true;
                     this.Location = p;
                 }
-                if (engine.Panel is PanelSimulator)
+                else if (engine.Panel is Wisecoco8k103Panel)
                 {
+                    Wisecoco8k103Panel ep = engine.Panel as Wisecoco8k103Panel;
+
                     Point p = new Point
                     {
-                        X = Screen.PrimaryScreen.WorkingArea.Left,
-                        Y = Screen.PrimaryScreen.WorkingArea.Top
+                        X = ep.Screen.WorkingArea.Left,
+                        Y = ep.Screen.WorkingArea.Top
                     };
 
-                    this.TopMost = false; // TODO : A tester
+                    this.TopMost = true;
                     this.Location = p;
                 }
             }

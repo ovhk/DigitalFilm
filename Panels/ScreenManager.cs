@@ -64,8 +64,8 @@ namespace DigitalFilm.Panels
 
                     switch (name)
                     {
-                        case "lontium semi":
-                            result.Add(new Panels.Wisecoco8k103(screen));
+                        case Wisecoco8k103Panel.Identification:
+                            result.Add(new Panels.Wisecoco8k103Panel(screen));
                             break;
                         default:
                             result.Add(new Panels.ExternalPanel(screen));
