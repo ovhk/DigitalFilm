@@ -57,8 +57,8 @@ namespace DigitalFilm.Papers
                                     {
                                         // Add here new paper Class!
                                         new FomaspeedVariantIIIGlossyG0(),
-                                        new FomaspeedVariantIIIVelvetG0(),
-                                        new FomaspeedVariantIIIMattG0(),
+                                        //new FomaspeedVariantIIIVelvetG0(),
+                                        //new FomaspeedVariantIIIMattG0(),
                                         new FomaspeedVariantIIIGlossyG1(),
                                         new FomaspeedVariantIIIGlossyG2(),
                                         new FomaspeedVariantIIIGlossyG3(),
