@@ -1,16 +1,12 @@
-﻿using MathNet.Numerics.Distributions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DigitalFilm.Sensors
 {
     /// <summary>
     /// https://files.atlas-scientific.com/EZO_RGB_Datasheet.pdf
     /// </summary>
-    internal class EZORGB
+    internal class EZO_RGB_Sensor
     {
         public const string CALIBRATE = "CAL\r"; // perform calibration
 
@@ -37,9 +33,9 @@ namespace DigitalFilm.Sensors
         public const string INDICATOR_OFF = "iL,0\r"; // indicator LED off
         public const string INDICATOR_GET = "iL,?\r";
 
-        public const string FACTORY_RESET = "FACTORY\r";
+        public const string FACTORY_RESET = "FACTORY\r"; // go to factory default
 
-        public const string STATUS = "STATUS\r";
+        public const string STATUS = "STATUS\r"; // get status
 
         public const string BAUDRATE_SET = "BAUD,{0}\r"; // change baudrate 300, 1200, 2400, 9600 (default), 19200, 38400, 57600, 115200
         public const string BAUDRATE_GET = "BAUD,?\r";

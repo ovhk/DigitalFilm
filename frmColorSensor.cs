@@ -20,6 +20,7 @@ namespace DigitalFilm
     /// </summary>
     public partial class frmColorSensor : Form
     {
+        private const int FRAME_TIME = 200; // ms
         /// <summary>
         /// 
         /// </summary>
@@ -61,22 +62,23 @@ namespace DigitalFilm
 
             this.serialPort1.PortName = comboBox1.SelectedItem.ToString();
 
-            this.serialPort1.Open(); // TODO mode commande in a specific class for this sensor
+            this.serialPort1.Open();
             this.toolStripStatusLabel1.Text = "Connecting to " + this.serialPort1.PortName + "...";
             this.serialPort1.DiscardInBuffer();
             this.serialPort1.DiscardOutBuffer();
 
-            this.serialPort1.Write(EZORGB.RESPONSECODE_OK_OFF);
-            Thread.Sleep(60);
-            this.serialPort1.Write(EZORGB.CONTINUOUSMODE_OFF);
-            Thread.Sleep(60);
-            this.serialPort1.Write(EZORGB.DEVICE_INFORMATION_GET);
-            Thread.Sleep(60);
-            this.serialPort1.Write(EZORGB.INDICATOR_OFF);
-            Thread.Sleep(300);
-            this.serialPort1.Write(EZORGB.CONTINUOUSMODE_ON);
-            this.serialPort1.DiscardInBuffer();
-            this.toolStripStatusLabel1.Text = "Connected.";
+            if (this.serialPort1.IsOpen)
+            {
+                this.serialPort1.Write(EZO_RGB_Sensor.CONTINUOUSMODE_OFF);
+                this.serialPort1.DiscardInBuffer();
+                this.serialPort1.Write(EZO_RGB_Sensor.DEVICE_INFORMATION_GET);
+                Thread.Sleep(FRAME_TIME);
+                this.serialPort1.Write(EZO_RGB_Sensor.INDICATOR_OFF);
+                Thread.Sleep(300);
+                this.serialPort1.Write(EZO_RGB_Sensor.CONTINUOUSMODE_ON);
+                this.serialPort1.DiscardInBuffer();
+                this.toolStripStatusLabel1.Text = "Connected.";
+            }
         }
 
         /// <summary>
@@ -86,9 +88,13 @@ namespace DigitalFilm
         /// <param name="e"></param>
         private void frmColorSensor_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.serialPort1.Write(EZORGB.CONTINUOUSMODE_OFF);
             this.toolStripStatusLabel1.Text = "Closing!";
-            this.serialPort1.Close();
+
+            if (this.serialPort1.IsOpen)
+            {
+                this.serialPort1.Write(EZO_RGB_Sensor.CONTINUOUSMODE_OFF);
+                this.serialPort1.Close();
+            }
         }
 
         /// <summary>
@@ -98,7 +104,7 @@ namespace DigitalFilm
         /// <param name="e"></param>
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            Thread.Sleep(400);
+            Thread.Sleep(FRAME_TIME);
 
             SerialPort sp = (SerialPort)sender;
 
@@ -116,6 +122,7 @@ namespace DigitalFilm
                 if (data[0] == '?') // command response
                 {
                     SafeUpdate(() => this.toolStripStatusLabel1.Text = data);
+                    Thread.Sleep(800); // just to display it
                     return;
                 }
 
@@ -179,7 +186,7 @@ namespace DigitalFilm
 
             this.pnColor.BackColor = Color.White;
 
-            this.serialPort1.Write(EZORGB.CONTINUOUSMODE_OFF);
+            this.serialPort1.Write(EZO_RGB_Sensor.CONTINUOUSMODE_OFF);
             Thread.Sleep(60);
             
             Application.DoEvents();
@@ -188,12 +195,12 @@ namespace DigitalFilm
 
             this.serialPort1.DiscardInBuffer();
             this.serialPort1.DiscardOutBuffer();
-            this.serialPort1.Write(EZORGB.CALIBRATE);
+            this.serialPort1.Write(EZO_RGB_Sensor.CALIBRATE);
             
             Thread.Sleep(100);
 
             this.serialPort1.DiscardInBuffer();
-            this.serialPort1.Write(EZORGB.CONTINUOUSMODE_ON);
+            this.serialPort1.Write(EZO_RGB_Sensor.CONTINUOUSMODE_ON);
         }
 
         /// <summary>
