@@ -495,7 +495,8 @@ namespace DigitalFilm
 
             this.UseWaitCursor = true;
 
-            if (!(engine.Panel is ExternalPanel))
+            // Do not hode if panel is an external panel or a Wisecoco
+            if (engine.Panel is PanelSimulator) // TODO : simplify this
             {
                 this.SafeUpdate(() => display.Hide());
             }
