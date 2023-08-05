@@ -17,7 +17,7 @@ Then, you have to put the screen directly on the paper and light it up.
 
 ## Method 2: GrayToTime
 
-<img src="/img/mode graytotime synoptic.drawio.png" width="900"><br /><br />
+<img src="/img/mode graytotime synoptic.drawio.png" width="1024"><br /><br />
 <center><img src="/img/mode graytotime.drawio.png" width="600"></center>
 
 ## Screen
