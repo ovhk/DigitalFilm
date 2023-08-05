@@ -5,12 +5,20 @@ DigitalFilm helps to transfer digital picture to analog print through a transpar
 <img src="/img/labo1.jpg" width="300"><img src="/img/labo2.jpg" width="300"><img src="/img/labo3.jpg" width="300">
 
 
-## Method
+## Method 1: Direct
 
 Basically, negative films have a gamma of around 0.7 and are printed on photographic paper with a gamma of around 1.4.<br /> 
 0.7 × 1.4 = 1.0, that's why the picture looks like the original view.<br />
 So the idea if you want to use a screen as a film, is to apply the invert of the gamma of the paper and invert black and white.
 Then, you have to put the screen directly on the paper and light it up.
+
+<img src="/img/mode direct synoptic.drawio.png" width="800"><br /><br />
+<img src="/img/mode direct.drawio.png" width="400">
+
+## Method 2: GrayToTime
+
+<img src="/img/mode graytotime synoptic.drawio.png" width="800"><br /><br />
+<img src="/img/mode graytotime.drawio.png" width="400">
 
 ## Screen
 
