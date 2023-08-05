@@ -8,7 +8,7 @@
 ## Next release
 - [X] Régression : BUG au stop, la frmDisplay se ferme
 - [ ] Pb ratio Wisecoco
-- [ ] simplifier la generation de matrice de calibration GrayToTime
+- [X] simplifier la generation de matrice de calibration GrayToTime
 
 - [ ] faire affiche pour l'AS8
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?

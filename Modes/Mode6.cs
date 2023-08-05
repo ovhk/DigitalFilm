@@ -2,6 +2,7 @@
 using DigitalFilm.Tools;
 using System.ComponentModel;
 using System.Drawing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace DigitalFilm.Modes
 {
@@ -46,6 +47,76 @@ namespace DigitalFilm.Modes
         /// <returns></returns>
         public bool Load()
         {
+            // Difine number of rows and cols
+            int nbRows = 3;
+            int nbCols = 6;
+
+            int width = engine.Panel.Width;
+            int height = engine.Panel.Height;
+            int iWidth = width / nbCols;
+            int iHeight = height / nbRows;
+
+            // width / NbInterval not round so we adjust...
+            width = iWidth * nbCols;
+            height = iHeight * nbRows;
+
+            Bitmap b = new Bitmap(width, height);
+
+            Graphics gfx = Graphics.FromImage(b);
+
+            // First, erase all
+            using (SolidBrush brush = new SolidBrush(Color.Black))
+            {
+                gfx.FillRectangle(brush, 0, 0, engine.Panel.Width, engine.Panel.Height);
+            }
+
+            // calculate interval of exposure of each squares
+            int interval = (maxTime - minTime) / (nbRows * nbCols);
+
+            // build a matrix: each square in the matrix get it exposure time
+            int init = minTime + interval;
+
+            int[,] matrix = new int[nbRows, nbCols];
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    matrix[i, j] = init;
+                    init += interval;
+                }
+            }
+
+            // Increment time with interval: we need one bitmap for each interval
+            for (int i = minTime; i <= maxTime; i += interval)
+            {
+                // Iterate over the matrix and fill each square with the appropriate color
+                for (int r = 0; r < matrix.GetLength(0); r++)
+                {
+                    for (int c = 0; c < matrix.GetLength(1); c++)
+                    {
+                        Color color = (i < matrix[r, c]) ? Color.White : Color.Black;
+                        
+                        using (SolidBrush brush = new SolidBrush(color))
+                        {
+                            gfx.FillRectangle(brush, c * iWidth, r * iHeight, iWidth, iHeight);
+                        }
+                    }
+                }
+
+                // Push the bitmap to the engine
+                engine.PushImage(new Bitmap(b), interval);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool LoadOkButTooSlow()
+        {
             int nbRows = 4;
             int nbCols = 5;
 
@@ -69,7 +140,6 @@ namespace DigitalFilm.Modes
             }
 
             // TODO : faire un cadrillage de 4 x 5 avec des lignes blanches franches pour délimiter
-
 
             int interval = (maxTime - minTime) / (nbRows * nbCols);
 
