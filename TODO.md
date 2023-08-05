@@ -6,10 +6,9 @@
     - [ ] digital texture background
 
 ## Next release
-- [ ] tester les courbes
+- [X] Régression : BUG au stop, la frmDisplay se ferme
 - [ ] Pb ratio Wisecoco
-- [ ] tester capteur de couleur
-- [?] Générer et imprimer une feuille A3 de référence de gris avec trou au milieu --> remplacer par le capteur de mesure ?
+- [ ] simplifier la generation de matrice de calibration GrayToTime
 
 - [ ] faire affiche pour l'AS8
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
