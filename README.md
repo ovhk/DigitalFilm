@@ -13,12 +13,12 @@ So the idea if you want to use a screen as a film, is to apply the invert of the
 Then, you have to put the screen directly on the paper and light it up.
 
 <img src="/img/mode direct synoptic.drawio.png" width="800"><br /><br />
-<img src="/img/mode direct.drawio.png" width="400">
+<center><img src="/img/mode direct.drawio.png" width="400"></center>
 
 ## Method 2: GrayToTime
 
-<img src="/img/mode graytotime synoptic.drawio.png" width="800"><br /><br />
-<img src="/img/mode graytotime.drawio.png" width="400">
+<img src="/img/mode graytotime synoptic.drawio.png" width="900"><br /><br />
+<center><img src="/img/mode graytotime.drawio.png" width="600"></center>
 
 ## Screen
 
