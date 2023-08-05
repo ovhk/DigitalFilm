@@ -365,9 +365,9 @@ namespace DigitalFilm
         private void LoadModes()
         {
             _ = this.cbMode.Items.Add(new Modes.Mode1());
-            _ = this.cbMode.Items.Add(new Modes.Mode2());
+            //_ = this.cbMode.Items.Add(new Modes.Mode2()); // Too difficult de compare gray visually
             _ = this.cbMode.Items.Add(new Modes.Mode3());
-            _ = this.cbMode.Items.Add(new Modes.Mode4());
+            //_ = this.cbMode.Items.Add(new Modes.Mode4()); // Unuseful to compare with a linear gray
             _ = this.cbMode.Items.Add(new Modes.Mode5());
             _ = this.cbMode.Items.Add(new Modes.Mode6());
             _ = this.cbMode.Items.Add(new Modes.Mode7());
@@ -461,7 +461,7 @@ namespace DigitalFilm
             this.ResumeLayout(true);
 
             // If panel is an external panel or a Wisecoco, show on Load button
-            if (engine.Panel is ExternalPanel || engine.Panel is Wisecoco8k103Panel)
+            if (engine.Panel is ExternalPanel || engine.Panel is Wisecoco8k103Panel) // TODO : simplify this
             {
                 display.Show();
             }
