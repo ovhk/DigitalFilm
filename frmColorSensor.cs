@@ -62,22 +62,32 @@ namespace DigitalFilm
 
             this.serialPort1.PortName = comboBox1.SelectedItem.ToString();
 
-            this.serialPort1.Open();
-            this.toolStripStatusLabel1.Text = "Connecting to " + this.serialPort1.PortName + "...";
-            this.serialPort1.DiscardInBuffer();
-            this.serialPort1.DiscardOutBuffer();
-
-            if (this.serialPort1.IsOpen)
+            try
             {
-                this.serialPort1.Write(EZO_RGB_Sensor.CONTINUOUSMODE_OFF);
+                this.serialPort1.Open();
+                this.toolStripStatusLabel1.Text = "Connecting to " + this.serialPort1.PortName + "...";
                 this.serialPort1.DiscardInBuffer();
-                this.serialPort1.Write(EZO_RGB_Sensor.DEVICE_INFORMATION_GET);
-                Thread.Sleep(FRAME_TIME);
-                this.serialPort1.Write(EZO_RGB_Sensor.INDICATOR_OFF);
-                Thread.Sleep(300);
-                this.serialPort1.Write(EZO_RGB_Sensor.CONTINUOUSMODE_ON);
-                this.serialPort1.DiscardInBuffer();
-                this.toolStripStatusLabel1.Text = "Connected.";
+                this.serialPort1.DiscardOutBuffer();
+
+                if (this.serialPort1.IsOpen)
+                {
+                    this.serialPort1.Write(EZO_RGB_Sensor.CONTINUOUSMODE_OFF);
+                    this.serialPort1.DiscardInBuffer();
+                    this.serialPort1.Write(EZO_RGB_Sensor.DEVICE_INFORMATION_GET);
+                    Thread.Sleep(FRAME_TIME);
+                    this.serialPort1.Write(EZO_RGB_Sensor.INDICATOR_OFF);
+                    Thread.Sleep(300);
+                    this.serialPort1.Write(EZO_RGB_Sensor.CONTINUOUSMODE_ON);
+                    this.serialPort1.DiscardInBuffer();
+                    this.toolStripStatusLabel1.Text = "Connected.";
+                }
+                else
+                {
+                    this.toolStripStatusLabel1.Text = "Cannot open port!";
+                }
+            } catch (Exception)
+            {
+                this.toolStripStatusLabel1.Text = "Cannot open port!";
             }
         }
 
