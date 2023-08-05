@@ -92,6 +92,7 @@ With this data, you will be able to fill the GrayToTime Excel file, to draw the 
 
 <img src="/img/EZ-RGB use.jpg" width="400"> 
 <img src="/img/sensor capture.png" width="400">
+<img src="/img/Excel sensor.png" width="400">
 
 ### Mode 7: Gray vs. GrayToTime
 
