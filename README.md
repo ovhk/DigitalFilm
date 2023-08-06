@@ -1,6 +1,6 @@
 ﻿# Digital Film
 
-DigitalFilm helps to transfer digital picture to analog print through a transparent screen. In a way, it's a digital film.
+DigitalFilm helps to transfer a digital picture to analog print through a transparent screen. In a way, it's a digital film.
 
 <img src="/img/labo1.jpg" width="300"><img src="/img/labo2.jpg" width="300"><img src="/img/labo3.jpg" width="300">
 
@@ -12,7 +12,7 @@ Basically, negative films have a gamma of around 0.7 and are printed on photogra
 So the idea if you want to use a screen as a film, is to apply the invert of the gamma of the paper and invert black and white.
 Then, you have to put the screen directly on the paper and light it up.
 
-In Direct mode, it convert the picture to grayscale and display it with inverted colors (like films), adapted for the specified paper and grade.
+In Direct mode, it converts the picture to grayscale and display it with inverted colors (like films), adapted for the specified paper and grade.
 With this method, you don't use the entire gray palette (because of the extrapolation), so you end up with artifacts. One solution is to use the GrayToTime mode.
 
 <img src="/img/mode direct synoptic.drawio.png" width="800"><br /><br />
@@ -24,9 +24,9 @@ With this method, you don't use the entire gray palette (because of the extrapol
 
 Display a picture with GrayToTime algorithm based on the article of Pierre MUTH : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/
 In this mode, each value of gray is converted to an exposure time.
-The function transfer gray to time is built by experimentation, it depends especially of your light source.
+The function transfer gray to time is built by experimentation. It depends especially on your light source.
 
-The other realease (Custom) of the algorithm is based on the calibration performed with the mode 6. The C# formula is a parameter and it will be evaluated on the fly. 
+The other release (Custom) of the algorithm is based on the calibration performed with the mode 6. The C# formula is a parameter and it will be evaluated on the fly. 
 
 <img src="/img/mode graytotime synoptic.drawio.png" width="1024"><br /><br />
 <img src="/img/mode graytotime.drawio.png" width="600"><br /><br />
@@ -39,7 +39,7 @@ This type of screen is usually dedicated for resin 3D printers with UV light.<br
 These tests are made with a 10.3", 8K (7680 x 4320) monochrome from <a href="https://wisecocodisplay.com/">Wisecoco</a>.
 The datasheet is <a href="DisplayDatasheets/TOP103MONO8K01A  10.3 inch 黑白屏.pdf">here</a>.
 <br />
-Why transparent? Just because it's actually the way to have a small screen with very high resolution.
+Why transparent? Just because it's actually the way to have a small screen with a very high resolution.
 
 <img src="/img/labo4.jpg" width="300">
 
@@ -48,16 +48,17 @@ Why transparent? Just because it's actually the way to have a small screen with 
 Papers have a characteristic curve with density and relative log exposure.<br />
 Remember: more light = more density = darker.
 
-<img src="/img/FomaspeedVariantIII.png" width="300">
+<img src="/img/FomaspeedVariantIII WPD.png" width="400">
 
 So you need to extract the data of the curve and convert the density to 256 gray levels.<br />
+Data are extracted with https://automeris.io/WebPlotDigitizer/<br />
 <br />
 Tests here are made with a Famaspeed Variant III RC paper (matt and glossy) : https://www.foma.cz/en/fomaspeed-variant-III
 Thanks to Foma for getting me few usefull information.
 
 ## Application
 
-The application is made with different mode for different tests.<br />
+The application is made with different modes for different tests.<br />
 <br />
 <img src="/img/DigitalFimPrintScreen.png" width="600">
 
@@ -67,7 +68,7 @@ Just a black & White zone to check if the display panel is able to block light.
 
 <img src="/img/mode1.png" width="300">
 
-### Mode 2: Find an exposure time for a specific gray
+### Mode 2: Find an exposure time for a specific gray.
 
 Generate a gray palette following parameters to compare with a specific value of gray.
 
