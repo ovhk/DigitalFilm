@@ -6,5 +6,5 @@
 
     internal enum DisplayMode { Direct, DirectPaperGamma, DirectAllGrade, GrayToTime };
 
-    internal enum GrayToTimeCurve { PMuth, Ovh };
+    internal enum GrayToTimeCurve { PMuth, Custom };
 }

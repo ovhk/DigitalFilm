@@ -117,6 +117,14 @@ namespace DigitalFilm.Modes
         { get; set; } = GrayToTimeCurve.PMuth;
 
         /// <summary>
+        /// 
+        /// </summary>
+        [Category("Mode Custom GrayToTime")]
+        [Description("Select GrayToTime curve")]
+        public string Formula
+        { get; set; } = "(int)(0.0001 * Math.Pow(x, 4) - 0.0722 * Math.Pow(x, 3) + 17.586 * Math.Pow(x, 2) - 1890.5 * x + 89686.0)";
+
+        /// <summary>
         /// Access to the Engine
         /// </summary>
         private readonly DisplayEngine engine = DisplayEngine.GetInstance();
@@ -385,7 +393,25 @@ namespace DigitalFilm.Modes
         {
             List<ImageLayer> imageLayers = new List<ImageLayer>();
 
-            int[] timings = (Curve == GrayToTimeCurve.PMuth) ? GrayToTime.TimingsPMUTH : GrayToTime.TimingsOVH;
+            int[] timings = null;
+
+            if (this.Curve == GrayToTimeCurve.PMuth)
+            {
+                timings = GrayToTime.TimingsPMUTH;
+            }
+            else if (this.Curve == GrayToTimeCurve.Custom)
+            {
+                // TODO : put 256 in a parameter
+                timings = GrayToTime.ComputeTimingsCustom(256, this.Formula);
+
+                // some debug
+                int[] timingsPMUTH = GrayToTime.TimingsPMUTH;
+
+                for (int i = 0; i < timingsPMUTH.Length; i++)
+                {
+                    Log.WriteLine("[" + i + "] PMuth=" + timingsPMUTH[i] + ", Custom=" + timings[i]);
+                }
+            }
 
             for (int i = 0; i < timings.Length; i++)
             {

@@ -78,6 +78,7 @@
     <Compile Include="frmColorSensor.Designer.cs">
       <DependentUpon>frmColorSensor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GrayToTime\DynamicMathEvaluation.cs" />
     <Compile Include="Modes\Mode9.cs" />
     <Compile Include="Modes\ModeParameters.cs" />
     <Compile Include="Panels\ScreenManager.cs" />

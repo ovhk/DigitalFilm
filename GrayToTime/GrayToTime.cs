@@ -7,65 +7,38 @@ namespace DigitalFilm.Engine
     /// </summary>
     internal class GrayToTime
     {
-        #region OVH Curve
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private static int[] _timingsOVH;
+        #region Custom Curve
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public static int[] TimingsOVH
+        public static int[] ComputeTimingsCustom(int nbgray, string formula)
         {
-            get
-            {
-                if (_timingsOVH == null)
-                {
-                    int[] timingsPMUTH = computeTimingsPMUTH();
-                    int[] timingsOVH = computeTimingsOVH();
+            int[] timings = new int[nbgray];
 
-                    for (int i = 0; i < timingsPMUTH.Length; i++)
-                    {
-                        Log.WriteLine("[" + i + "] " + timingsPMUTH[i] + ", " + timingsOVH[i]);
-                    }
-
-                    _timingsOVH = timingsOVH;
-                }
-
-                return _timingsOVH;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private static int[] computeTimingsOVH()
-        {
-            int[] timings = new int[256];
+            DynamicMathEvaluation dm = new DynamicMathEvaluation();
+            
+            dm.Compile(formula);
 
             for (int i = 0; i < timings.Length; i++)
             {
-                //y = 0,0001x4 - 0,0722x3 + 17,586x2 - 1890,5x + 89686
-                double ii = i;
-                timings[i] = (int)(
-                    0.0001 * Math.Pow(ii, 4) -
-                    0.0722 * Math.Pow(ii, 3) +
-                    17.586 * Math.Pow(ii, 2) -
-                    1890.5 * ii +
-                    89686.0);
+                ////y = 0,0001x4 - 0,0722x3 + 17,586x2 - 1890,5x + 89686
+                //double ii = i;
+                //timings[i] = (int)(
+                //    0.0001 * Math.Pow(ii, 4) -
+                //    0.0722 * Math.Pow(ii, 3) +
+                //    17.586 * Math.Pow(ii, 2) -
+                //    1890.5 * ii +
+                //    89686.0);
+
+                timings[i] = dm.Eval(i);
             }
 
             for (int i = 0; i < timings.Length - 1; i++)
             {
                 timings[i] = timings[i] - timings[i + 1];
             }
-
-            // on fixe le dernier à 800 ms
-            timings[255] = 800;
 
             int cumulatedTimeMs = 0;
 
@@ -74,7 +47,8 @@ namespace DigitalFilm.Engine
                 cumulatedTimeMs += timings[i];
                 //    Log.WriteLine("for gray " + i + ", time " + timings[i]);
             }
-            Log.WriteLine("[GrayToTime] OVH : cumulatedTimeMs = " + cumulatedTimeMs);
+
+            Log.WriteLine("[GrayToTime] Custom : cumulatedTimeMs = " + cumulatedTimeMs);
 
             return timings;
         }

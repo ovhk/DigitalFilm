@@ -38,7 +38,13 @@ namespace DigitalFilm.Modes
         /// <returns></returns>
         public bool Load()
         {
-            int[] timings = (Curve == GrayToTimeCurve.PMuth) ? GrayToTime.TimingsPMUTH : GrayToTime.TimingsOVH;
+            int[] timings = GrayToTime.TimingsPMUTH;
+
+            if (Curve == GrayToTimeCurve.Custom)
+            {
+                // Not implemented
+                return false;
+            }
 
             int width = engine.Panel.Width;
             int height = engine.Panel.Height;
