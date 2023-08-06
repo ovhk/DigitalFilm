@@ -12,13 +12,26 @@ Basically, negative films have a gamma of around 0.7 and are printed on photogra
 So the idea if you want to use a screen as a film, is to apply the invert of the gamma of the paper and invert black and white.
 Then, you have to put the screen directly on the paper and light it up.
 
+In Direct mode, it convert the picture to grayscale and display it with inverted colors (like films), adapted for the specified paper and grade.
+With this method, you don't use the entire gray palette (because of the extrapolation), so you end up with artifacts. One solution is to use the GrayToTime mode.
+
 <img src="/img/mode direct synoptic.drawio.png" width="800"><br /><br />
-<center><img src="/img/mode direct.drawio.png" width="400"></center>
+<img src="/img/mode direct.drawio.png" width="400"><br /><br />
+<img src="/img/mode5inverted.png" width="300">
+<br />
 
 ## Method 2: GrayToTime
 
+Display a picture with GrayToTime algorithm based on the article of Pierre MUTH : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/
+In this mode, each value of gray is converted to an exposure time.
+The function transfer gray to time is built by experimentation, it depends especially of your light source.
+
+The other realease (Custom) of the algorithm is based on the calibration performed with the mode 6. The C# formula is a parameter and it will be evaluated on the fly. 
+
 <img src="/img/mode graytotime synoptic.drawio.png" width="1024"><br /><br />
-<center><img src="/img/mode graytotime.drawio.png" width="600"></center>
+<img src="/img/mode graytotime.drawio.png" width="600"><br /><br />
+<img src="/img/mode6.gif" width="300">
+<br />
 
 ## Screen
 
@@ -75,20 +88,7 @@ The gamma parameter is available.
 
 ### Mode 5: Display a picture following parameters
 
-#### Display mode : Direct, convert a colored picture in grayscale and display it
-Convert the picture to grayscale and display it with inverted colors (like films), adapted for the specified paper and grade.
-With this method, you don't use the entire gray palette (because of the extrapolation), so you end up with artifacts. One solution is to use the GrayToTime mode.
-
-<img src="/img/mode5inverted.png" width="300">
-
-#### Display mode : Display a picture with GrayToTime algorithm
-Display a picture with GrayToTime algorithm based on the article of Pierre MUTH : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/
-In this mode, each value of gray is converted to an exposure time.
-The function transfer gray to time is built by experimentation, it depends especially of your light source.
-
-The other realease of the algorithm is based on the calibration performed in the mode 6.
-
-<img src="/img/mode6.gif" width="300">
+2 modes are available: Direct and GrayToTime. 
 
 ### Mode 6: GrayToTime calibration
 
