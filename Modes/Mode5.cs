@@ -319,6 +319,11 @@ namespace DigitalFilm.Modes
                             // 7.4. get image layers
                             List<ImageLayer> ils = GetImageLayers(bmpPanel);
 
+                            if (ils == null)
+                            {
+                                return false;
+                            }
+
                             foreach (ImageLayer il in ils)
                             {
                                 // 8.4. push image to engine
@@ -401,8 +406,15 @@ namespace DigitalFilm.Modes
             }
             else if (this.Curve == GrayToTimeCurve.Custom)
             {
-                // TODO : put 256 in a parameter
-                timings = GrayToTime.ComputeTimingsCustom(256, this.Formula);
+                try
+                {
+                    // TODO : put 256 in a parameter
+                    timings = GrayToTime.ComputeTimingsCustom(256, this.Formula);
+                }
+                catch 
+                {
+                    return null;
+                }
 
                 // some debug
                 int[] timingsPMUTH = GrayToTime.TimingsPMUTH;

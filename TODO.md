@@ -10,6 +10,7 @@
 - [ ] Pb ratio Wisecoco
 - [X] Add GrayToTime formula in parameter and evaluate it on the fly
 - [/] draw synoptic
+- [X] synoptic measure color - convert to gray
 
 ## Futur release
 - [ ] GrayToTime algo : do not limit to 256 levels, we can do more using a custom image format
