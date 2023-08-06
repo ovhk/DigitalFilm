@@ -20,14 +20,14 @@ With this method, you don't use the entire gray palette (because of the extrapol
 <img src="/img/mode5inverted.png" width="300">
 <br />
 
-## Method 2: GrayToTime
+## Method 2: GrayToTime - display a picture with GrayToTime algorithm
 
-Display a picture with GrayToTime algorithm based on the article of Pierre MUTH : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/
-In this mode, each value of gray is converted to an exposure time.
-The function transfer gray to time is built by experimentation. It depends especially on your light source.
-
+In this mode, each value of gray is converted to an exposure time. You need to generate a black and white mask for each gray value and expose it with the associated exposure time.<br />
+<br />
+The first algorithm is based on the article of Pierre MUTH : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/ <br />
+<br />
 The other release (Custom) of the algorithm is based on the calibration performed with the mode 6. The C# formula is a parameter and it will be evaluated on the fly. 
-
+<br />
 <img src="/img/mode graytotime synoptic.drawio.png" width="1024"><br /><br />
 <img src="/img/mode graytotime.drawio.png" width="600"><br /><br />
 <img src="/img/mode6.gif" width="300">
