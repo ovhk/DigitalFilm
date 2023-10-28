@@ -369,6 +369,7 @@ namespace DigitalFilm
             _ = this.cbMode.Items.Add(new Modes.Mode3());
             //_ = this.cbMode.Items.Add(new Modes.Mode4()); // Unuseful to compare with a linear gray
             _ = this.cbMode.Items.Add(new Modes.Mode5());
+            _ = this.cbMode.Items.Add(new Modes.Mode50());
             _ = this.cbMode.Items.Add(new Modes.Mode6());
             //_ = this.cbMode.Items.Add(new Modes.Mode7()); // Unuseful
             _ = this.cbMode.Items.Add(new Modes.Mode8());

@@ -1,4 +1,9 @@
-﻿using System;
+﻿using DigitalFilm.Modes;
+using DigitalFilm.Tools;
+using ImageMagick;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace DigitalFilm.Engine
 {
@@ -131,6 +136,170 @@ namespace DigitalFilm.Engine
             Log.WriteLine("[GrayToTime] PMUTH : cumulatedTimeMs = " + cumulatedTimeMs);
 
             return timings;
+        }
+
+        #endregion
+
+        #region GetImageLayers from GrayToTime algo
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="magickImage"></param>
+        /// <param name="grayToTimeCurve"></param>
+        /// <param name="formula"></param>
+        /// <returns></returns>
+        public static List<ImageLayer> GetImageLayers(MagickImage magickImage, GrayToTimeCurve grayToTimeCurve, string formula)
+        {
+            List<ImageLayer> imageLayers = new List<ImageLayer>();
+
+            int[] timings = null;
+
+            int numberOfGray = 0;
+
+            using (var uniqueColors = magickImage.UniqueColors())
+            {
+                numberOfGray = uniqueColors.Width; // Each color is one pixel.
+                Log.WriteLine("Number of grays= " + numberOfGray);
+            }
+
+            if (grayToTimeCurve == GrayToTimeCurve.PMuth)
+            {
+                if (numberOfGray != GrayToTime.TimingsPMUTH.Length)
+                {
+                    Log.WriteLine("Error, number of grays is different from timings array size...");
+                    return null;
+                }
+
+                timings = GrayToTime.TimingsPMUTH;
+            }
+            else if (grayToTimeCurve == GrayToTimeCurve.Custom)
+            {
+                try
+                {
+                    timings = GrayToTime.ComputeTimingsCustom(numberOfGray, formula);
+                }
+                catch
+                {
+                    return null;
+                }
+
+                // some debug
+                int[] timingsPMUTH = GrayToTime.TimingsPMUTH;
+
+                for (int i = 0; i < timingsPMUTH.Length; i++)
+                {
+                    if (i < timings.Length - 1)
+                    {
+                        Log.WriteLine("[" + i + "] PMuth=" + timingsPMUTH[i] + ", Custom=" + timings[i]);
+                    }
+                }
+            }
+
+            // TODO : check here if all params are compliant...
+            //if (1)
+            {
+
+            }
+
+            IPixelCollection<float> pixels = magickImage.GetPixels();
+
+            for (int i = 0; i < timings.Length; i++)
+            {
+                using (DirectBitmap b = new DirectBitmap(magickImage.Width, magickImage.Height))
+                {
+                    foreach (Pixel p in pixels)
+                    {
+                        // Channels: 0=R, 1=G, 2=B
+                        // In GrayScale, Channel 0 = value
+
+                        //IMagickColor<float> magickColor = p.ToColor();
+                        //int currentPixelColor2 = Convert.ToInt32(magickColor.R / (float)UInt16.MaxValue * 255.0);
+
+                        int currentPixelColor = Convert.ToInt32(p.GetChannel(0) / (float)UInt16.MaxValue * 255.0);
+
+                        if (currentPixelColor < i) // TODO : < or <= ?
+                        {
+                            b.SetPixel(p.X, p.Y, Color.FromArgb(255, 255, 255));
+                        }
+                        else
+                        {
+                            b.SetPixel(p.X, p.Y, Color.FromArgb(0, 0, 0));
+                        }
+                    }
+
+                    imageLayers.Add(new ImageLayer(b.Bitmap, timings[i], i));
+                }
+            }
+
+            return imageLayers;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="nbgray"></param>
+        /// <param name="grayToTimeCurve"></param>
+        /// <param name="formula"></param>
+        /// <returns></returns>
+        public static List<ImageLayer> GetImageLayers(Bitmap bitmap, int nbgray, GrayToTimeCurve grayToTimeCurve, string formula)
+        {
+            List<ImageLayer> imageLayers = new List<ImageLayer>();
+
+            int[] timings = null;
+
+            if (grayToTimeCurve == GrayToTimeCurve.PMuth)
+            {
+                timings = GrayToTime.TimingsPMUTH;
+            }
+            else if (grayToTimeCurve == GrayToTimeCurve.Custom)
+            {
+                try
+                {
+                    timings = GrayToTime.ComputeTimingsCustom(nbgray, formula);
+                }
+                catch
+                {
+                    return null;
+                }
+
+                // some debug
+                int[] timingsPMUTH = GrayToTime.TimingsPMUTH;
+
+                for (int i = 0; i < timingsPMUTH.Length; i++)
+                {
+                    Log.WriteLine("[" + i + "] PMuth=" + timingsPMUTH[i] + ", Custom=" + timings[i]);
+                }
+            }
+
+            for (int i = 0; i < timings.Length; i++)
+            {
+                using (DirectBitmap b = new DirectBitmap(bitmap.Width, bitmap.Height))
+                {
+                    for (int x = 0; x < b.Width; x++)
+                    {
+                        for (int y = 0; y < b.Height; y++)
+                        {
+                            Color c = bitmap.GetPixel(x, y);
+
+                            // we use R but G or B are equal
+                            if (c.R < i) // TODO : < or <= ?
+                            {
+                                b.SetPixel(x, y, Color.FromArgb(255, 255, 255));
+                            }
+                            else
+                            {
+                                b.SetPixel(x, y, Color.FromArgb(0, 0, 0));
+                            }
+                        }
+                    }
+
+                    imageLayers.Add(new ImageLayer(b.Bitmap, timings[i], i));
+                }
+            }
+
+            return imageLayers;
         }
 
         #endregion

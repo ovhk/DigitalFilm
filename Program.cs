@@ -1,4 +1,5 @@
 ﻿using DigitalFilm.Papers;
+using ImageMagick;
 using System;
 using System.Windows.Forms;
 
@@ -33,9 +34,16 @@ namespace DigitalFilm
 
             Log.WriteLine("######################################################");
             Log.WriteLine("Starting");
+            
+            // Initialize ImageMagik
+            MagickNET.Initialize();
+
+            // Start app
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frmMain());
+
+            // Close app
             Log.WriteLine("Closing!");
             Log.Close();
         }

@@ -2,28 +2,32 @@
 using DigitalFilm.Engine;
 using DigitalFilm.Papers;
 using DigitalFilm.Tools;
+using ImageMagick;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DigitalFilm.Modes
 {
-    internal class Mode5 : IMode
+    internal class Mode50 : IMode
     {
         /// <summary>
         /// Name
         /// </summary>
         [Browsable(false)]
-        public string Name => "Display picture";
+        public string Name => "Display picture (RAW)";
 
         /// <summary>
         /// Description
         /// </summary>
         [Browsable(false)]
-        public string Description => "Display the selected picture following parameters.";
+        public string Description => "Display the selected RAW picture following parameters.";
 
         /// <summary>
         /// Display exposure time in ms
@@ -70,16 +74,8 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Category("Margin")]
-        [Description("Top and bottom margin size.")]
-        public int MarginTopBottom
-        { get; set; } = 10;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Category("Margin")]
-        [Description("Left and right margin size.")]
-        public int MarginLeftRight
+        [Description("Margin size.")]
+        public int MarginWidth
         { get; set; } = 10;
 
         #endregion
@@ -89,8 +85,8 @@ namespace DigitalFilm.Modes
         /// </summary>
         [Category("Configuration")]
         [Description("Rotation")]
-        public RotateFlipType Rotation
-        { get; set; } = RotateFlipType.RotateNoneFlipNone;
+        public double Rotation
+        { get; set; } = 0.0;
 
         /// <summary>
         /// 
@@ -132,7 +128,7 @@ namespace DigitalFilm.Modes
         /// <summary>
         /// Constructor
         /// </summary>
-        public Mode5()
+        public Mode50()
         {
             Paper = PapersManager.Papers[2];
         }
@@ -148,7 +144,7 @@ namespace DigitalFilm.Modes
                 return false;
             }
 
-            if (DisplayMode == DisplayMode.Direct && Paper == null)
+            if (Paper == null)
             {
                 return false;
             }
@@ -158,63 +154,48 @@ namespace DigitalFilm.Modes
             md5 += "-" + (Rotation.GetHashCode()
                 + 22 * SizeMode.GetHashCode()
                 + 333 * MarginColor.GetHashCode()
-                + 4444 * MarginTopBottom.GetHashCode()
-                + 55555 * MarginLeftRight.GetHashCode()
-                ).ToString(); // Just a way to have an unique value with parameters, not perfect but seems enought!
+                + 4444 * MarginWidth.GetHashCode()
+                ).ToString(); // Just a way to have an unique id value with parameters, not perfect but seems enought!
 
             if (DisplayMode == DisplayMode.GrayToTime)
             {
-                // Use Cache ?
-                if (this.UseCache)
+                if (this.UseCache) // Use Cache ?
                 {
-                    if (engine.Cache.IsInCache(md5) == true)
+                    if (engine.Cache.IsInCache(md5) == true) // If it's in cache
                     {
-                        return engine.Cache.LoadFromCache(md5);
+                        return engine.Cache.LoadFromCache(md5); // load from cache
                     }
                     else
                     {
-                        engine.Cache.SetCacheIdentifier(md5);
+                        engine.Cache.SetCacheIdentifier(md5); // else define a cache identifier
                     }
                 }
                 else
                 {
-                    engine.Cache.ClearCacheFromIdentifier(md5);
+                    engine.Cache.ClearCacheFromIdentifier(md5); // if we're not using the cache, then clear old cache
                 }
             }
 
             // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
-            using (Bitmap bmpPicture = new Bitmap(ImagePath))
+            using (MagickImage magickImage = new MagickImage(ImagePath))
             {
-                Bitmap bmpPanel = new Bitmap(engine.Panel.Width, engine.Panel.Height, PixelFormat.Format24bppRgb);
+                MagickImage magickPanel = new MagickImage(MagickColors.White, engine.Panel.Width, engine.Panel.Height);
 
-                Graphics gfx = Graphics.FromImage(bmpPanel);
-
-                bmpPicture.RotateFlip(Rotation);
+                // rotate
+                if (this.DisplayMode != DisplayMode.GrayToTime) // TODO : don't know yet why, but there's an exception in this case...
+                {
+                    magickImage.Rotate(Rotation);
+                }
 
                 // 1. erase all
-                using (SolidBrush brush = new SolidBrush(Color.White))
-                {
-                    gfx.FillRectangle(brush, 0, 0, engine.Panel.Width, engine.Panel.Height);
-                }
+                // done at the constructor
+                magickPanel.Grayscale();
 
                 // 2. Draw margins
-                SolidBrush marginBrush = (MarginColor == MarginColor.Back) ? new SolidBrush(Color.Black) : new SolidBrush(Color.White); // do not invert color here, done after
+                magickPanel.Settings.StrokeColor = (MarginColor == MarginColor.Back) ? MagickColors.Black : MagickColors.White;
+                magickPanel.Settings.StrokeWidth = MarginWidth;
 
-                if (MarginLeftRight > 0)
-                {
-                    gfx.FillRectangle(marginBrush, 0, 0, MarginLeftRight, engine.Panel.Height); // LEFT
-
-                    gfx.FillRectangle(marginBrush, engine.Panel.Width - MarginLeftRight, 0, MarginLeftRight, engine.Panel.Height); // RIGHT
-                }
-
-                if (MarginTopBottom > 0)
-                {
-                    gfx.FillRectangle(marginBrush, 0, 0, engine.Panel.Width, MarginTopBottom); // TOP
-
-                    gfx.FillRectangle(marginBrush, 0, engine.Panel.Height - MarginTopBottom, engine.Panel.Width, MarginTopBottom); // BOTTOM
-                }
-
-                marginBrush.Dispose();
+                magickPanel.Draw(new Drawables().FillColor(MagickColors.White).Rectangle(0, 0, engine.Panel.Width, engine.Panel.Height));
 
                 // 3. determine size
                 Size sz = new Size();
@@ -223,33 +204,36 @@ namespace DigitalFilm.Modes
                 {
                     case SizeMode.CenterImage:
                         // Ratio is : canavas / original
-                        double ratioW = (engine.Panel.Width - (2 * (double)MarginLeftRight)) / bmpPicture.Width;
-                        double ratioH = (engine.Panel.Height - (2 * (double)MarginTopBottom)) / bmpPicture.Height;
+                        double ratioW = (engine.Panel.Width - (2.0 * (double)MarginWidth)) / magickImage.Width;
+                        double ratioH = (engine.Panel.Height - (2.0 * (double)MarginWidth)) / magickImage.Height;
 
                         // get the smaller ratio
                         double ratio = (ratioW < ratioH) ? ratioW : ratioH;
 
-                        sz.Width = Convert.ToInt32(ratio * bmpPicture.Width);
-                        sz.Height = Convert.ToInt32(ratio * bmpPicture.Height);
+                        sz.Width = Convert.ToInt32(ratio * magickImage.Width);
+                        sz.Height = Convert.ToInt32(ratio * magickImage.Height);
                         break;
 
                     case SizeMode.StretchImage:
-                        sz.Width = engine.Panel.Width - (2 * MarginLeftRight);
-                        sz.Height = engine.Panel.Height - (2 * MarginTopBottom);
+                        sz.Width = engine.Panel.Width - (2 * MarginWidth);
+                        sz.Height = engine.Panel.Height - (2 * MarginWidth);
                         break;
 
                     default:
                         break;
                 }
 
-                // 4. convert picture to grayscale
-                Bitmap grayscalePicture = BitmapTools.MakeGrayscale3(bmpPicture);
+                // 4. convert picture to grayscale if needed
+                if (magickImage.ColorSpace != ColorSpace.Gray)
+                {
+                    magickImage.Grayscale(PixelIntensityMethod.Average); // TODO : parameter for PixelIntensityMethod?
+                }
 
                 // 5. size image
                 Rectangle imgRect = new Rectangle
                 {
-                    X = MarginLeftRight,
-                    Y = MarginTopBottom,
+                    X = MarginWidth,
+                    Y = MarginWidth,
                     Width = sz.Width, // margin already inside
                     Height = sz.Height
                 };
@@ -257,24 +241,31 @@ namespace DigitalFilm.Modes
                 if (SizeMode == SizeMode.CenterImage)
                 {
                     // Add offset to center image
-                    imgRect.X += Convert.ToInt32(((engine.Panel.Width - (2 * (double)MarginLeftRight)) / 2) - (sz.Width / 2.0));
-                    imgRect.Y += Convert.ToInt32(((engine.Panel.Height - (2 * (double)MarginTopBottom)) / 2) - (sz.Height / 2.0));
+                    imgRect.X += Convert.ToInt32(((engine.Panel.Width - (2.0 * (double)MarginWidth)) / 2.0) - (sz.Width / 2.0));
+                    imgRect.Y += Convert.ToInt32(((engine.Panel.Height - (2.0 * (double)MarginWidth)) / 2.0) - (sz.Height / 2.0));
                 }
+
+                MagickGeometry magickGeometry = new MagickGeometry
+                {
+                    Width = sz.Width,
+                    Height = sz.Height,
+                    //FillArea = (SizeMode == SizeMode.StretchImage),
+                    IgnoreAspectRatio = (SizeMode == SizeMode.StretchImage),
+                };
+
+                magickImage.Resize(magickGeometry);
+                //magickImage.AdaptiveResize(sz.Width, sz.Height);
+                //magickImage.InterpolativeResize(sz.Width, sz.Height, PixelInterpolateMethod.Average);
 
                 // Check ratio
                 //System.Windows.Forms.MessageBox.Show("Ratio=" + (double)imgRect.Width / (double)imgRect.Height); // for debug only
 
                 // 6. draw image
-                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                //bmpPanel.SetResolution(grayscalePicture.HorizontalResolution/2, grayscalePicture.VerticalResolution*2);
 
-                //Log.WriteLine("bmpPicture H={0},V={1}", bmpPicture.HorizontalResolution, bmpPicture.VerticalResolution);
-                //Log.WriteLine("grayscalePicture H={0},V={1}", grayscalePicture.HorizontalResolution, grayscalePicture.VerticalResolution);
-                //Log.WriteLine("bmpPanel H={0},V={1}", bmpPanel.HorizontalResolution, bmpPanel.VerticalResolution);
+                //TODO marche pas quand c'est un DNG que l'on écrit dans magickPanel
+                magickPanel.Draw(new Drawables().Composite(imgRect.X, imgRect.Y, magickImage));
 
-                //gfx.DrawImage(imgPhoto, new Rectangle(destX, destY, destWidth, destHeight), new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight), GraphicsUnit.Pixel);
-
-                gfx.DrawImage(grayscalePicture, imgRect);
+                Bitmap bmpPanel = magickPanel.ToBitmap();
 
                 //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // for debug only
 
@@ -325,7 +316,7 @@ namespace DigitalFilm.Modes
                     case DisplayMode.GrayToTime:
                         {
                             // 7.4. get image layers
-                            List<ImageLayer> ils = GrayToTime.GetImageLayers(bmpPanel, 256, this.Curve, this.Formula);
+                            List<ImageLayer> ils = GrayToTime.GetImageLayers(magickPanel, this.Curve, this.Formula);
 
                             if (ils == null)
                             {
@@ -340,8 +331,6 @@ namespace DigitalFilm.Modes
                         }
                         break;
                 }
-
-                gfx.Dispose();
             }
 
             return true;
