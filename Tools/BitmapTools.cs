@@ -1,4 +1,5 @@
 ﻿using DigitalFilm.Papers;
+using ImageMagick;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -213,6 +214,20 @@ namespace DigitalFilm.Tools
             //dispose the Graphics object
             g.Dispose();
             return newBitmap;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static Bitmap UniqueColors(Bitmap bitmap)
+        {
+            var m = new MagickFactory();
+            
+            MagickImage image = new MagickImage(m.Image.Create(bitmap));
+
+            return image.UniqueColors().ToBitmap();
         }
 
         /// <summary>
