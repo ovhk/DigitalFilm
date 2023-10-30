@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace DigitalFilm.Tools
 {
@@ -8,6 +9,17 @@ namespace DigitalFilm.Tools
     /// </summary>
     public class ColorTools
     {
+        //create the grayscale ColorMatrix
+        public static ColorMatrix GrayscaleMatrix = new ColorMatrix(
+           new float[][]
+           { // Values from https://en.wikipedia.org/wiki/Grayscale
+                 new float[] {.299f, .299f, .299f, 0, 0},
+                 new float[] {.587f, .587f, .587f, 0, 0},
+                 new float[] {.114f, .114f, .114f, 0, 0},
+                 new float[] {0, 0, 0, 1, 0},
+                 new float[] {0, 0, 0, 0, 1}
+           });
+
         /// <summary>
         /// 
         /// </summary>
@@ -67,9 +79,22 @@ namespace DigitalFilm.Tools
         /// <returns></returns>
         public static Color ColorToGrayScale(Color color)
         {
-            // TODO : is it possible from a 24 bit RGB to get a more than 8 bit gray level? 
-            int grayScale = (int)((color.R * 0.299) + (color.G * 0.587) + (color.B * 0.114));
+            float fR = GrayscaleMatrix[0, 0]; // 0.299f
+            float fG = GrayscaleMatrix[1, 0]; // 0.587f
+            float fB = GrayscaleMatrix[2, 0]; // 0.114f
+            
+            int grayScale = (int)((color.R * fR) + (color.G * fG) + (color.B * fB));
+            
             return Color.FromArgb(color.A, grayScale, grayScale, grayScale);
+        }
+
+        public static UInt16 ColorToGrayScale16(Color color)
+        {
+            float fR = GrayscaleMatrix[0, 0]; // 0.299f
+            float fG = GrayscaleMatrix[1, 0]; // 0.587f
+            float fB = GrayscaleMatrix[2, 0]; // 0.114f
+
+            return (UInt16)((color.R * 500 / 31 * fR) + (color.G * 500 / 31 * fG) + (color.B * 500 / 63 * fB));
         }
     }
 }

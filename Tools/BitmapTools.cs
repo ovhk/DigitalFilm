@@ -197,22 +197,11 @@ namespace DigitalFilm.Tools
             //get a graphics object from the new image
             Graphics g = Graphics.FromImage(newBitmap);
 
-            //create the grayscale ColorMatrix
-            ColorMatrix colorMatrix = new ColorMatrix(
-               new float[][]
-               { // Values from https://en.wikipedia.org/wiki/Grayscale
-                 new float[] {.299f, .299f, .299f, 0, 0},
-                 new float[] {.587f, .587f, .587f, 0, 0},
-                 new float[] {.114f, .114f, .114f, 0, 0},
-                 new float[] {0, 0, 0, 1, 0},
-                 new float[] {0, 0, 0, 0, 1}
-               });
-
             //create some image attributes
             ImageAttributes attributes = new ImageAttributes();
 
             //set the color matrix attribute
-            attributes.SetColorMatrix(colorMatrix);
+            attributes.SetColorMatrix(ColorTools.GrayscaleMatrix);
 
             //draw the original image on the new image
             //using the grayscale color matrix
@@ -221,6 +210,7 @@ namespace DigitalFilm.Tools
 
             //dispose the Graphics object
             g.Dispose();
+
             return newBitmap;
         }
 
