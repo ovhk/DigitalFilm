@@ -218,7 +218,7 @@ namespace DigitalFilm.Engine
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            // We're waiing to start
+            // We're waiting to start
             _ = _evStartDisplay.WaitOne();
 
             while (!de._threadStop)
@@ -531,7 +531,7 @@ namespace DigitalFilm.Engine
             this.Cache.ClearTmpCache();
 
             GC.Collect();
-            System.GC.WaitForPendingFinalizers();
+            GC.WaitForPendingFinalizers();
         }
 
         /// <summary>
