@@ -364,16 +364,10 @@ namespace DigitalFilm
         /// </summary>
         private void LoadModes()
         {
-            _ = this.cbMode.Items.Add(new Modes.Mode1());
-            //_ = this.cbMode.Items.Add(new Modes.Mode2()); // Too difficult de compare gray visually
-            _ = this.cbMode.Items.Add(new Modes.Mode3());
-            //_ = this.cbMode.Items.Add(new Modes.Mode4()); // Unuseful to compare with a linear gray
-            _ = this.cbMode.Items.Add(new Modes.Mode5());
-            _ = this.cbMode.Items.Add(new Modes.Mode50());
-            _ = this.cbMode.Items.Add(new Modes.Mode6());
-            //_ = this.cbMode.Items.Add(new Modes.Mode7()); // Unuseful
-            _ = this.cbMode.Items.Add(new Modes.Mode8());
-            _ = this.cbMode.Items.Add(new Modes.Mode9());
+            foreach(IMode mode in ModesManager.Modes)
+            {
+                _ = this.cbMode.Items.Add(mode);
+            }
 
             this.btUnloadMode.Enabled = false;
         }
