@@ -16,6 +16,8 @@ namespace DigitalFilm.Tools
         /// <returns></returns>
         public static Bitmap BitmapToPaper(Bitmap bitmap, Paper paper)
         {
+            // We don't use ImageMagick here because we don't need more than 256 gray levels. This comes from the performance of the transparent display
+
             DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
 
             for (int x = 0; x < bitmap.Width; x++)
@@ -42,6 +44,8 @@ namespace DigitalFilm.Tools
         /// <returns></returns>
         public static Bitmap BitmapFromPaper(Bitmap bitmap, Paper paper)
         {
+            // We don't use ImageMagick here because we don't need more than 256 gray levels. This comes from the performance of the transparent display
+
             DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
 
             Bitmap invBitmap = BitmapTools.GetInvertedBitmap(bitmap);
@@ -68,6 +72,8 @@ namespace DigitalFilm.Tools
         /// <returns></returns>
         public static Bitmap BitmapToPapers(Bitmap bitmap)
         {
+            // We don't use ImageMagick here because we don't need more than 256 gray levels. This comes from the performance of the transparent display
+
             DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
 
             for (int x = 0; x < bitmap.Width; x++)
@@ -102,6 +108,8 @@ namespace DigitalFilm.Tools
         /// <returns></returns>
         public static Bitmap BitmapFromPapers(Bitmap bitmap)
         {
+            // We don't use ImageMagick here because we don't need more than 256 gray levels. This comes from the performance of the transparent display
+
             DirectBitmap bbw = new DirectBitmap(bitmap.Width, bitmap.Height);
 
             Bitmap invBitmap = BitmapTools.GetInvertedBitmap(bitmap);
@@ -214,20 +222,6 @@ namespace DigitalFilm.Tools
             //dispose the Graphics object
             g.Dispose();
             return newBitmap;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bitmap"></param>
-        /// <returns></returns>
-        public static Bitmap UniqueColors(Bitmap bitmap)
-        {
-            var m = new MagickFactory();
-            
-            MagickImage image = new MagickImage(m.Image.Create(bitmap));
-
-            return image.UniqueColors().ToBitmap();
         }
 
         /// <summary>

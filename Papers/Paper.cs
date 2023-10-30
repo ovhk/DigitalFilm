@@ -260,7 +260,7 @@ namespace DigitalFilm.Papers
 
             // from this part, do not use Dmin and Dmax anymore
 
-            // 4. Scale density data to 0-255
+            // 4. Scale density data to 0-255, we do not use more than 0-225 because of the performance of the transparent display
 
             foreach (PaperDataItem item in paperDataItems)
             {
@@ -275,8 +275,8 @@ namespace DigitalFilm.Papers
             // Y = RelativeLogExposure from RLEmin to RLEmax
             LinearSpline ii = LinearSpline.InterpolateSorted(this.ScaledDensity, this.RelativeLogExposure);
 
-            DataToPaper = new int[256];
-            DataFromPaper = new int[256];
+            DataToPaper = new int[256]; // 0-225 because of the performance of the transparent display
+            DataFromPaper = new int[256]; // 0-225 because of the performance of the transparent display
 
             for (int x = 0; x < DataToPaper.Length; x++) // for each 256 density = color
             {

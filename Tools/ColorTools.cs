@@ -67,6 +67,7 @@ namespace DigitalFilm.Tools
         /// <returns></returns>
         public static Color ColorToGrayScale(Color color)
         {
+            // TODO : is it possible from a 24 bit RGB to get a more than 8 bit gray level? 
             int grayScale = (int)((color.R * 0.299) + (color.G * 0.587) + (color.B * 0.114));
             return Color.FromArgb(color.A, grayScale, grayScale, grayScale);
         }
