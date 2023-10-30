@@ -88,13 +88,23 @@ namespace DigitalFilm.Tools
             return Color.FromArgb(color.A, grayScale, grayScale, grayScale);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
         public static UInt16 ColorToGrayScale16(Color color)
         {
             float fR = GrayscaleMatrix[0, 0]; // 0.299f
             float fG = GrayscaleMatrix[1, 0]; // 0.587f
             float fB = GrayscaleMatrix[2, 0]; // 0.114f
 
-            return (UInt16)((color.R * 500 / 31 * fR) + (color.G * 500 / 31 * fG) + (color.B * 500 / 63 * fB));
+            // TODO : is it the better way?
+            float R = color.R * UInt16.MaxValue / 255; // TODO : A TESTER 
+            float G = color.G * UInt16.MaxValue / 255;
+            float B = color.B * UInt16.MaxValue / 255;
+
+            return (UInt16)((R * fR) + (G * fG) + (B * fB));
         }
     }
 }
