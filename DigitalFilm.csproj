@@ -90,9 +90,11 @@
       <DependentUpon>frmColorSensor.cs</DependentUpon>
     </Compile>
     <Compile Include="GrayToTime\DynamicMathEvaluation.cs" />
+    <Compile Include="Modes\Mode10.cs" />
     <Compile Include="Modes\Mode50.cs" />
     <Compile Include="Modes\Mode9.cs" />
     <Compile Include="Modes\ModeParameters.cs" />
+    <Compile Include="Modes\ModesManager.cs" />
     <Compile Include="Panels\ScreenManager.cs" />
     <Compile Include="Panels\Wisecoco8k103Panel.cs" />
     <Compile Include="Papers\Fomaspeed Variant III\FomaspeedVariantIII.cs" />
