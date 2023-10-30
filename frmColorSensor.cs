@@ -154,7 +154,7 @@ namespace DigitalFilm
                             SafeUpdate(() => pnColor.BackColor = c);
                             SafeUpdate(() => lbColor.Text = String.Format("R:{0}, G:{1}, B:{2}", pnColor.BackColor.R, pnColor.BackColor.G, pnColor.BackColor.B));
                             SafeUpdate(() => pnGray.BackColor = ColorTools.ColorToGrayScale(c));
-                            SafeUpdate(() => lbGray.Text = "Gray: " + pnGray.BackColor.R.ToString());
+                            SafeUpdate(() => lbGray.Text = "Gray: " + pnGray.BackColor.R.ToString() + " / " + ColorTools.ColorToGrayScale16(c).ToString());
                         }
                         else
                         {
