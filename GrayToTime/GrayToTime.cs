@@ -149,23 +149,20 @@ namespace DigitalFilm.Engine
         /// <param name="grayToTimeCurve"></param>
         /// <param name="formula"></param>
         /// <returns></returns>
-        public static List<ImageLayer> GetImageLayers(MagickImage magickImage, GrayToTimeCurve grayToTimeCurve, string formula)
+        public static List<ImageLayer> GetImageLayers(MagickImage magickImage, GrayToTimeCurve grayToTimeCurve, string formula, int maxLayers)
         {
             List<ImageLayer> imageLayers = new List<ImageLayer>();
 
             int[] timings = null;
 
-            int numberOfGray = 0;
+            int numberOfGray = magickImage.TotalColors;
 
-            using (var uniqueColors = magickImage.UniqueColors())
-            {
-                numberOfGray = uniqueColors.Width; // Each color is one pixel.
-                Log.WriteLine("Number of grays= " + numberOfGray);
-            }
-
+            //IReadOnlyDictionary<IMagickColor<float>, int> histogram = magickImage.Histogram();
+            //numberOfGray = histogram.Count; // Each color is one pixel.
+            
             if (grayToTimeCurve == GrayToTimeCurve.PMuth)
             {
-                if (numberOfGray != GrayToTime.TimingsPMUTH.Length)
+                if (numberOfGray > GrayToTime.TimingsPMUTH.Length)
                 {
                     Log.WriteLine("Error, number of grays is different from timings array size...");
                     return null;
@@ -196,15 +193,17 @@ namespace DigitalFilm.Engine
                 }
             }
 
-            // TODO : check here if all params are compliant...
-            //if (1)
-            {
+            // TODO : a tester !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            int grayIncrement = 1;
 
+            if (numberOfGray > maxLayers)
+            {
+                grayIncrement = (int) Math.Ceiling((decimal)numberOfGray / maxLayers);
             }
 
             IPixelCollection<float> pixels = magickImage.GetPixels();
 
-            for (int i = 0; i < timings.Length; i++)
+            for (int i = 0; i < timings.Length; i += grayIncrement)
             {
                 using (DirectBitmap b = new DirectBitmap(magickImage.Width, magickImage.Height))
                 {
@@ -216,6 +215,7 @@ namespace DigitalFilm.Engine
                         //IMagickColor<float> magickColor = p.ToColor();
                         //int currentPixelColor2 = Convert.ToInt32(magickColor.R / (float)UInt16.MaxValue * 255.0);
 
+                        // reduce to 255.0 because the color sensor is 0-255
                         int currentPixelColor = Convert.ToInt32(p.GetChannel(0) / (float)UInt16.MaxValue * 255.0);
 
                         if (currentPixelColor < i) // TODO : < or <= ?
