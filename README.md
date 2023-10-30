@@ -13,7 +13,7 @@ So the idea if you want to use a screen as a film, is to apply the invert of the
 Then, you have to put the screen directly on the paper and light it up.
 
 In Direct mode, it converts the picture to grayscale and display it with inverted colors (like films), adapted for the specified paper and grade.
-With this method, you don't use the entire gray palette (because of the extrapolation), so you end up with artifacts. One solution is to use the GrayToTime mode.
+With this method, you don't use the entire gray palette (because of the extrapolation, and because of the screen limited to 256 levels), so you end up with artifacts. One solution is to use the GrayToTime mode.
 
 <img src="/img/mode direct synoptic.drawio.png" width="800"><br /><br />
 <img src="/img/mode direct.drawio.png" width="400"><br /><br />
@@ -26,7 +26,9 @@ In this mode, each value of gray is converted to an exposure time. You need to g
 <br />
 The first algorithm is based on the article of Pierre MUTH : https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/ <br />
 <br />
-The other release (Custom) of the algorithm is based on the calibration performed with the mode 6. The C# formula is a parameter and it will be evaluated on the fly. 
+The other release (Custom) of the algorithm is based on the calibration performed with the mode "GrayToTime calibration". The C# formula is a parameter and it will be evaluated on the fly.<br /> 
+With this method, you can generate a mask for each gray value and not only 8 bit, you can use directly RAW picture file with lots more colors (thanks to https://www.imagemagick.org).
+But if you have too much color masks, you will not have the time to expose all of them. So limit the number of colors, or try to grow the exposure time thought a new calibration with a more closed lens (less light = more time). 
 <br />
 <img src="/img/mode graytotime synoptic.drawio.png" width="1024"><br /><br />
 <img src="/img/mode graytotime.drawio.png" width="600"><br /><br />
@@ -53,7 +55,7 @@ Remember: more light = more density = darker.
 So you need to extract the data of the curve and convert the density to 256 gray levels.<br />
 Data are extracted with https://automeris.io/WebPlotDigitizer/<br />
 <br />
-Tests here are made with a Famaspeed Variant III RC paper (matt and glossy) : https://www.foma.cz/en/fomaspeed-variant-III
+Tests here are made with a Fomaspeed Variant III RC paper (matt and glossy) : https://www.foma.cz/en/fomaspeed-variant-III
 Thanks to Foma for getting me few usefull information.
 
 ## Application
@@ -133,7 +135,6 @@ Generate a gray palette with the gamma parameter.
 - https://www.covingtoninnovations.com/dslr/curves.html
 - https://nvlpubs.nist.gov/nistpubs/jres/7/jresv7n3p495_A2b.pdf
 - https://pierremuth.wordpress.com/2020/04/18/digital-picture-to-analog-darkroom-print/
-- https://ezgif.com/maker
 
 ---
 
