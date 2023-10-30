@@ -359,7 +359,6 @@ namespace DigitalFilm.Modes
             switch (this.DisplayMode)
             {
                 case Modes.DisplayMode.Direct:
-                case Modes.DisplayMode.GrayToTime:
                     imageToDisplay = BitmapTools.BitmapFromPaper(bitmap, this.Paper);
                     break;
                 case Modes.DisplayMode.DirectPaperGamma:
@@ -369,6 +368,9 @@ namespace DigitalFilm.Modes
                     break;
                 case Modes.DisplayMode.DirectAllGrade:
                     imageToDisplay = BitmapTools.BitmapFromPapers(bitmap);
+                    break;
+                case Modes.DisplayMode.GrayToTime:
+                    imageToDisplay = BitmapTools.GetInvertedBitmap(bitmap);
                     break;
             }
 
