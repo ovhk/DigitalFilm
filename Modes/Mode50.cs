@@ -52,14 +52,6 @@ namespace DigitalFilm.Modes
         public string ImagePath
         { get; set; }
 
-        /// <summary>
-        /// Display mode
-        /// </summary>
-        [Category("Configuration")]
-        [Description("Size mode")]
-        public SizeMode SizeMode
-        { get; set; } = SizeMode.CenterImage;
-
         #region Margins
 
         /// <summary>
@@ -108,6 +100,14 @@ namespace DigitalFilm.Modes
         /// 
         /// </summary>
         [Category("Mode GrayToTime")]
+        [Description("Maximum number of mask to generate")]
+        public int MaxLayers
+        { get; set; } = 512;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Category("Mode GrayToTime")]
         [Description("Select GrayToTime curve")]
         public GrayToTimeCurve Curve
         { get; set; } = GrayToTimeCurve.PMuth;
@@ -115,7 +115,7 @@ namespace DigitalFilm.Modes
         /// <summary>
         /// 
         /// </summary>
-        [Category("Mode Custom GrayToTime")]
+        [Category("Mode GrayToTime")]
         [Description("Select GrayToTime curve")]
         public string Formula
         { get; set; } = "(int)(0.0001 * Math.Pow(x, 4) - 0.0722 * Math.Pow(x, 3) + 17.586 * Math.Pow(x, 2) - 1890.5 * x + 89686.0)";
@@ -152,9 +152,9 @@ namespace DigitalFilm.Modes
             string md5 = Tools.Checksum.CalculateMD5(ImagePath);
 
             md5 += "-" + (Rotation.GetHashCode()
-                + 22 * SizeMode.GetHashCode()
-                + 333 * MarginColor.GetHashCode()
-                + 4444 * MarginWidth.GetHashCode()
+                + 22 * MarginColor.GetHashCode()
+                + 333 * MarginWidth.GetHashCode()
+                + 4444 * MaxLayers.GetHashCode()
                 ).ToString(); // Just a way to have an unique id value with parameters, not perfect but seems enought!
 
             if (DisplayMode == DisplayMode.GrayToTime)
@@ -179,157 +179,145 @@ namespace DigitalFilm.Modes
             // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
             using (MagickImage magickImage = new MagickImage(ImagePath))
             {
-                MagickImage magickPanel = new MagickImage(MagickColors.White, engine.Panel.Width, engine.Panel.Height);
-
-                // rotate
-                if (this.DisplayMode != DisplayMode.GrayToTime) // TODO : don't know yet why, but there's an exception in this case...
+                using (MagickImage magickPanel = new MagickImage(MagickColors.White, engine.Panel.Width, engine.Panel.Height))
                 {
+                    System.Windows.Forms.MessageBox.Show("Original TotalColors = " + magickImage.TotalColors);
+                    
+                    // rotate
                     magickImage.Rotate(Rotation);
-                }
 
-                // 1. erase all
-                // done at the constructor
-                magickPanel.Grayscale();
+                    // 1. erase all
+                    // done at the constructor
+                    magickPanel.Grayscale();
+                    
+                    // 2. convert picture to grayscale if needed
+                    if (magickImage.ColorSpace != ColorSpace.Gray)
+                    {
+                        magickImage.Grayscale(PixelIntensityMethod.Average); // TODO : parameter for PixelIntensityMethod?
+                    }
 
-                // 2. Draw margins
-                magickPanel.Settings.StrokeColor = (MarginColor == MarginColor.Back) ? MagickColors.Black : MagickColors.White;
-                magickPanel.Settings.StrokeWidth = MarginWidth;
+                    // 3. Draw margins
+                    MagickColor mgkMarginColor = (MarginColor == MarginColor.Back) ? MagickColors.Black : MagickColors.White;
+                    
+                    magickPanel.Draw(new Drawables().FillColor(mgkMarginColor).Rectangle(0, 0, engine.Panel.Width, engine.Panel.Height));
 
-                magickPanel.Draw(new Drawables().FillColor(MagickColors.White).Rectangle(0, 0, engine.Panel.Width, engine.Panel.Height));
+                    // 4. determine size ratio
+                    // Ratio is : canavas / original
+                    double ratioW = (engine.Panel.Width - (2.0 * (double)MarginWidth)) / magickImage.Width;
+                    double ratioH = (engine.Panel.Height - (2.0 * (double)MarginWidth)) / magickImage.Height;
 
-                // 3. determine size
-                Size sz = new Size();
+                    // get the smaller ratio
+                    double ratio = (ratioW < ratioH) ? ratioW : ratioH;
 
-                switch (SizeMode)
-                {
-                    case SizeMode.CenterImage:
-                        // Ratio is : canavas / original
-                        double ratioW = (engine.Panel.Width - (2.0 * (double)MarginWidth)) / magickImage.Width;
-                        double ratioH = (engine.Panel.Height - (2.0 * (double)MarginWidth)) / magickImage.Height;
+                    // 5. resize image
+                    Rectangle imgRect = new Rectangle
+                    {
+                        X = MarginWidth,
+                        Y = MarginWidth,
+                        Width = Convert.ToInt32(ratio * magickImage.Width), // margin already inside
+                        Height = Convert.ToInt32(ratio * magickImage.Height)
+                    };
 
-                        // get the smaller ratio
-                        double ratio = (ratioW < ratioH) ? ratioW : ratioH;
-
-                        sz.Width = Convert.ToInt32(ratio * magickImage.Width);
-                        sz.Height = Convert.ToInt32(ratio * magickImage.Height);
-                        break;
-
-                    case SizeMode.StretchImage:
-                        sz.Width = engine.Panel.Width - (2 * MarginWidth);
-                        sz.Height = engine.Panel.Height - (2 * MarginWidth);
-                        break;
-
-                    default:
-                        break;
-                }
-
-                // 4. convert picture to grayscale if needed
-                if (magickImage.ColorSpace != ColorSpace.Gray)
-                {
-                    magickImage.Grayscale(PixelIntensityMethod.Average); // TODO : parameter for PixelIntensityMethod?
-                }
-
-                // 5. size image
-                Rectangle imgRect = new Rectangle
-                {
-                    X = MarginWidth,
-                    Y = MarginWidth,
-                    Width = sz.Width, // margin already inside
-                    Height = sz.Height
-                };
-
-                if (SizeMode == SizeMode.CenterImage)
-                {
                     // Add offset to center image
-                    imgRect.X += Convert.ToInt32(((engine.Panel.Width - (2.0 * (double)MarginWidth)) / 2.0) - (sz.Width / 2.0));
-                    imgRect.Y += Convert.ToInt32(((engine.Panel.Height - (2.0 * (double)MarginWidth)) / 2.0) - (sz.Height / 2.0));
-                }
+                    imgRect.X += Convert.ToInt32(((engine.Panel.Width - (2.0 * (double)MarginWidth)) / 2.0) - (imgRect.Width / 2.0));
+                    imgRect.Y += Convert.ToInt32(((engine.Panel.Height - (2.0 * (double)MarginWidth)) / 2.0) - (imgRect.Height / 2.0));
 
-                MagickGeometry magickGeometry = new MagickGeometry
-                {
-                    Width = sz.Width,
-                    Height = sz.Height,
-                    //FillArea = (SizeMode == SizeMode.StretchImage),
-                    IgnoreAspectRatio = (SizeMode == SizeMode.StretchImage),
-                };
+                    MagickGeometry magickGeometry = new MagickGeometry
+                    {
+                        Width = imgRect.Width,
+                        Height = imgRect.Height,
+                        IgnoreAspectRatio = false, // do not stretch image
+                    };
 
-                magickImage.Resize(magickGeometry);
-                //magickImage.AdaptiveResize(sz.Width, sz.Height);
-                //magickImage.InterpolativeResize(sz.Width, sz.Height, PixelInterpolateMethod.Average);
+                    //magickImage.Resize(magickGeometry); // explode the number of grey levels
+                    //magickImage.AdaptiveResize(magickGeometry); // explode the number of grey levels
+                    magickImage.InterpolativeResize(magickGeometry, PixelInterpolateMethod.Nearest); // not explode to much the number of grey levels, but... 
 
-                // Check ratio
-                //System.Windows.Forms.MessageBox.Show("Ratio=" + (double)imgRect.Width / (double)imgRect.Height); // for debug only
+                    // Debug only: Check ratio
+                    //System.Windows.Forms.MessageBox.Show("Ratio=" + (double)imgRect.Width / (double)imgRect.Height);
 
-                // 6. draw image
+                    // 6. Draw image
+                    magickPanel.Composite(magickImage, imgRect.X, imgRect.Y, CompositeOperator.Over);
 
-                //TODO marche pas quand c'est un DNG que l'on écrit dans magickPanel
-                magickPanel.Draw(new Drawables().Composite(imgRect.X, imgRect.Y, magickImage));
+                    // 8. Reduce number of colors
+                    // https://www.imagemagick.org/discourse-server/viewtopic.php?t=12599
+                    // http://www.imagemagick.org/Usage/quantize/#extract
 
-                Bitmap bmpPanel = magickPanel.ToBitmap();
+                    //  ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????,
 
-                //engine.PushImage((Bitmap)bmpPanel.Clone(), ExposureTime); // for debug only
+                    QuantizeSettings quantizeSettings = new QuantizeSettings
+                    {
+                        Colors = 2048,
+                        DitherMethod = DitherMethod.No,
+                    };
 
-                switch (DisplayMode)
-                {
-                    case DisplayMode.Direct:
-                        {
-                            if (this.Paper == null)
+                    if (magickImage.Format != MagickFormat.Dng) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WHY ???????????????????????????
+                    {
+                        magickPanel.Quantize(quantizeSettings); // HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    }
+
+                    ///////// on a beau avoir plein de couleurs... au delas de 255, c'est vide...
+
+                    System.Windows.Forms.MessageBox.Show("magickPanel.TotalColors = " + magickPanel.TotalColors);
+
+                    //  ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????,
+
+                    //engine.PushImage((Bitmap)magickPanel.ToBitmap().Clone(), ExposureTime); // for debug only
+
+                    switch (DisplayMode)
+                    {
+                        case DisplayMode.Direct:
                             {
-                                return false;
+                                // 7.1. convert image for selected paper
+                                Bitmap imageForPaper = BitmapTools.BitmapToPaper(magickPanel.ToBitmap(), this.Paper);
+
+                                // 8.1. push image to engine
+                                engine.PushImage(imageForPaper, this.ExposureTime);
                             }
-                            // 7.1. convert image for selected paper
-                            Bitmap imageForPaper = BitmapTools.BitmapToPaper(bmpPanel, this.Paper);
+                            break;
 
-                            // 8.1. push image to engine
-                            engine.PushImage(imageForPaper, this.ExposureTime);
-                        }
-                        break;
-
-                    case DisplayMode.DirectPaperGamma:
-                        {
-                            if (this.Paper == null)
+                        case DisplayMode.DirectPaperGamma:
                             {
-                                return false;
+                                // 7.2.1 apply the Gamma from the selected paper
+                                magickPanel.GammaCorrect(1.0 / this.Paper.Gamma); // invert because film and paper are opposite
+
+                                // 7.2.2 invert black and white
+                                magickPanel.ColorType = ColorType.Grayscale; // Negate() work only with this...
+                                magickPanel.Negate(); // magickPanel.NegateGrayscale(); ?
+
+                                // 8.2. push image to engine
+                                engine.PushImage(magickPanel.ToBitmap(), this.ExposureTime);
                             }
+                            break;
 
-                            // 7.2.1 apply the Gamma from the selected paper
-                            Bitmap imageGamma = BitmapTools.GetBitmapWithGamma(bmpPanel, this.Paper.Gamma);
-
-                            // 7.2.2 invert black and white
-                            Bitmap imageForPaper = BitmapTools.GetInvertedBitmap(imageGamma);
-
-                            // 8.2. push image to engine
-                            engine.PushImage(imageForPaper, this.ExposureTime);
-                        }
-                        break;
-
-                    case DisplayMode.DirectAllGrade:
-                        {
-                            // 7.3. convert image with all grade of selected paper
-                            Bitmap imageForPaper = BitmapTools.BitmapToPapers(bmpPanel);
-
-                            // 8.3. push image to engine
-                            engine.PushImage(imageForPaper, this.ExposureTime);
-                        }
-                        break;
-
-                    case DisplayMode.GrayToTime:
-                        {
-                            // 7.4. get image layers
-                            List<ImageLayer> ils = GrayToTime.GetImageLayers(magickPanel, this.Curve, this.Formula);
-
-                            if (ils == null)
+                        case DisplayMode.DirectAllGrade:
                             {
-                                return false;
-                            }
+                                // 7.3. convert image with all grade of selected paper
+                                Bitmap imageForPaper = BitmapTools.BitmapToPapers(magickPanel.ToBitmap());
 
-                            foreach (ImageLayer il in ils)
-                            {
-                                // 8.4. push image to engine
-                                engine.PushImage(il);
+                                // 8.3. push image to engine
+                                engine.PushImage(imageForPaper, this.ExposureTime);
                             }
-                        }
-                        break;
+                            break;
+
+                        case DisplayMode.GrayToTime:
+                            {
+                                // 7.4. get image layers
+                                List<ImageLayer> ils = GrayToTime.GetImageLayers(magickPanel, this.Curve, this.Formula, this.MaxLayers);
+
+                                if (ils == null)
+                                {
+                                    return false;
+                                }
+
+                                foreach (ImageLayer il in ils)
+                                {
+                                    // 8.4. push image to engine
+                                    engine.PushImage(il);
+                                }
+                            }
+                            break;
+                    }
                 }
             }
 
@@ -348,7 +336,6 @@ namespace DigitalFilm.Modes
             switch (this.DisplayMode)
             {
                 case Modes.DisplayMode.Direct:
-                case Modes.DisplayMode.GrayToTime:
                     imageToDisplay = BitmapTools.BitmapFromPaper(bitmap, this.Paper);
                     break;
                 case Modes.DisplayMode.DirectPaperGamma:
@@ -358,6 +345,9 @@ namespace DigitalFilm.Modes
                     break;
                 case Modes.DisplayMode.DirectAllGrade:
                     imageToDisplay = BitmapTools.BitmapFromPapers(bitmap);
+                    break;
+                case Modes.DisplayMode.GrayToTime:
+                    imageToDisplay = BitmapTools.GetInvertedBitmap(bitmap);
                     break;
             }
 
