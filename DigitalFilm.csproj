@@ -52,6 +52,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LibVLCSharp, Version=3.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\LibVLCSharp.3.8.1\lib\net471\LibVLCSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LibVLCSharp.WinForms, Version=3.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\LibVLCSharp.WinForms.3.8.1\lib\net40\LibVLCSharp.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="Magick.NET-Q16-HDRI-AnyCPU, Version=13.4.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
       <HintPath>packages\Magick.NET-Q16-HDRI-AnyCPU.13.4.0\lib\netstandard20\Magick.NET-Q16-HDRI-AnyCPU.dll</HintPath>
     </Reference>
@@ -79,15 +85,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vlc.DotNet.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
-      <HintPath>packages\Vlc.DotNet.Core.3.1.0\lib\net45\Vlc.DotNet.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Vlc.DotNet.Core.Interops, Version=3.1.0.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
-      <HintPath>packages\Vlc.DotNet.Core.Interops.3.1.0\lib\net45\Vlc.DotNet.Core.Interops.dll</HintPath>
-    </Reference>
-    <Reference Include="Vlc.DotNet.Forms, Version=3.1.0.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
-      <HintPath>packages\Vlc.DotNet.Forms.3.1.0\lib\net45\Vlc.DotNet.Forms.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\CacheManager.cs" />
@@ -99,6 +96,12 @@
     </Compile>
     <Compile Include="frmColorSensor.Designer.cs">
       <DependentUpon>frmColorSensor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVideoDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVideoDisplay.Designer.cs">
+      <DependentUpon>frmVideoDisplay.cs</DependentUpon>
     </Compile>
     <Compile Include="GrayToTime\DynamicMathEvaluation.cs" />
     <Compile Include="Modes\Mode10.cs" />
@@ -172,6 +175,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmColorSensor.resx">
       <DependentUpon>frmColorSensor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVideoDisplay.resx">
+      <DependentUpon>frmVideoDisplay.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDisplay.resx">
       <DependentUpon>frmDisplay.cs</DependentUpon>
@@ -256,7 +263,7 @@
       <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\Magick.NET-Q16-HDRI-AnyCPU.13.4.0\build\netstandard20\Magick.NET-Q16-HDRI-AnyCPU.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Magick.NET-Q16-HDRI-AnyCPU.13.4.0\build\netstandard20\Magick.NET-Q16-HDRI-AnyCPU.targets'))" />
-    <Error Condition="!Exists('packages\FFmpeg.Static.4.4.0.7\build\FFmpeg.Static.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\FFmpeg.Static.4.4.0.7\build\FFmpeg.Static.targets'))" />
+    <Error Condition="!Exists('packages\VideoLAN.LibVLC.Windows.3.0.18\build\VideoLAN.LibVLC.Windows.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoLAN.LibVLC.Windows.3.0.18\build\VideoLAN.LibVLC.Windows.targets'))" />
   </Target>
-  <Import Project="packages\FFmpeg.Static.4.4.0.7\build\FFmpeg.Static.targets" Condition="Exists('packages\FFmpeg.Static.4.4.0.7\build\FFmpeg.Static.targets')" />
+  <Import Project="packages\VideoLAN.LibVLC.Windows.3.0.18\build\VideoLAN.LibVLC.Windows.targets" Condition="Exists('packages\VideoLAN.LibVLC.Windows.3.0.18\build\VideoLAN.LibVLC.Windows.targets')" />
 </Project>
