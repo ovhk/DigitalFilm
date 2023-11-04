@@ -9,10 +9,14 @@
 - [ ] Pb ratio Wisecoco
 - [/] GrayToTime algo : custom number of colors
 - [/] Sensor calibration : TESTER ColorToGrayScale16
-- [ ] Add mask managment
-- [ ] create a ImageFileNameEditor for multiple files -> MaskFileNamesEditor
+- [X] Integrate FFmpeg
+- [X] Integrate VLC Player 
+- [/] Generate video from image mask with ffmpeg.exe
+- [ ] Create a control for VLC Player
 
 ## Futur release candidate
+- [ ] Add mask managment
+- [ ] create a ImageFileNameEditor for multiple files -> MaskFileNamesEditor
 - [ ] extention des poses longues ???
 - [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
 - [ ] Reframe picture : maybe it has to be done in a true image manipulation program

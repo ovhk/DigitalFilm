@@ -14,8 +14,11 @@ namespace DigitalFilm.Engine
         /// <summary>
         /// the path of the image
         /// </summary>
-        private readonly string _imgPath;
-
+        public string ImagePath
+        {
+            get;
+            private set;
+        }
         /// <summary>
         ///  The image
         /// </summary>
@@ -57,7 +60,7 @@ namespace DigitalFilm.Engine
         /// Exposure time
         /// </summary>
         [CategoryAttribute("ExposureTime"),
-        DescriptionAttribute("Exposure time")]
+        DescriptionAttribute("Exposure time in ms")]
         public int ExposureTime
         {
             get;
@@ -85,8 +88,8 @@ namespace DigitalFilm.Engine
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 
-            this._imgPath = DisplayEngine.GetInstance().Cache.GetTmpCachePath(index, exposureTime);
-            bmp.Save(this._imgPath);
+            this.ImagePath = DisplayEngine.GetInstance().Cache.GetTmpCachePath(index, exposureTime);
+            bmp.Save(this.ImagePath);
 
             this.Thumbnail = bmp.GetThumbnailImage(ThumbnailSize.Width, ThumbnailSize.Height, callback, new IntPtr()); // 256x256 max
             this.ExposureTime = exposureTime;
@@ -102,14 +105,14 @@ namespace DigitalFilm.Engine
         {
             Image.GetThumbnailImageAbort callback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
 
-            this._imgPath = cacheImgPath;
+            this.ImagePath = cacheImgPath;
 
-            FileInfo file = new FileInfo(this._imgPath);
+            FileInfo file = new FileInfo(this.ImagePath);
 
 
             _ = DisplayEngine.GetInstance().Cache.GetIndexAndExposureTime(file.Name, out int index, out int exposureTime);
 
-            using (Bitmap bmp = new Bitmap(this._imgPath))
+            using (Bitmap bmp = new Bitmap(this.ImagePath))
             {
                 this.Thumbnail = bmp.GetThumbnailImage(ThumbnailSize.Width, ThumbnailSize.Height, callback, new IntPtr()); // 256x256 max
                 this.ExposureTime = exposureTime;
@@ -125,7 +128,7 @@ namespace DigitalFilm.Engine
             if (this._bitmap == null)
             {
                 // this way permit to not lock the file : https://stackoverflow.com/questions/6576341/open-image-from-file-then-release-lock
-                using (Bitmap bmpTemp = new Bitmap(this._imgPath))
+                using (Bitmap bmpTemp = new Bitmap(this.ImagePath))
                 {
                     this._bitmap = new Bitmap(bmpTemp);
                 }

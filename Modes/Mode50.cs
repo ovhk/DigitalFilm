@@ -2,16 +2,14 @@
 using DigitalFilm.Engine;
 using DigitalFilm.Papers;
 using DigitalFilm.Tools;
+using DigitalFilm.FFmpegWrapper;
 using ImageMagick;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
+using System.Reflection;
 
 namespace DigitalFilm.Modes
 {
@@ -309,6 +307,17 @@ namespace DigitalFilm.Modes
                                 {
                                     return false;
                                 }
+
+                                // TODO TEST FFMPEG
+
+                                // TODO : here select engine : ImageEngine / VideoEngine
+
+                                string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\cache\tmp";
+
+                                FFconcat.Generate(path, ils);
+                                FFmpeg.Execute(path);
+                                
+                                // TODO END TEST FFMPEG
 
                                 foreach (ImageLayer il in ils)
                                 {
