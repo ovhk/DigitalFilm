@@ -13,13 +13,10 @@ namespace DigitalFilm
     /// </summary>
     public partial class frmVideoDisplay : Form
     {
-        public LibVLC _libVLC;
-        public MediaPlayer _mp;
-
         /// <summary>
         /// Display Engine
         /// </summary>
-        private readonly DisplayEngine engine;
+        private readonly VideoDisplayEngine engine;
 
         /// <summary>
         /// FrmVideoDisplay constructor
@@ -28,12 +25,9 @@ namespace DigitalFilm
         {
             InitializeComponent();
             this.DoubleBuffered = true; // Needed to eliminate flickering
-            _libVLC = new LibVLC();
-            _mp = new MediaPlayer(_libVLC);
-            videoView1.MediaPlayer = _mp;
-
-
-            engine = DisplayEngine.GetInstance();
+            engine = VideoDisplayEngine.GetInstance();
+            
+            videoView1.MediaPlayer = engine._mp;
         }
 
         private readonly Stopwatch _sw = new Stopwatch();
@@ -98,12 +92,7 @@ namespace DigitalFilm
         /// <param name="e"></param>
         private void frmDisplay_MouseDown(object sender, MouseEventArgs e)
         {
-            if (engine.Panel.IsFullScreen == false)
-            {
-                dragging = true;
-                dragCursorPoint = Cursor.Position;
-                dragFormPoint = this.Location;
-            }
+            
         }
 
         /// <summary>
@@ -128,50 +117,13 @@ namespace DigitalFilm
         {
             if (this.Visible)
             {
-                // Adapte to panel size
-                if (engine.Panel is PanelSimulator) // TODO simplify this ! Put Screen in IPanel?
-                {
-                    Point p = new Point
-                    {
-                        X = Screen.PrimaryScreen.WorkingArea.Left,
-                        Y = Screen.PrimaryScreen.WorkingArea.Top
-                    };
-
-                    this.TopMost = false;
-                    this.Location = p;
-                }
-                else if (engine.Panel is ExternalPanel)
-                {
-                    ExternalPanel ep = engine.Panel as ExternalPanel;
-
-                    Point p = new Point
-                    {
-                        X = ep.Screen.WorkingArea.Left,
-                        Y = ep.Screen.WorkingArea.Top
-                    };
-
-                    this.TopMost = true;
-                    this.Location = p;
-                }
-                else if (engine.Panel is Wisecoco8k103Panel)
-                {
-                    Wisecoco8k103Panel ep = engine.Panel as Wisecoco8k103Panel;
-
-                    Point p = new Point
-                    {
-                        X = ep.Screen.WorkingArea.Left,
-                        Y = ep.Screen.WorkingArea.Top
-                    };
-
-                    this.TopMost = true;
-                    this.Location = p;
-                }
+            
             }
         }
 
         private void frmVideoDisplay_Load(object sender, EventArgs e)
         {
-            Media media = new Media(_libVLC, "C:\\Users\\sectronic\\source\\repos\\DigitalFilm\\bin\\Debug\\cache\\tmp2\\out.avi", FromType.FromPath);
+            Media media = new Media(engine._libVLC, "C:\\Users\\sectronic\\source\\repos\\DigitalFilm\\bin\\Debug\\cache\\tmp2\\out.avi", FromType.FromPath);
             videoView1.MediaPlayer.Play(media);
         }
     }

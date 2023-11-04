@@ -89,6 +89,7 @@
   <ItemGroup>
     <Compile Include="Engine\CacheManager.cs" />
     <Compile Include="Engine\DisplayEngine.cs" />
+    <Compile Include="Engine\VideoDisplayEngine.cs" />
     <Compile Include="FFmpeg\FFconcat.cs" />
     <Compile Include="FFmpeg\FFmpeg.cs" />
     <Compile Include="frmColorSensor.cs">
