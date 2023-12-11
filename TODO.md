@@ -15,10 +15,10 @@
 - [ ] Create a control for VLC Player
 
 ## Futur release candidate
-- [ ] Add mask managment
+- [ ] Add mask managment : preview picture for aligning (or crosses on each corners), draw polygone, blur edges, change density and timing for each polygon
 - [ ] create a ImageFileNameEditor for multiple files -> MaskFileNamesEditor
 - [ ] extention des poses longues ???
-- [ ] est-ce que l'on fait un filtre pour les papiers mats et satinés (réduire Dmax) ?
+- [ ] est-ce que l'on fait un filtre pour les papiers mats et satinÃ©s (rÃ©duire Dmax) ?
 - [ ] Reframe picture : maybe it has to be done in a true image manipulation program
 - [ ] Add GrayToTime configuration system can show the impact on picture on real time
 - [ ] Move Excel GrayToTime to the app?
